@@ -1,0 +1,39 @@
+id: IK-PROC-003
+layer: industrial_knowledge
+category: procurement
+domain: automotive
+subdomain: procurement
+difficulty: 3
+estimated_time_min: 30
+title: サプライヤ品質悪化時の受入戦略
+scenario: |
+  樹脂成形部品の主要サプライヤで、過去3か月の受入不良率が0.2%から1.8%へ上昇した。
+  不良内容はバリ、ショート、寸法外れが混在している。
+  代替サプライヤはあるが、立上げには2か月必要である。
+question: |
+  供給継続と品質リスク低減を両立するための受入戦略を立案せよ。
+  検査強化、サプライヤ改善要求、代替調達準備の観点を含めよ。
+expected_skills:
+- supplier_quality_management
+- procurement_planning
+- containment_planning
+- risk_assessment
+primary_skill: supplier_quality_management
+secondary_skills:
+- containment_planning
+- procurement_planning
+- risk_assessment
+reference_answer: |
+  不良種類ごとに受入検査を暫定強化(重要特性は全数等)。
+  サプライヤに工程変更・金型状態・成形条件・検査体制の報告と是正計画を要求。
+  代替サプライヤ立上げを並行開始し、改善状況に応じ発注配分を見直す。
+evaluation_rubric:
+  must_have:
+  - 自社受入検査の暫定強化(流出防止)
+  - サプライヤへの原因究明と是正計画の公式要求
+  nice_to_have:
+  - 代替サプライヤの立上げ準備の並行開始
+  - 正常復帰条件(連続良品/工程能力)の明確化
+  critical_failures:
+  - 品質悪化を放置して通常受入(抜取)のままライン投入を継続する
+reasoning_trace_required: true

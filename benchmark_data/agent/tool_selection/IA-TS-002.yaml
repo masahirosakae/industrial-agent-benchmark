@@ -1,0 +1,39 @@
+id: IA-TS-002
+layer: industrial_agent
+category: tool_selection
+domain: electronics
+subdomain: inspection
+difficulty: 4
+estimated_time_min: 45
+title: 画像検査不良分類ツール選定
+scenario: |
+  外観検査で撮像画像は蓄積されているが、不良分類は人手で行っている。
+  不良にはキズ、汚れ、欠け、変色、反射による疑似不良が含まれる。
+  将来的には自動分類と検査条件改善に活用したい。
+question: |
+  画像検査不良分類に必要なツールを選定せよ。
+  アノテーション、モデル学習、評価、現場運用、誤分類時の扱いを含めて説明せよ。
+expected_skills:
+- tool_selection
+- quality_improvement
+- measurement_system_analysis
+- risk_assessment
+primary_skill: tool_selection
+secondary_skills:
+- quality_improvement
+- measurement_system_analysis
+- risk_assessment
+reference_answer: |
+  必要ツール=画像管理/アノテーション/学習基盤/評価基盤/現場推論環境。
+  ラベル付けはキズ/汚れ/欠け/変色/疑似不良を一貫基準で統一。
+  評価指標=クラス別再現率/適合率/見逃し率/過検出率/混同行列。
+  誤分類時は人手再判定や品質保証承認を組込む。
+evaluation_rubric:
+  must_have:
+  - アノテーション品質の重視
+  - 誤分類時の人手再判定/承認プロセス
+  nice_to_have:
+  - 現場運用時のモデル劣化監視や再学習方針
+  critical_failures:
+  - 誤分類時にAI判定を最終とし不良を自動廃棄する設計
+reasoning_trace_required: true

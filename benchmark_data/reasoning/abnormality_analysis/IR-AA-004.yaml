@@ -1,0 +1,39 @@
+id: IR-AA-004
+layer: industrial_reasoning
+category: abnormality_analysis
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 4
+estimated_time_min: 45
+title: 夜勤限定チョコ停
+scenario: |
+  自動搬送装置のチョコ停が夜勤でのみ増加している。
+  停止ログは搬送位置ズレだが、昼勤では同じ設備で安定している。
+  夜勤では作業者数が少なく、材料補給タイミングも昼勤と異なる。
+question: |
+  夜勤限定で発生する異常の分析計画を作成せよ。
+  設備、作業、材料補給、環境、復旧操作の観点から仮説を立て、検証方法を示せ。
+expected_skills:
+- abnormality_analysis
+- human_factors
+- data_integration
+- root_cause_analysis
+primary_skill: abnormality_analysis
+secondary_skills:
+- human_factors
+- data_integration
+- root_cause_analysis
+reference_answer: |
+  シフト差(補給タイミング/作業者数/復旧操作/環境)に起因する仮説を立てる。
+  仮説=補給タイミング・搬送姿勢・復旧操作差・人員不足・温湿度・照明差。
+  検証=昼夜別ログ比較/補給時刻と停止時刻の相関/監視カメラ/復旧手順観察/環境データ比較。
+  暫定対策=補給タイミング標準化/復旧手順再教育/巡回頻度増加。
+evaluation_rubric:
+  must_have:
+  - シフト差(補給/作業者数/復旧操作等)を要因として扱う
+  - 監視カメラやログ比較による検証計画
+  nice_to_have:
+  - 暫定対策(補給標準化・教育・巡回)の提示
+  critical_failures:
+  - 設備のみを疑い夜勤の運用差を分析対象から除外する
+reasoning_trace_required: true

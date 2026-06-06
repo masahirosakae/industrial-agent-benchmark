@@ -1,0 +1,40 @@
+id: IR-FMEA-002
+layer: industrial_reasoning
+category: fmea
+domain: automotive
+subdomain: inspection
+difficulty: 4
+estimated_time_min: 45
+title: 電子基板検査工程FMEA
+scenario: |
+  車載基板の検査工程では、AOI、ICT、機能検査を実施している。
+  新製品では一部回路が低消費電力モードでしか動作せず、
+  従来の機能検査条件では潜在不良を検出できない可能性がある。
+question: |
+  検査工程FMEAを作成し、検出漏れ、誤判定、治具不良、プログラム設定ミスのリスクを評価せよ。
+  追加すべき検査管理も示せ。
+expected_skills:
+- fmea_analysis
+- measurement_system_analysis
+- risk_assessment
+- process_validation
+primary_skill: fmea_analysis
+secondary_skills:
+- measurement_system_analysis
+- risk_assessment
+- process_validation
+reference_answer: |
+  故障モード=検出漏れ/良品誤判定/不良品誤判定/治具接触不良/プログラム設定ミス。
+  低消費電力モード回路は従来条件で検出不可の潜在不良リスク。
+  影響=市場機能不良/車載品質問題/リコール。
+  追加管理=モード別機能検査・プログラム版数管理・治具点検・マスター品確認・検査カバレッジレビュー。
+evaluation_rubric:
+  must_have:
+  - 低消費電力モード特有の検出漏れリスク評価
+  - モード別検査条件の追加
+  nice_to_have:
+  - 治具不良やプログラム設定ミスなど検査工程自身のFMEA
+  - 検査カバレッジレビューの仕組み
+  critical_failures:
+  - 潜在不良の検出条件不足を無視して従来検査を継続する
+reasoning_trace_required: true

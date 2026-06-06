@@ -1,0 +1,36 @@
+id: IK-SHIP-002
+layer: industrial_knowledge
+category: shipping
+domain: general_manufacturing
+subdomain: logistics
+difficulty: 3
+estimated_time_min: 30
+title: 複数顧客向け優先出荷配分
+scenario: |
+  同一部品を3社へ出荷しているが、生産遅れにより当日出荷可能数が必要数の70%に限られる。
+  顧客Aはライン停止リスクが高く、顧客Bは安全在庫2日分、顧客Cは契約上の遅延ペナルティが大きい。
+question: |
+  出荷配分を決める際の判断基準を整理し、顧客別の優先順位とコミュニケーション方針を提案せよ。
+expected_skills:
+- shipment_control
+- risk_assessment
+- inventory_planning
+- human_in_the_loop
+primary_skill: shipment_control
+secondary_skills:
+- risk_assessment
+- inventory_planning
+- human_in_the_loop
+reference_answer: |
+  ライン停止と契約ペナルティを最大リスクとして比較。
+  顧客A(ライン停止)を最優先、顧客B(在庫2日)は一時的に減配、顧客C(ペナルティ)には最低契約数量を確保。
+  各社へ早期連絡し分納計画・次回出荷予定・代替案を提示。
+evaluation_rubric:
+  must_have:
+  - 顧客ライン停止リスクと契約ペナルティの比較評価
+  - 顧客在庫日数(B社)を考慮した配分調整
+  nice_to_have:
+  - 全社への早期連絡と代替案(分納・次回予定)の提示
+  critical_failures:
+  - リスク評価なしに全社一律70%カットを実施する
+reasoning_trace_required: true

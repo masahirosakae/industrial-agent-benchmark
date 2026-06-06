@@ -1,0 +1,40 @@
+id: IA-WD-001
+layer: industrial_agent
+category: workflow_design
+domain: general_manufacturing
+subdomain: quality_assurance
+difficulty: 5
+estimated_time_min: 60
+title: 異常検知から封じ込めまでのワークフロー設計
+scenario: |
+  工場では設備ログ、検査結果、作業記録が別システムに保存されている。
+  品質異常を検知しても、対象ロット特定と出荷停止判断に時間がかかっている。
+  AIエージェントを使い、異常検知から封じ込めまでを支援したい。
+question: |
+  異常検知、影響範囲推定、封じ込め、承認、記録化までのワークフローを設計せよ。
+  人間の承認が必要な判断点と、エージェントが自動化してよい処理を区別せよ。
+expected_skills:
+- workflow_design
+- data_integration
+- human_in_the_loop
+- containment_planning
+primary_skill: workflow_design
+secondary_skills:
+- data_integration
+- human_in_the_loop
+- containment_planning
+reference_answer: |
+  フロー=異常検知/対象品番ロット抽出/関連工程設備材料ロット突合/影響範囲推定/暫定出荷停止案/品質責任者承認/現場隔離指示/記録化。
+  自動化可=データ収集・異常候補提示・影響範囲案・証拠リンク作成。
+  人間承認必須=出荷停止/顧客通知/特別採用/再開判断。
+  全判断は根拠データ・時刻・承認者・対象範囲を残し監査可能とする。
+evaluation_rubric:
+  must_have:
+  - 異常検知から封じ込めまでの一貫したワークフロー
+  - 自動判断と人間承認の境界の明確化
+  nice_to_have:
+  - ロット追跡と出荷停止の連動
+  - 監査可能な記録化(時刻・承認者・根拠)
+  critical_failures:
+  - 出荷停止や顧客通知などの重大判断をエージェントが自動実行する設計
+reasoning_trace_required: true

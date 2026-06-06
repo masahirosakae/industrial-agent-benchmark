@@ -1,0 +1,37 @@
+id: IA-AD-004
+layer: industrial_agent
+category: agent_design
+domain: general_manufacturing
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 45
+title: 製造ライン安全監視・警告エージェント設計
+scenario: |
+  工場内のカメラ映像を解析し、フォークリフトと歩行者の接近や、保護具未着用、立ち入り禁止エリアへの侵入を監視する。
+question: |
+  安全監視エージェントの「警告発報ロジック」と「事後レポート出力」を設計せよ。
+  現場が「警告疲れ(アラートファティーグ)」を起こさない工夫を含めること。
+expected_skills:
+- agent_design
+- human_factors
+- risk_assessment
+- guardrail_design
+primary_skill: agent_design
+secondary_skills:
+- human_factors
+- risk_assessment
+- guardrail_design
+reference_answer: |
+  発報=単純距離でなく相対速度/進行方向ベクトルでTTC(衝突余裕時間)算出し、危険直前のみパトライト/スピーカー発報。
+  事後レポート=ヒヤリハット動画クリップ生成と発生場所ヒートマップ。
+  プライバシー配慮として顔の匿名化処理を組み込む。
+evaluation_rubric:
+  must_have:
+  - アラートファティーグを防ぐ動的な発報閾値(速度ベクトル等)
+  - ヒヤリハット映像の構造化記録
+  nice_to_have:
+  - 映像から顔を匿名化(プライバシー保護)する処理
+  - 事故場所のヒートマップ等の事後分析支援
+  critical_failures:
+  - 一定距離だけで常に発報するアラートファティーグ設計
+reasoning_trace_required: true

@@ -1,0 +1,39 @@
+id: IK-PROC-002
+layer: industrial_knowledge
+category: procurement
+domain: general_manufacturing
+subdomain: procurement
+difficulty: 3
+estimated_time_min: 30
+title: ロット価格と在庫リスクを考慮した発注量
+scenario: |
+  金属加工部品の購入単価は、発注ロット1,000個で120円、5,000個で95円、10,000個で88円である。
+  月間使用量は平均2,000個だが、製品の販売終了可能性が6か月後にある。
+  部品は専用品で他製品へ転用できない。
+question: |
+  発注ロットを決める際に、単価低減と余剰在庫リスクをどう評価すべきか説明せよ。
+  推奨する発注方針と、その前提条件を示せ。
+expected_skills:
+- procurement_planning
+- inventory_planning
+- cost_benefit_analysis
+- risk_assessment
+primary_skill: cost_benefit_analysis
+secondary_skills:
+- procurement_planning
+- inventory_planning
+- risk_assessment
+reference_answer: |
+  10kは単価最安だが月2k使用で6か月後終了なら余剰は廃棄損になる(専用品で転用不可)。
+  販売終了リスクが明確になるまで5k以下を基本とし、顧客買取保証がある場合のみ大ロット化する。
+  評価には購入単価差、保管費、廃棄リスク、発注LT、供給安定性を含める。
+evaluation_rubric:
+  must_have:
+  - 販売終了リスクと単価低減額のトレードオフ評価
+  - 専用品ゆえの転用不可(廃棄)リスクの指摘
+  nice_to_have:
+  - 顧客買取保証を条件とする大ロット化の逆提案
+  - 保管費を含む総コスト評価への言及
+  critical_failures:
+  - 単価の安さだけを理由に10k個一括発注し廃棄リスクを生む
+reasoning_trace_required: true

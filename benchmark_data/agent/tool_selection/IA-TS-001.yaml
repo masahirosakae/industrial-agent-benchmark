@@ -1,0 +1,43 @@
+id: IA-TS-001
+layer: industrial_agent
+category: tool_selection
+domain: general_manufacturing
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 45
+title: 設備ログ解析に使うツール選定
+scenario: |
+  生産技術部で、設備異常解析のためにPLCログとセンサデータを分析する仕組みを検討している。
+  PLCログは10msサンプリングで生成され、データ量は20GB/日に達する。解析用PCは3台、年間IT予算は500万円である。
+  異常発生時には現場保全担当者が原因切り分けを15分以内に着手できることを要件とする。
+  全社セキュリティ方針により外部SaaSへのデータ持ち出しは原則禁止である。
+question: |
+  上記要件を満たすツール構成を選定せよ。
+  ストレージ・分析エンジン・可視化UIの組合せを示し、15分以内の初期切り分けに必要な機能と運用上の留意点を述べよ。
+expected_skills:
+- tool_selection
+- data_integration
+- abnormality_analysis
+- human_factors
+primary_skill: tool_selection
+secondary_skills:
+- data_integration
+- abnormality_analysis
+- human_factors
+reference_answer: |
+  20GB/日・10msサンプリングはPC上の単純Excel処理では到底扱えないため、オンプレ時系列DB（例: InfluxDB / TimescaleDB）を中核に、PLCゲートウェイ経由で常時取り込む構成とする。
+  現場保全向けには社内BIまたはダッシュボード（Grafana等）で15分以内の初期切り分けが可能な定型画面（設備別タイムライン、アラーム、相関グラフ）を提供する。
+  詳細解析は生産技術がJupyter上のPython/Rで実施し、ロー データはオンプレに留め外部SaaSへ持ち出さない方針を徹底する。
+  予算500万円内で時系列DB＋BI＋3台PCに優先配分し、ML系の高度解析は次年度フェーズへ送る。
+evaluation_rubric:
+  must_have:
+  - 20GB/日・10msデータ量を扱えるストレージ/分析基盤を選定している
+  - オンプレ前提でSaaS禁止と500万円予算を尊重している
+  - 15分以内の初期切り分けを支える可視化UIを含んでいる
+  nice_to_have:
+  - ロール別のツール役割分担が示されている
+  - 将来MLや高度解析の拡張性に触れている
+  critical_failures:
+  - 外部SaaSにロー データを送る前提のアーキテクチャを提案する
+  - 現場保全にPythonコーディングを必須とする運用設計
+reasoning_trace_required: true

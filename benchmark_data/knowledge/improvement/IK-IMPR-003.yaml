@@ -1,0 +1,39 @@
+id: IK-IMPR-003
+layer: industrial_knowledge
+category: improvement
+domain: electronics
+subdomain: smt
+difficulty: 3
+estimated_time_min: 30
+title: 工程内不良率改善のデータ仮説立案
+scenario: |
+  基板実装工程で、はんだボイド不良率が0.6%から1.4%へ上昇した。
+  不良は特定部品周辺に多く、発生は月曜午前と金曜夜勤に偏っている。
+  材料ロット変更と炉メンテナンス履歴はあるが、明確な因果は不明である。
+question: |
+  不良率改善に向けた仮説を複数立案し、どのデータを確認すべきか優先順位を付けて示せ。
+expected_skills:
+- quality_improvement
+- root_cause_analysis
+- data_integration
+- risk_assessment
+primary_skill: quality_improvement
+secondary_skills:
+- root_cause_analysis
+- data_integration
+- risk_assessment
+reference_answer: |
+  特定部品集中からパッド設計・はんだ量・部品熱容量・リフロー条件を疑う。
+  月曜午前/金曜夜勤の偏りから炉立上げ・作業者・保管状態・メンテナンス後条件を確認。
+  材料ロット変更・はんだペースト管理・炉メンテ履歴・温度プロファイル・印刷検査データを優先確認する。
+  発生部位・時間帯・ロットで層別し仮説検証する。
+evaluation_rubric:
+  must_have:
+  - 発生部位・時間帯の偏りを活用した仮説立案
+  - 材料・設備・作業条件の広範な確認
+  nice_to_have:
+  - 層別分析に基づく原因絞り込み(根拠なき断定の回避)
+  - 確認データの優先順位付け
+  critical_failures:
+  - 材料ロット変更を即断で原因として対策を実行する
+reasoning_trace_required: true

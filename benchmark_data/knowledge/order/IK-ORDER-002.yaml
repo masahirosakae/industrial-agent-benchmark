@@ -1,0 +1,43 @@
+id: IK-ORDER-002
+layer: industrial_knowledge
+category: order
+domain: electronics
+subdomain: assembly
+difficulty: 4
+estimated_time_min: 45
+title: 内示変動を考慮した受注可否判断
+scenario: |
+  電子制御ユニット用ハーネスについて、顧客から3か月内示が提示された。
+  1か月目は確定10,000本、2か月目は内示18,000本、3か月目は内示6,000本である。
+  過去6か月の内示変動は最大±35%で、主要コネクタの調達リードタイムは10週間。
+  工場の通常能力は月12,000本、残業・休日対応で月16,000本まで可能である。
+question: |
+  この注文を受ける場合の生産・調達上のリスクを整理し、顧客へ提示すべき受注条件を作成せよ。
+  また、どの数量までを確定発注として求めるべきか理由とともに示せ。
+expected_skills:
+- requirement_analysis
+- capacity_planning
+- procurement_planning
+- risk_assessment
+primary_skill: capacity_planning
+secondary_skills:
+- procurement_planning
+- risk_assessment
+- requirement_analysis
+reference_answer: |
+  1か月目10,000は通常能力内だが、2か月目18,000は最大能力16,000を超える。
+  主要コネクタLT10週なので内示変動を待ってからの調達では間に合わない。
+  顧客に対しては長納期部品分の確定発注またはキャンセル補償を求めるべき。
+  能力超過分は分納条件・納期調整を提示する。
+  受注条件には、内示変動幅、確定期限、特急費用、残業対応可否、部品キャンセル費用負担を含める。
+evaluation_rubric:
+  must_have:
+  - 能力上限(16,000本/月)を超えるリスクの定量的指摘
+  - 長納期部品(10週)の先行発注に対する費用補償条件の設定
+  nice_to_have:
+  - 需要急減時(3か月目)の在庫買取条件の提示
+  - 分納や納期調整など現実的な代替案の提示
+  critical_failures:
+  - LT・能力制約を無視して全量受注を無条件で了承する
+  - 長納期部品のキャンセル時費用負担条件を取り決めずに発注する
+reasoning_trace_required: true

@@ -1,0 +1,40 @@
+id: IR-5WHY-004
+layer: industrial_reasoning
+category: 5why
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: 設備チョコ停増加の5Why
+scenario: |
+  自動供給機のチョコ停が先月比で2倍になった。
+  停止理由は部品詰まりで、特に湿度が高い日に多い。
+  部品メーカーは変更されていないが、保管場所を一時的に変更していた。
+question: |
+  部品詰まりによるチョコ停増加について5Why分析を行い、
+  保管・部品状態・設備条件・保全管理の観点から真因を掘り下げよ。
+expected_skills:
+- five_why_analysis
+- abnormality_analysis
+- root_cause_analysis
+- risk_assessment
+primary_skill: five_why_analysis
+secondary_skills:
+- abnormality_analysis
+- root_cause_analysis
+- risk_assessment
+reference_answer: |
+  なぜ詰まり増加?→湿度上昇で部品姿勢/滑りが悪化。
+  なぜ湿度影響を受ける?→一時変更した保管場所で吸湿または結露。
+  なぜ管理できなかった?→保管場所変更時の環境条件・部品状態確認が標準化されていない。
+  真因=保管場所変更時の環境管理ルール不足。
+  対策=保管環境基準・湿度管理・使用前乾燥・フィーダ条件見直し・場所変更承認。
+evaluation_rubric:
+  must_have:
+  - 湿度と部品詰まりの相関の指摘
+  - 保管場所変更時の環境評価不足への到達
+  nice_to_have:
+  - 使用前乾燥ルールや保管場所変更承認プロセスの確立
+  critical_failures:
+  - 湿度だけを原因とし保管変更管理の不備を見逃す
+reasoning_trace_required: true

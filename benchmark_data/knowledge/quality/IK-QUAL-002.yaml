@@ -1,0 +1,40 @@
+id: IK-QUAL-002
+layer: industrial_knowledge
+category: quality
+domain: general_manufacturing
+subdomain: machining
+difficulty: 4
+estimated_time_min: 45
+title: 工程内寸法ばらつきと工程能力評価
+scenario: |
+  金属シャフトの重要寸法は10.00±0.05 mmである。
+  直近50個の測定平均は10.028 mm、標準偏差は0.018 mmで、規格上限に近い値が増えている。
+  工具寿命、クーラント濃度、機械温度、素材ロットが候補要因として挙がっている。
+question: |
+  工程能力と品質リスクを評価し、出荷可否および工程調整の判断を示せ。
+  平均シフト、ばらつき、工具摩耗、追加検査の観点を含めよ。
+expected_skills:
+- statistical_quality_control
+- process_capability_analysis
+- risk_assessment
+- quality_improvement
+primary_skill: process_capability_analysis
+secondary_skills:
+- statistical_quality_control
+- risk_assessment
+- quality_improvement
+reference_answer: |
+  3σ=0.054が公差半幅0.05を超え、平均も上限側10.028へシフトしている。
+  上限外れリスクが高い。工具寿命80%で摩耗による寸法シフトを疑う。
+  出荷品は追加選別または全数確認、工程は工具交換・補正・条件確認を実施。
+  調整後に再度能力確認を行う。
+evaluation_rubric:
+  must_have:
+  - 公差に対する標準偏差と平均シフトの指摘(工程能力不足の検知)
+  - 工具摩耗との関連推測
+  nice_to_have:
+  - 出荷品の追加選別と工程(工具)の即時調整指示
+  - 調整後の再評価プロセス
+  critical_failures:
+  - 「規格内に入っているものもある」として無対策で生産・出荷を続ける
+reasoning_trace_required: true

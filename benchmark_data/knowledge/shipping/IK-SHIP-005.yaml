@@ -1,0 +1,40 @@
+id: IK-SHIP-005
+layer: industrial_knowledge
+category: shipping
+domain: automotive
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 60
+title: リコール対象ロットの出荷停止範囲
+scenario: |
+  あるロットの安全部品に熱処理条件逸脱の疑いが発生した。
+  対象ロットの一部は既に出荷済みで、同じ熱処理炉を前後2日間使用した別ロットも存在する。
+  熱処理記録の一部に欠落がある。
+question: |
+  出荷停止範囲と顧客連絡範囲をどのように決めるべきか説明せよ。
+  記録欠落、同一設備使用ロット、安全リスク、追加検査可否を含めて判断せよ。
+expected_skills:
+- containment_planning
+- traceability_analysis
+- shipment_control
+- risk_assessment
+primary_skill: containment_planning
+secondary_skills:
+- traceability_analysis
+- shipment_control
+- risk_assessment
+reference_answer: |
+  記録欠落は条件適合を証明できない重大リスク。安全部品なので同一炉前後2日のロットも対象に含めて評価。
+  既出荷分は顧客へ暫定連絡し使用停止・在庫隔離・リコール要否を協議。
+  追加検査(硬度・組織・強度)で品質を十分確認できるか判断。
+evaluation_rubric:
+  must_have:
+  - 同一炉・前後日のロットまで広げた出荷停止範囲設定
+  - 記録欠落を「品質証明不可」とする重大リスク認識
+  nice_to_have:
+  - 追加検査(硬度・組織等)による代替品質証明の検討
+  - 顧客連絡と追加検査の関係整理
+  critical_failures:
+  - 記録がないことを異常なしと都合よく解釈し出荷を継続する
+  - 疑義ロットのみ停止し同一設備の関連ロットを放置する
+reasoning_trace_required: true

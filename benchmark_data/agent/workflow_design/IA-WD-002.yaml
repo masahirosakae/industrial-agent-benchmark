@@ -1,0 +1,41 @@
+id: IA-WD-002
+layer: industrial_agent
+category: workflow_design
+domain: automotive
+subdomain: production_control
+difficulty: 3
+estimated_time_min: 45
+title: 受注変更から生産計画再生成までのフロー設計
+scenario: |
+  顧客EDIの内示変更が頻繁に発生し、生産計画担当者が手作業で計画修正している。
+  部品在庫、生産能力、出荷優先度の情報は別々のシステムにある。
+  変更反映漏れにより、欠品や過剰生産が発生している。
+question: |
+  受注変更を検知し、生産計画案を再生成し、担当者が承認するまでのワークフローを設計せよ。
+  入力データ、判断ロジック、例外処理を含めよ。
+expected_skills:
+- workflow_design
+- production_planning
+- data_integration
+- human_in_the_loop
+primary_skill: workflow_design
+secondary_skills:
+- production_planning
+- data_integration
+- human_in_the_loop
+reference_answer: |
+  EDI変更検知→差分を数量/納期/品番/確定度に分解。
+  エージェントは在庫・生産能力・調達LT・出荷優先度を取得し制約違反を判定。
+  計画案=通常案/残業案/分納案/調達前倒し案として提示。
+  例外=欠品/能力超過/設計変更不一致/確定不足は担当者承認。
+  最終登録は人間承認。
+evaluation_rubric:
+  must_have:
+  - 受注変更検知から計画更新までの一貫した流れ
+  - 在庫・能力・出荷優先度の統合判断
+  nice_to_have:
+  - 例外処理(欠品/能力超過等)の人間承認設計
+  - 複数の代替計画案の生成
+  critical_failures:
+  - 計画を自動確定しシステムへ書込み、人間承認を省略する設計
+reasoning_trace_required: true

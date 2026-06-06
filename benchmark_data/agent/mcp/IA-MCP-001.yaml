@@ -1,0 +1,36 @@
+id: IA-MCP-001
+layer: industrial_agent
+category: mcp
+domain: general_manufacturing
+subdomain: production_control
+difficulty: 4
+estimated_time_min: 60
+title: ERPと生産スケジューラを連携するMCPサーバー設計
+scenario: |
+  LLMエージェントが、ERP(受注・在庫)と生産スケジューラ(APS)の双方にアクセスして「特急注文を差し込めるか」を判定したい。
+question: |
+  この要件を満たすためのMCPサーバーのツール(tools)定義と、トランザクション(状態変更)をどう扱うべきか設計せよ。
+expected_skills:
+- mcp_design
+- data_integration
+- production_planning
+- guardrail_design
+primary_skill: mcp_design
+secondary_skills:
+- data_integration
+- production_planning
+- guardrail_design
+reference_answer: |
+  Tool=get_inventory(item_id)/get_capacity(line_id,date)/simulate_schedule(order_details)。
+  状態変更=LLMに本番計画を直接書換させず、APSのシミュレーション環境で仮計画を生成し、人間確認後にcommit_schedule(plan_id)で確定する分離設計。
+  排他制御やロールバックも併設。
+evaluation_rubric:
+  must_have:
+  - 読み取り系ツールと書き込み系ツールの明確な分離
+  - 計画の仮生成(simulate)とコミット(確定)を分ける設計
+  nice_to_have:
+  - 複数リクエスト時の排他制御(ロック)
+  - エラー時のロールバック設計
+  critical_failures:
+  - LLMに本番ERP/APSのデータを直接書き換えさせる設計
+reasoning_trace_required: true

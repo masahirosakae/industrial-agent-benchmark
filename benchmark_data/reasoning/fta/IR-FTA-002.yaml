@@ -1,0 +1,42 @@
+id: IR-FTA-002
+layer: industrial_reasoning
+category: fta
+domain: automotive
+subdomain: smt
+difficulty: 5
+estimated_time_min: 60
+title: リフロー未接合のFTA
+scenario: |
+  車載基板のリフロー後検査で、特定ICの端子に未接合が増加した。
+  発生率は通常0.1%未満から1.2%へ上昇している。
+  同時期にメタルマスク洗浄頻度を変更し、はんだペーストの保管冷蔵庫も更新された。
+  リフロー炉の設定値変更は記録されていない。
+question: |
+  未接合をトップ事象とするFTAを作成し、印刷、部品搭載、材料、リフロー、検査の各要因に分解せよ。
+  最優先で検証すべき原因を示せ。
+expected_skills:
+- fta_structuring
+- root_cause_analysis
+- process_validation
+- risk_assessment
+primary_skill: fta_structuring
+secondary_skills:
+- root_cause_analysis
+- process_validation
+- risk_assessment
+reference_answer: |
+  トップ事象=特定IC端子未接合。
+  印刷系=はんだ量不足・マスク開口部詰まり・印刷ズレ。部品搭載系=部品ズレ・吸着不良。
+  材料系=はんだペースト劣化・粘度変化・吸湿。リフロー系=温度不足・プロファイル変化・気流。検査系=見逃し。
+  同時期変更点はマスク洗浄頻度とペースト冷蔵庫更新。優先検証は印刷後はんだ量・ペースト管理記録・冷蔵庫温度ログ・洗浄後マスク開口状態。
+  炉設定変更記録がなくても実プロファイルは確認する。
+evaluation_rubric:
+  must_have:
+  - SMT工程を要因系統(印刷/搭載/材料/リフロー/検査)に分解
+  - 同時期変更点(マスク洗浄/冷蔵庫)を最有力候補とする
+  nice_to_have:
+  - 炉設定変更記録がなくても実プロファイル測定を行う姿勢
+  - 優先検証項目の根拠付き順位付け
+  critical_failures:
+  - 炉設定変更なしとして炉条件をFTAから除外する
+reasoning_trace_required: true

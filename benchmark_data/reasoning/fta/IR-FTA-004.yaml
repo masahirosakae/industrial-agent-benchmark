@@ -1,0 +1,41 @@
+id: IR-FTA-004
+layer: industrial_reasoning
+category: fta
+domain: electronics
+subdomain: inspection
+difficulty: 4
+estimated_time_min: 45
+title: 出荷検査誤判定のFTA
+scenario: |
+  出荷後に顧客で電気特性NGが見つかったが、出荷検査記録ではOKとなっていた。
+  検査装置は自動判定式で、当該日は治具交換と検査プログラム更新が行われていた。
+  校正期限は有効だが、日常点検記録に一部未記入がある。
+question: |
+  出荷検査誤判定をトップ事象としてFTAを作成せよ。
+  装置、治具、プログラム、作業、測定対象の観点で原因を整理し、優先調査項目を示せ。
+expected_skills:
+- fta_structuring
+- measurement_system_analysis
+- root_cause_analysis
+- risk_assessment
+primary_skill: fta_structuring
+secondary_skills:
+- measurement_system_analysis
+- root_cause_analysis
+- risk_assessment
+reference_answer: |
+  トップ事象=OK判定の流出NG。
+  装置系=故障/校正/接触不良。治具系=接触/位置/摩耗。プログラム系=閾値/条件/バージョン誤り。
+  作業系=設定誤り/手順省略/日常点検未実施。測定対象系=間欠不良/温度依存。
+  当日治具交換とプログラム更新が最有力。治具ID・接触抵抗・プログラム版数・判定閾値を優先確認。
+  校正有効でも日常点検未記入があり始業前確認不備の可能性。
+evaluation_rubric:
+  must_have:
+  - 自動判定でも人的・設定要因を考慮した要因分解
+  - 治具交換とプログラム更新を最優先要因とする判断
+  nice_to_have:
+  - 校正有効=測定保証ではないとの慎重姿勢
+  - 出荷済み同条件品の影響範囲への言及
+  critical_failures:
+  - 校正期限が有効だからと測定システム要因を全て除外する
+reasoning_trace_required: true

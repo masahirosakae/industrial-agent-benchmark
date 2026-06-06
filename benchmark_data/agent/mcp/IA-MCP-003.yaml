@@ -1,0 +1,37 @@
+id: IA-MCP-003
+layer: industrial_agent
+category: mcp
+domain: electronics
+subdomain: maintenance
+difficulty: 5
+estimated_time_min: 60
+title: IoTセンサーのリアルタイムデータ取得MCPの設計とセキュリティ
+scenario: |
+  稼働中の設備から1秒間に数百件のセンサーデータ(温度・振動)が生成されている。
+  LLMエージェントが「今の設備状態を診断して」と要求されたとき、全データをコンテキストに積むと破綻する。
+question: |
+  高頻度な時系列データをLLMが扱えるようにするためのMCPサーバー側の処理(集約・サンプリング)と、ツール定義を設計せよ。
+expected_skills:
+- mcp_design
+- data_integration
+- abnormality_analysis
+- guardrail_design
+primary_skill: mcp_design
+secondary_skills:
+- data_integration
+- abnormality_analysis
+- guardrail_design
+reference_answer: |
+  サーバー側でダウンサンプリング/移動平均/ピーク・異常値抽出を行う。
+  Tool=get_sensor_summary(machine_id,time_window,aggregation_type='avg|max|min')。
+  LLMには統計要約や閾値超えイベントリストを返す。
+evaluation_rubric:
+  must_have:
+  - MCPサーバー側でのデータ集約・サンプリング(LLMに生データを渡さない)
+  - aggregation_type等の引数で粒度を指定できる設計
+  nice_to_have:
+  - トレンドや簡易プロットの提供
+  - 異常値ピーク抽出など分析支援機能
+  critical_failures:
+  - 生の高頻度データを全てLLMに渡しコンテキスト破綻させる設計
+reasoning_trace_required: true

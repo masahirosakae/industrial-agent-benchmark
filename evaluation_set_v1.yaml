@@ -1,0 +1,80 @@
+﻿version: "1.0"
+name: evaluation_set_v1
+description: |
+  Industrial Agent Benchmark v1.0 の比較評価用サブセット。
+  複数の評価対象を同一条件で評価することを想定し、
+  Knowledge / Reasoning / Agent から各5問、合計15問を選定する。
+selection_policy:
+  total_questions: 15
+  by_layer:
+    knowledge: 5
+    reasoning: 5
+    agent: 5
+  criteria:
+    - domainバランス
+    - difficultyバランス
+    - skillバランス
+    - HLE適合性
+    - LLM-as-a-Judgeで採点しやすいrubricの明確さ
+summary:
+  difficulty_distribution:
+    difficulty_3: 2
+    difficulty_4: 9
+    difficulty_5: 4
+  domain_distribution:
+    automotive: 4
+    electronics: 4
+    medical_device: 2
+    general_manufacturing: 5
+  layer_distribution:
+    industrial_knowledge: 5
+    industrial_reasoning: 5
+    industrial_agent: 5
+questions:
+  - id: IK-ORDER-004
+    layer: industrial_knowledge
+    rationale: 医療機器ドメイン、試作から量産移管、コスト・品質保証のトレードオフを評価できる。
+  - id: IK-PP-002
+    layer: industrial_knowledge
+    rationale: ICT検査能力の定量計算と納期回答を評価できる。
+  - id: IK-PROC-003
+    layer: industrial_knowledge
+    rationale: サプライヤ品質悪化時の供給継続と品質リスク低減の両立を評価できる。
+  - id: IK-MPREP-005
+    layer: industrial_knowledge
+    rationale: 作業者スキル差・教育時間・出荷制約・流出コストの複合判断を評価できる。
+  - id: IK-SHIP-005
+    layer: industrial_knowledge
+    rationale: 安全部品の記録欠落と出荷停止範囲という高リスク判断を評価できる。
+
+  - id: IR-FTA-001
+    layer: industrial_reasoning
+    rationale: FTA構造化と変更点に基づく原因優先順位付けを評価できる。
+  - id: IR-5WHY-003
+    layer: industrial_reasoning
+    rationale: データ完全性、ネットワーク障害、システム設計の5Whyを評価できる。
+  - id: IR-FMEA-004
+    layer: industrial_reasoning
+    rationale: 梱包コスト・試験結果・クレーム費用を含む物流FMEAを評価できる。
+  - id: IR-CAPA-003
+    layer: industrial_reasoning
+    rationale: 医療機器向け異物混入CAPAとして、厳格な封じ込めと工程別原因調査を評価できる。
+  - id: IR-AA-005
+    layer: industrial_reasoning
+    rationale: 規格内データと機能異常の矛盾を扱う高難度異常解析を評価できる。
+
+  - id: IA-WD-001
+    layer: industrial_agent
+    rationale: 品質異常検知から封じ込めまでのワークフローと人間承認境界を評価できる。
+  - id: IA-AD-001
+    layer: industrial_agent
+    rationale: 生産計画支援エージェントのデータ鮮度・制約・構造化出力設計を評価できる。
+  - id: IA-MCP-002
+    layer: industrial_agent
+    rationale: MCP Tool/Resource分離、権限、画像サイズ、監査ログ設計を評価できる。
+  - id: IA-TS-001
+    layer: industrial_agent
+    rationale: 大容量設備ログ、オンプレ制約、現場利用性を踏まえたツール選定を評価できる。
+  - id: IA-MAC-001
+    layer: industrial_agent
+    rationale: 調達と生産計画の目的衝突を統一評価関数で調停するマルチエージェント設計を評価できる。

@@ -1,0 +1,42 @@
+id: IK-ORDER-005
+layer: industrial_knowledge
+category: order
+domain: general_manufacturing
+subdomain: machining
+difficulty: 4
+estimated_time_min: 45
+title: 短納期特急注文の採算・能力判断
+scenario: |
+  既存顧客から、通常納期4週間の金属プレス部品について、10日後に通常月産量の30%に相当する特急注文が入った。
+  材料在庫は半分しかなく、金型は別品番の生産に使用中である。
+  顧客はライン停止回避のため、割増価格を認める可能性がある。
+question: |
+  受注可否を判断するために必要な確認項目を挙げ、
+  生産能力、材料、金型、採算、既存注文影響の観点から対応案を比較せよ。
+  最終的な受注条件案も提示せよ。
+expected_skills:
+- capacity_planning
+- procurement_planning
+- cost_benefit_analysis
+- risk_assessment
+primary_skill: risk_assessment
+secondary_skills:
+- capacity_planning
+- cost_benefit_analysis
+- procurement_planning
+reference_answer: |
+  材料在庫が半分しかなく、金型も別品番に使用中であるため無条件受注は既存注文遅延リスクが高い。
+  確認事項は、顧客の最低必要数、分納可否、材料の緊急調達可否、金型切替時間、既存注文の納期影響、割増価格、品質確認時間。
+  対応案は、在庫材料分のみ先行生産、段取り再編、材料特急手配、分納、顧客への納期調整。
+  最終案は割増価格・既存注文影響の顧客了承・品質確認時間確保・分納条件を前提とした条件付き受注。
+evaluation_rubric:
+  must_have:
+  - 既存注文への納期遅延リスクの評価
+  - 割増価格や分納を前提とした条件付き受注案の提示
+  nice_to_have:
+  - 金型切替(段取り)による全体能力低下の定量的言及
+  - 材料特急手配と通常調達の選択肢比較
+  critical_failures:
+  - 既存注文を無断で後回しにして全量受注する
+  - 品質確認時間を確保せず短納期を約束する
+reasoning_trace_required: true

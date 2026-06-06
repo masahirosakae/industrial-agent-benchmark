@@ -1,0 +1,42 @@
+id: IK-MEXEC-002
+layer: industrial_knowledge
+category: manufacturing_execution
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 4
+estimated_time_min: 45
+title: 設備停止時のライン復旧優先順位
+scenario: |
+  自動組立ラインの中間工程で設備停止が発生した。
+  上流工程には仕掛が蓄積し、下流工程は30分後に部品切れとなる。
+  保全担当は到着まで20分、復旧見込みは未定である。
+  顧客向け緊急出荷品も同ラインで生産中である。
+question: |
+  ライン停止時の初動対応と復旧優先順位を示せ。
+  安全、品質、仕掛、代替生産、出荷影響、情報連絡の観点から整理せよ。
+expected_skills:
+- shopfloor_control
+- containment_planning
+- risk_assessment
+- shipment_control
+primary_skill: shopfloor_control
+secondary_skills:
+- containment_planning
+- risk_assessment
+- shipment_control
+reference_answer: |
+  初動は安全確保、設備停止状態の確認、異常品混入防止、上流投入停止・制限。
+  下流は30分で部品切れ。緊急出荷品があるため下流仕掛の優先投入や代替ライン可否を確認。
+  保全到着までの20分で停止時刻・対象ロット・設備状態・仕掛位置を記録。
+  復旧後は初品確認と品質確認を行い、復旧前後品を識別。情報連絡は製造・保全・生産管理・品質保証・出荷へ。
+evaluation_rubric:
+  must_have:
+  - 安全確保の最優先、異常品混入防止と上流投入停止
+  - 停止状態の記録と復旧後の品質確認(初品確認)
+  nice_to_have:
+  - 緊急出荷品への代替対応(別ライン等)の検討指示
+  - 関係部門への情報連絡フローの明確化
+  critical_failures:
+  - 安全確認や品質確認なしに強引に再稼働させる
+  - 停止状態を記録せずに再稼働しトレーサビリティを失う
+reasoning_trace_required: true

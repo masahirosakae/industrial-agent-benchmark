@@ -1,0 +1,38 @@
+id: IK-PP-003
+layer: industrial_knowledge
+category: production_planning
+domain: automotive
+subdomain: molding
+difficulty: 3
+estimated_time_min: 30
+title: 内示急減時の計画修正と在庫抑制
+scenario: |
+  自動車向け樹脂部品で、翌月内示が20,000個から11,000個へ急減した。
+  すでに材料は18,000個分手配済みで、成形ラインには旧計画に基づく稼働枠が確保されている。
+  完成品在庫の保管期限は3か月で、材料は6か月保管可能である。
+question: |
+  生産計画をどのように修正すべきか、完成品在庫、材料在庫、ライン稼働率、顧客内示変動リスクの観点から整理せよ。
+expected_skills:
+- production_planning
+- inventory_planning
+- procurement_planning
+- risk_assessment
+primary_skill: inventory_planning
+secondary_skills:
+- production_planning
+- procurement_planning
+- risk_assessment
+reference_answer: |
+  完成品は保管期限3か月のため過剰生産は廃棄リスクが高い。
+  材料は6か月保管可能であるため、完成品化を抑え材料在庫として保持するほうがリスクが低い。
+  生産計画は11,000個基準にし、内示回復可能性を考慮して一部のみ前倒しまたは能力枠を仮押さえする。
+  顧客には内示急減の理由・回復見込み・確定注文化範囲を確認する。
+evaluation_rubric:
+  must_have:
+  - 完成品化を止め材料在庫で保持する判断(保管期限制約の考慮)
+  nice_to_have:
+  - 内示回復を見越した能力枠の仮押さえ提案
+  - ライン空き枠の他品番転用や休止の検討
+  critical_failures:
+  - 確保済みのライン枠を埋めるために不要な完成品を作り続け廃棄リスクを生む
+reasoning_trace_required: true

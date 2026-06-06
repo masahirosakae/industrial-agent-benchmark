@@ -1,0 +1,38 @@
+id: IR-AA-002
+layer: industrial_reasoning
+category: abnormality_analysis
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: エア圧低下と不良増加
+scenario: |
+  自動圧入機で、エア圧が通常0.55 MPaから0.48 MPaへ低下していた。
+  同時間帯に圧入未完了アラームと高さ不良が増えている。
+  設備は自動補正機能を持つが、補正範囲は仕様書に明記されていない。
+question: |
+  エア圧低下と不良増加の関係を分析し、異常範囲、対象品隔離、設備確認、再発防止をどう進めるか示せ。
+expected_skills:
+- abnormality_analysis
+- containment_planning
+- process_validation
+- risk_assessment
+primary_skill: abnormality_analysis
+secondary_skills:
+- containment_planning
+- process_validation
+- risk_assessment
+reference_answer: |
+  時間相関が強いため因果を疑う。自動補正範囲不明のため正常保証とは判断できない。
+  0.48 MPa時間帯の対象品を隔離し圧入高さ・荷重ログ・アラーム履歴を確認。
+  設備=レギュレータ・漏れ・供給圧・補正仕様を確認。
+  再発防止=圧力下限アラーム/補正範囲明確化/日常点検基準化。
+evaluation_rubric:
+  must_have:
+  - エア圧低下と不良の時間相関の確認
+  - 自動補正を過信せず対象品を隔離する判断
+  nice_to_have:
+  - 圧力下限アラーム設定など再発防止策
+  critical_failures:
+  - 自動補正があるからと対象品を出荷可能とする
+reasoning_trace_required: true

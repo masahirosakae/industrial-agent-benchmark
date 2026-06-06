@@ -1,0 +1,42 @@
+id: IK-MEXEC-003
+layer: industrial_knowledge
+category: manufacturing_execution
+domain: automotive
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: トレーサビリティ不備発見時の現場対応
+scenario: |
+  組立工程で、作業者が部品ロットのバーコード読み取りを忘れたまま、20台分を次工程へ流したことが判明した。
+  対象部品は機能安全に関わる重要部品である。
+  完成品シリアルは記録されているが、部品ロットとの紐付けが欠落している。
+question: |
+  現場で直ちに行うべき対応を示せ。
+  対象範囲特定、隔離、再記録可否、品質保証部門への連絡、再発防止の観点を含めよ。
+expected_skills:
+- traceability_analysis
+- containment_planning
+- shopfloor_control
+- risk_assessment
+primary_skill: traceability_analysis
+secondary_skills:
+- containment_planning
+- shopfloor_control
+- risk_assessment
+reference_answer: |
+  対象20台を直ちに識別・隔離し、次工程や出荷へ流れないようにする。
+  完成品シリアルは記録されているため対象シリアル範囲から部品ロットが復元できるか確認。
+  推定だけで正式トレーサビリティを補完する場合は品質保証部門の承認が必要。
+  機能安全部品なので安全側に判断し、復元不能品は特採や再作業を審査。
+  再発防止はバーコード未読時のライン停止、読み取り完了チェック、作業者教育。
+evaluation_rubric:
+  must_have:
+  - 対象20台の即時隔離・流出防止
+  - 機能安全部品としての厳格な判断(勝手な記録捏造の禁止)
+  nice_to_have:
+  - 未読時のライン停止などシステム的ポカヨケへの言及
+  - 品質保証部門の承認を経た復元プロセス
+  critical_failures:
+  - 推測や記憶で部品ロット情報を捏造して次工程へ流す
+  - 機能安全重要部品のトレーサビリティ欠落を黙認する
+reasoning_trace_required: true

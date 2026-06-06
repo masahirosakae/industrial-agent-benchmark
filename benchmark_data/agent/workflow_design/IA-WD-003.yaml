@@ -1,0 +1,41 @@
+id: IA-WD-003
+layer: industrial_agent
+category: workflow_design
+domain: general_manufacturing
+subdomain: quality_assurance
+difficulty: 5
+estimated_time_min: 60
+title: 品質クレーム対応の部門横断フロー
+scenario: |
+  顧客クレーム対応では、営業、品質保証、生産技術、製造、調達が関与する。
+  現状はメール中心で、暫定回答、原因解析、CAPA、顧客報告の期限管理が不十分である。
+  重要顧客から対応リードタイム短縮を求められている。
+question: |
+  部門横断の品質クレーム対応ワークフローを設計せよ。
+  役割分担、期限管理、証拠収集、承認、顧客報告、再発防止確認を含めよ。
+expected_skills:
+- workflow_design
+- capa_planning
+- human_in_the_loop
+- evidence_management
+primary_skill: workflow_design
+secondary_skills:
+- capa_planning
+- evidence_management
+- human_in_the_loop
+reference_answer: |
+  クレーム受付→営業が顧客要求と期限登録→品質保証が重大度と初動封じ込め判定。
+  生産技術・製造・調達は工程条件・作業記録・部品ロット・変更履歴を提出。
+  エージェントは期限管理・証拠収集・影響範囲案・CAPAドラフト支援。
+  暫定回答・原因確定・恒久対策・顧客提出は承認ゲート。
+  CAPA後は有効性確認期限と再発追跡。
+evaluation_rubric:
+  must_have:
+  - 部門別役割の明確化
+  - 期限管理とエスカレーションの設計
+  nice_to_have:
+  - 技術解析と顧客回答の連動
+  - CAPA有効性確認までの追跡
+  critical_failures:
+  - 顧客報告内容をエージェントが自動送信する設計
+reasoning_trace_required: true

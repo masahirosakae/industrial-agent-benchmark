@@ -1,0 +1,40 @@
+id: IR-FMEA-005
+layer: industrial_reasoning
+category: fmea
+domain: general_manufacturing
+subdomain: maintenance
+difficulty: 3
+estimated_time_min: 30
+title: 保全作業FMEA
+scenario: |
+  自動組立機の定期保全では、センサ清掃、グリスアップ、フィーダ位置調整を行う。
+  過去に保全後の調整不良で翌日不良が増加したことがある。
+  保全作業は夜勤帯に実施されることが多い。
+question: |
+  保全作業FMEAを作成し、保全ミスが生産品質へ与える影響を評価せよ。
+  作業後確認、記録、復旧判定の管理策を含めよ。
+expected_skills:
+- fmea_analysis
+- process_validation
+- work_standardization
+- risk_assessment
+primary_skill: fmea_analysis
+secondary_skills:
+- process_validation
+- work_standardization
+- risk_assessment
+reference_answer: |
+  故障モード=センサ清掃不足/グリス過不足/フィーダ位置ズレ/復旧確認漏れ。
+  影響=誤検知/部品供給不良/組付け不良/翌日不良増加。
+  夜勤は確認者不足や記録漏れリスクあり。
+  管理策=保全チェックシート/作業後マスター確認/初品確認/復旧判定基準/ダブルチェック。保全後の一定数を重点監視。
+evaluation_rubric:
+  must_have:
+  - 保全作業を品質リスクとして捉える視点
+  - 夜勤作業の管理リスクと過去トラブルの反映
+  nice_to_have:
+  - 作業後マスター確認・初品確認などの復旧判定基準
+  - 保全後の重点監視ロット設定
+  critical_failures:
+  - 保全完了後の品質確認を行わずに即量産再開する
+reasoning_trace_required: true

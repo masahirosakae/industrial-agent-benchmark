@@ -1,0 +1,41 @@
+id: IK-MEXEC-005
+layer: industrial_knowledge
+category: manufacturing_execution
+domain: electronics
+subdomain: assembly
+difficulty: 4
+estimated_time_min: 45
+title: 自動機アラーム頻発時の生産継続判断
+scenario: |
+  画像検査付き自動組立機で、部品位置ズレアラームが通常の5倍発生している。
+  アラーム解除後は再検査でOKとなることが多く、不良流出はまだ確認されていない。
+  ただし、前日に部品供給フィーダの調整を実施している。
+question: |
+  生産を継続すべきか停止すべきか判断するための確認事項を整理せよ。
+  アラーム傾向、設備変更、品質リスク、暫定検査、保全対応の観点から判断基準を示せ。
+expected_skills:
+- abnormality_analysis
+- shopfloor_control
+- risk_assessment
+- containment_planning
+primary_skill: abnormality_analysis
+secondary_skills:
+- shopfloor_control
+- risk_assessment
+- containment_planning
+reference_answer: |
+  アラームが通常の5倍、かつ前日フィーダ調整後で発生のため異常として扱う。
+  再検査OKでも位置ズレ実発生があれば潜在不良や見逃しリスクがある。
+  確認はアラーム時刻・品番・部品ロット・フィーダ設定・画像ログ・調整記録・再検査結果。
+  継続条件は追加検査で不良なし・位置ズレ原因が管理内・暫定監視可能な場合のみ。
+  不良混入や原因不明が続けば停止し対象品を隔離。
+evaluation_rubric:
+  must_have:
+  - アラーム多発を異常と捉え、前日調整の影響を確認する姿勢
+  - 暫定検査での品質保証確認と、確認できない場合の停止判断基準
+  nice_to_have:
+  - 不良混入時の明確なライン停止条件(ストップルール)の提示
+  - 対象ロットの暫定隔離方針
+  critical_failures:
+  - 再検査でOKになるからとアラーム多発を無視して生産を強行する
+reasoning_trace_required: true

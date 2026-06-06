@@ -1,0 +1,42 @@
+id: IK-PP-004
+layer: industrial_knowledge
+category: production_planning
+domain: automotive
+subdomain: assembly
+difficulty: 4
+estimated_time_min: 45
+title: 新製品立上げ時の安全在庫と能力計画
+scenario: |
+  新規車載カメラモジュールの量産立上げを控えている。
+  初月需要は5,000台、2か月目は12,000台、3か月目は20,000台予定である。
+  立上げ初月の直行率は85%、3か月目には95%を目標としている。
+  主要部品の調達リードタイムは8週間で、顧客の欠品許容はない。
+question: |
+  立上げ期の生産計画において、安全在庫、歩留まり、調達、能力増強をどう考慮すべきか説明せよ。
+  初期流動期間に設定すべき管理指標も提示せよ。
+expected_skills:
+- production_planning
+- capacity_planning
+- procurement_planning
+- launch_readiness
+primary_skill: launch_readiness
+secondary_skills:
+- production_planning
+- capacity_planning
+- procurement_planning
+reference_answer: |
+  直行率85%の初月は5,000台出荷に対し約5,882台以上の投入が必要。
+  LT8週のため前倒し発注必須で、重要部品には安全在庫を持つ。
+  初期流動指標は直行率、不良率、手直し率、工程能力、設備停止、部品欠品、出荷遅延、顧客クレーム。
+  能力増強は3か月目20,000台基準で検査・手直し能力含めて設計。
+evaluation_rubric:
+  must_have:
+  - 歩留まり(85%)を加味した投入材料の割り増し計算
+  - 調達LT(8週)を考慮した前倒し発注の指示
+  nice_to_have:
+  - 3か月目の2万台に向けた検査・手直し能力の拡張計画
+  - 初期流動の重点監視指標(直行率/不良率等)の設定
+  critical_failures:
+  - 良品率100%を前提としたギリギリの部材発注
+  - 欠品許容なしの顧客に対し安全在庫を全く設けない
+reasoning_trace_required: true

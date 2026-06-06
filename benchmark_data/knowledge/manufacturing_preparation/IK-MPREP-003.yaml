@@ -1,0 +1,41 @@
+id: IK-MPREP-003
+layer: industrial_knowledge
+category: manufacturing_preparation
+domain: electronics
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: ねじ締めトルク設定とポカヨケ準備
+scenario: |
+  アルミ筐体にM3ねじで基板を固定する工程を新設する。
+  設計指定トルクは0.45 N·mだが、試作時に一部でねじ山損傷が発生した。
+  電動ドライバにはトルク管理機能があるが、ねじ浮き検知は未実装である。
+question: |
+  量産開始前に必要なトルク設定検証とポカヨケ準備を整理せよ。
+  ねじ山損傷、締付不足、作業ミスを防ぐ観点を含めよ。
+expected_skills:
+- process_validation
+- work_standardization
+- human_factors
+- risk_assessment
+primary_skill: process_validation
+secondary_skills:
+- work_standardization
+- human_factors
+- risk_assessment
+reference_answer: |
+  設計指定0.45 N·mに対しアルミ雌ねじでねじ山損傷があるため、トルクの実力評価が必要。
+  破壊トルク・戻しトルク・締付軸力・ねじ浮き・作業速度・ドライバ精度を確認。
+  ポカヨケはトルク到達判定、締付回数管理、締付順序表示、ねじ浮き高さ検知、バーコード連携。
+  作業標準にはねじ挿入角度・仮締め・本締め・異常時処置を明記。
+evaluation_rubric:
+  must_have:
+  - ねじ山損傷(過トルク)と締付不足の両面からのトルク検証
+  - ねじ浮きや回数不足を防ぐ物理的/システム的ポカヨケ設計
+  nice_to_have:
+  - 作業標準への異常時処置(リトライ禁止等)の明記
+  - ドライバ精度や作業速度などの管理パラメータ追加
+  critical_failures:
+  - 設計指定値のみを採用し実機検証なしで量産開始する
+  - ねじ浮き検知やトルク管理を実装しないまま安全機能部品を組み立てる
+reasoning_trace_required: true

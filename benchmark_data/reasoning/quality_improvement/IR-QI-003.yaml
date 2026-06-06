@@ -1,0 +1,39 @@
+id: IR-QI-003
+layer: industrial_reasoning
+category: quality_improvement
+domain: general_manufacturing
+subdomain: inspection
+difficulty: 3
+estimated_time_min: 30
+title: 外観検査過検出低減
+scenario: |
+  画像外観検査でNG率が15%に上昇したが、再確認すると実不良は2%程度である。
+  過検出は照明反射が強い部位に集中している。
+  検査基準を緩めると不良流出リスクが懸念される。
+question: |
+  過検出を低減しつつ不良流出を防ぐ改善方針を示せ。
+  検査条件、画像処理閾値、限度見本、再判定フローの観点を含めよ。
+expected_skills:
+- quality_improvement
+- measurement_system_analysis
+- risk_assessment
+- process_validation
+primary_skill: quality_improvement
+secondary_skills:
+- measurement_system_analysis
+- risk_assessment
+- process_validation
+reference_answer: |
+  照明反射部位への偏りから照明角度・偏光・撮像条件・画像処理ROIを見直す。
+  限度見本と実不良サンプルで閾値を再評価し、再判定フローを標準化。
+  改善後は過検出率と見逃し率の両方で評価する。
+evaluation_rubric:
+  must_have:
+  - 過検出と見逃しのトレードオフ評価
+  - 照明条件の影響を考慮した条件最適化
+  nice_to_have:
+  - 再判定フローの標準化
+  - 限度見本の再定義による閾値見直し
+  critical_failures:
+  - NG率を下げるために検査基準を安易に緩める
+reasoning_trace_required: true

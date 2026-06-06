@@ -1,0 +1,38 @@
+id: IK-SHIP-001
+layer: industrial_knowledge
+category: shipping
+domain: general_manufacturing
+subdomain: logistics
+difficulty: 4
+estimated_time_min: 45
+title: 出荷検査NG混入リスクと出荷可否判断
+scenario: |
+  出荷前検査で、1ケース50個入りのうち1個にラベル誤貼付が見つかった。
+  同時間帯に梱包された30ケースは同じプリンタと同じ作業者で処理されている。
+  顧客納期は翌朝で、再検査には4時間かかる。
+question: |
+  出荷可否を判断するためのリスク評価を行い、再検査範囲、顧客連絡要否、出荷延期判断を示せ。
+expected_skills:
+- shipment_control
+- containment_planning
+- traceability_analysis
+- risk_assessment
+primary_skill: shipment_control
+secondary_skills:
+- containment_planning
+- traceability_analysis
+- risk_assessment
+reference_answer: |
+  1個不良を単発と即断せず、同一プリンタ・作業者・時間帯の30ケースに波及影響を評価。
+  全ケース再検査を必須とし、納期と品質リスクを比較。顧客へ状況と出荷見込みを早期連絡。
+  再検査完了・誤貼付なし・原因と暫定対策確認後に出荷判断。未確認のままの出荷強行は禁止。
+evaluation_rubric:
+  must_have:
+  - 同一条件(プリンタ/作業者)の全30ケースへの波及影響評価
+  - 品質確認優先による顧客への納期遅延リスクの早期連絡
+  nice_to_have:
+  - 出荷可否判定における未確認出荷の絶対禁止の明示
+  - ラベル発行ログやプリンタ設定の確認に関する言及
+  critical_failures:
+  - 納期遅延を恐れ再検査せずに残りのケースを出荷する
+reasoning_trace_required: true

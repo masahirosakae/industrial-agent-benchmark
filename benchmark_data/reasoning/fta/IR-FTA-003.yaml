@@ -1,0 +1,40 @@
+id: IR-FTA-003
+layer: industrial_reasoning
+category: fta
+domain: general_manufacturing
+subdomain: molding
+difficulty: 3
+estimated_time_min: 30
+title: 樹脂成形ショートショットのFTA
+scenario: |
+  樹脂成形品のリブ先端にショートショットが発生している。
+  発生は夜勤帯に多く、金型温度ログにばらつきが見られる。
+  材料グレード変更はないが、乾燥機のフィルタ清掃が遅れていた。
+question: |
+  ショートショットをトップ事象としてFTAを作成し、
+  材料、金型、成形条件、設備、作業管理の原因に分解せよ。最も疑わしい原因群を説明せよ。
+expected_skills:
+- fta_structuring
+- root_cause_analysis
+- abnormality_analysis
+- risk_assessment
+primary_skill: fta_structuring
+secondary_skills:
+- root_cause_analysis
+- abnormality_analysis
+- risk_assessment
+reference_answer: |
+  トップ事象=リブ先端ショートショット。
+  材料系=乾燥不足/粘度上昇/異物/温度不適。金型系=温度低下/ガス抜き不良/流路詰まり/リブ冷却過多。
+  成形条件系=射出圧/速度/保圧/樹脂温度不足。
+  夜勤偏りと金型温度ばらつきから温度管理・立上げ条件・作業管理を優先。
+  乾燥機フィルタ遅れは材料乾燥不良として優先検証。
+evaluation_rubric:
+  must_have:
+  - ショートショットの物理メカニズム理解と要因系統分解
+  - 夜勤偏り・金型温度ばらつき・乾燥不良の関連付け
+  nice_to_have:
+  - 夜勤帯の立上げ条件確認や作業管理の検証項目
+  critical_failures:
+  - 材料グレード変更がない=材料系除外と短絡する
+reasoning_trace_required: true

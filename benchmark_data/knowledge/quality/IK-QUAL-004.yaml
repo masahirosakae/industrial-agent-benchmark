@@ -1,0 +1,40 @@
+id: IK-QUAL-004
+layer: industrial_knowledge
+category: quality
+domain: electronics
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 60
+title: 市場クレーム初動と封じ込め判断
+scenario: |
+  市場で使用中の電子機器が高温環境で停止するクレームが複数発生した。
+  返品品の初期解析では電源基板の一部部品が熱劣化している可能性がある。
+  同一設計品は複数顧客へ出荷されており、工程変更履歴は直近3か月で2件ある。
+question: |
+  品質保証責任者として、初動対応と封じ込め判断を示せ。
+  影響範囲、顧客通知、在庫隔離、解析計画、暫定対策を含めよ。
+expected_skills:
+- containment_planning
+- root_cause_analysis
+- traceability_analysis
+- risk_assessment
+primary_skill: containment_planning
+secondary_skills:
+- root_cause_analysis
+- traceability_analysis
+- risk_assessment
+reference_answer: |
+  市場安全リスクとして重大に扱う。複数顧客・全対象ロットを速やかに隔離し、顧客へ暫定通知・使用停止依頼。
+  返品品解析では電源基板部品の熱劣化・部品ロット・実装条件・熱設計・使用環境を確認。
+  工程変更履歴2件と対象ロットを突合する。
+  顧客対応と技術解析を並行する。
+evaluation_rubric:
+  must_have:
+  - 複数顧客・全対象ロットへの影響範囲拡大(安全側の封じ込め)
+  - 顧客への迅速な通知と使用停止依頼
+  nice_to_have:
+  - 工程変更履歴との突合や熱設計・使用環境を含めた複合解析の指示
+  critical_failures:
+  - 原因が確定するまで顧客に黙認・隠蔽し出荷を止めない
+  - 単一顧客のみに連絡し他顧客の影響を放置する
+reasoning_trace_required: true

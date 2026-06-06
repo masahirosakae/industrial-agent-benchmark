@@ -1,0 +1,34 @@
+id: IA-HIL-002
+layer: industrial_agent
+category: human_in_the_loop
+domain: general_manufacturing
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 45
+title: 出荷判定エージェントのグレーゾーン対応の人間設計
+scenario: |
+  出荷判定エージェントが、寸法は規格内だが過去の類似不良と傾向が似ているため「保留(グレーゾーン)」と判定した。
+question: |
+  この保留案件を人間(品質保証責任者)が最終判定するための支援インターフェースと、承認プロセスのワークフローを設計せよ。
+expected_skills:
+- human_in_the_loop
+- shipment_control
+- risk_assessment
+- evidence_management
+primary_skill: human_in_the_loop
+secondary_skills:
+- shipment_control
+- risk_assessment
+- evidence_management
+reference_answer: |
+  支援=対象ロットの寸法分布グラフ・過去類似不良ロットとの比較・保留判定の根拠(AI確信度/関連クレーム)を提示。
+  プロセス=責任者が特採として追加検査(機能試験)を指示。エビデンス取得後に出荷可否を判定し理由を記録。
+evaluation_rubric:
+  must_have:
+  - 人間が判定するための根拠データ(比較グラフ/類似事例)の提示
+  - 承認/否認だけでなく追加検査・特採などの選択肢
+  nice_to_have:
+  - 判断理由を次回のエージェント判定基準へフィードバックする機能
+  critical_failures:
+  - 保留判定の根拠を示さず人間に判断を丸投げする設計
+reasoning_trace_required: true

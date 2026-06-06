@@ -1,0 +1,40 @@
+id: IR-QI-001
+layer: industrial_reasoning
+category: quality_improvement
+domain: general_manufacturing
+subdomain: machining
+difficulty: 4
+estimated_time_min: 45
+title: 寸法Cpk改善
+scenario: |
+  切削加工品の重要寸法でCpkが0.85に低下している。
+  平均値は規格中心から上限側に偏っており、ばらつきも増加傾向である。
+  工具寿命、クーラント濃度、機械温度、素材ロットが候補要因として挙がっている。
+question: |
+  Cpk改善に向けた分析計画と改善案を示せ。
+  平均シフトとばらつき増加を分けて考え、検証すべきデータと対策を整理せよ。
+expected_skills:
+- quality_improvement
+- process_capability_analysis
+- statistical_quality_control
+- root_cause_analysis
+primary_skill: process_capability_analysis
+secondary_skills:
+- quality_improvement
+- statistical_quality_control
+- root_cause_analysis
+reference_answer: |
+  平均シフト=工具摩耗/機械温度/補正値ずれ。ばらつき=素材/クーラント/工具摩耗ばらつき/チャック状態。
+  確認データ=時系列寸法/工具使用数/温度/クーラント濃度/素材ロット別分布。
+  対策=工具交換基準見直し/補正ルール/温度安定化/素材ロット管理。
+  改善後にCpkを再評価。
+evaluation_rubric:
+  must_have:
+  - 平均シフトとばらつき増加の分離分析
+  - 候補要因ごとの検証データの提示
+  nice_to_have:
+  - 工程調整(暫定)と管理基準見直し(恒久)の区分
+  - 改善後のCpk再評価プロセス
+  critical_failures:
+  - 原因を断定して対策を講じる(分析プロセスを省略)
+reasoning_trace_required: true

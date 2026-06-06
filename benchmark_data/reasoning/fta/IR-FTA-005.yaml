@@ -1,0 +1,41 @@
+id: IR-FTA-005
+layer: industrial_reasoning
+category: fta
+domain: heavy_machinery
+subdomain: coating
+difficulty: 5
+estimated_time_min: 60
+title: 塗装剥離クレームのFTA
+scenario: |
+  建機向け金属カバーで、納入後2週間以内に塗装剥離が発生した。
+  剥離は端部に集中し、同じ塗装ラインの別製品では発生していない。
+  前処理薬液の濃度管理記録は規格内だが、端部バリ取り工程に外注先変更があった。
+question: |
+  塗装剥離をトップ事象とするFTAを作成し、前処理、素材、形状、塗装条件、後工程、輸送の要因に分解せよ。
+  端部集中という事実から優先原因を推論せよ。
+expected_skills:
+- fta_structuring
+- root_cause_analysis
+- change_control
+- risk_assessment
+primary_skill: fta_structuring
+secondary_skills:
+- root_cause_analysis
+- change_control
+- risk_assessment
+reference_answer: |
+  トップ事象=端部塗装剥離。
+  前処理系=脱脂/洗浄/化成処理不足。素材系=油分/酸化/異物。形状系=エッジ形状/バリ/曲率。
+  塗装条件系=膜厚/焼付不足/ガス抜き。後工程系=取扱/積載傷。輸送系=振動/衝撃。
+  端部集中かつ別製品で発生していないので、ライン全体条件ではなく端部状態を優先。
+  外注先変更のあった端部バリ取りが最有力。バリ残り/エッジ形状/表面粗さ/油分/前処理液の端部濡れ性を確認。
+evaluation_rubric:
+  must_have:
+  - 剥離位置の偏りを原因推定に使う論理
+  - 外注先変更のあったバリ取り工程を最優先候補とする推論
+  nice_to_have:
+  - ライン全体不良との違いを説明する姿勢
+  - 端部の物理特性(粗さ・形状)への言及
+  critical_failures:
+  - 薬液濃度規格内を理由に前処理要因を全て除外する
+reasoning_trace_required: true

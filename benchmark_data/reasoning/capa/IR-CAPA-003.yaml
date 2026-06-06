@@ -1,0 +1,40 @@
+id: IR-CAPA-003
+layer: industrial_reasoning
+category: capa
+domain: medical_device
+subdomain: molding
+difficulty: 5
+estimated_time_min: 60
+title: 異物混入CAPA
+scenario: |
+  医療機器向け樹脂部品で、顧客受入時に黒色異物が見つかった。
+  自社工程では成形、バリ取り、洗浄、梱包を行っている。
+  異物分析では有機物と金属粉が混在している可能性が示された。
+question: |
+  異物混入に対するCAPAを立案せよ。
+  汚染源調査、工程別封じ込め、清掃管理、環境管理、再発防止、有効性確認を含めよ。
+expected_skills:
+- capa_planning
+- containment_planning
+- root_cause_analysis
+- risk_assessment
+primary_skill: capa_planning
+secondary_skills:
+- containment_planning
+- root_cause_analysis
+- risk_assessment
+reference_answer: |
+  医療機器水準として対象ロットだけでなく同一工程・環境ロットも隔離。
+  有機物+金属粉なので成形機/バリ取り工具/洗浄槽/梱包環境/作業服/搬送容器を工程別に調査。
+  暫定=全数外観・洗浄条件確認・環境清掃・異物サンプル保全。
+  是正=発生源別の工具摩耗管理/清掃標準/フィルタ管理/環境監視強化。
+  有効性=異物検出率/環境測定/清掃監査/連続良品ロット。
+evaluation_rubric:
+  must_have:
+  - 医療機器水準の厳格なロット隔離
+  - 有機物/金属粉に基づく工程別発生源の特定
+  nice_to_have:
+  - 環境測定や清掃監査など予防処置の有効性確認プロセス
+  critical_failures:
+  - 対象1ロットのみ隔離し医療機器用としての影響を過小評価する
+reasoning_trace_required: true

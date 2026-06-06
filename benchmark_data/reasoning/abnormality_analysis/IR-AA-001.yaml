@@ -1,0 +1,40 @@
+id: IR-AA-001
+layer: industrial_reasoning
+category: abnormality_analysis
+domain: electronics
+subdomain: smt
+difficulty: 4
+estimated_time_min: 45
+title: 温度プロファイル逸脱
+scenario: |
+  リフロー炉の温度プロファイル測定で、ピーク温度は規格内だが、
+  液相線以上の時間が下限近くまで短くなっている。
+  直近で炉内ファン交換が行われ、同時に搬送速度も微調整された。外観検査では大きな異常はない。
+question: |
+  この状態を異常として扱うべきか判断し、品質リスク、追加確認、暫定処置、生産継続条件を示せ。
+expected_skills:
+- abnormality_analysis
+- process_validation
+- risk_assessment
+- containment_planning
+primary_skill: abnormality_analysis
+secondary_skills:
+- process_validation
+- risk_assessment
+- containment_planning
+reference_answer: |
+  ピーク温度内でも液相線時間が短ければ接合信頼性リスクがあり異常として扱う。
+  外観異常なくとも未濡れ・接合強度低下など潜在不良があり得る。
+  ファン交換と搬送速度調整の影響を再測定。
+  暫定=対象ロット識別/追加外観・X線・断面または強度確認。
+  継続条件=プロファイルが管理範囲内に戻り追加確認で問題なし。
+evaluation_rubric:
+  must_have:
+  - ピーク温度OKでも液相線時間不足による潜在リスクの指摘
+  - ファン交換・搬送速度調整との関連確認
+  nice_to_have:
+  - 断面・強度等の追加評価指示
+  - 対象ロットの暫定隔離
+  critical_failures:
+  - ピーク温度規格内・外観異常なしを根拠に異常なしと判断する
+reasoning_trace_required: true

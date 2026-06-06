@@ -1,0 +1,39 @@
+id: IR-5WHY-002
+layer: industrial_reasoning
+category: 5why
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: ピッキング誤品の5Why
+scenario: |
+  組立工程で外観が似た2種類のコネクタが取り違えられた。
+  棚番は隣同士で、部品箱ラベルは正しかった。
+  作業者は標準作業通りにピッキングしたと説明している。
+question: |
+  ピッキング誤品について5Why分析を行い、人的ミスの背後にある仕組み上の原因を特定せよ。
+  再発防止策も提示せよ。
+expected_skills:
+- five_why_analysis
+- human_factors
+- root_cause_analysis
+- work_standardization
+primary_skill: five_why_analysis
+secondary_skills:
+- human_factors
+- root_cause_analysis
+- work_standardization
+reference_answer: |
+  なぜ取り違えた?→外観類似のコネクタを隣接配置・視覚識別依存。
+  なぜ標準作業通りでも防げない?→標準作業が誤品防止の仕組みを持たない。
+  真因=似た部品の隣接配置と視覚依存の工程設計。
+  対策=棚配置分離・色分け・バーコード照合・専用容器・ピッキングリスト照合・誤品投入防止。
+evaluation_rubric:
+  must_have:
+  - 作業者責任に短絡せず、配置・識別性の問題への深掘り
+  nice_to_have:
+  - ポカヨケ的対策(バーコード照合・専用容器等)の具体提案
+  - 標準作業と現場実態の差の指摘
+  critical_failures:
+  - 作業者への再教育のみで真因と再発防止を終える
+reasoning_trace_required: true

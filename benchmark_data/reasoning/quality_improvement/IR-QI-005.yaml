@@ -1,0 +1,41 @@
+id: IR-QI-005
+layer: industrial_reasoning
+category: quality_improvement
+domain: general_manufacturing
+subdomain: procurement
+difficulty: 4
+estimated_time_min: 45
+title: 受入部品ばらつき改善
+scenario: |
+  購入シャフトの外径は規格内だが、組立圧入力がロットにより大きく変動している。
+  サプライヤの検査成績書では平均値のみ記載され、分布情報はない。
+  自社工程では圧入荷重の上昇により設備停止が増えている。
+question: |
+  受入部品ばらつき改善のため、サプライヤと自社で実施すべき分析・対策を示せ。
+  規格内ばらつき、分布管理、工程影響、受入基準見直しを含めよ。
+expected_skills:
+- supplier_quality_management
+- quality_improvement
+- statistical_quality_control
+- risk_assessment
+primary_skill: supplier_quality_management
+secondary_skills:
+- quality_improvement
+- statistical_quality_control
+- risk_assessment
+reference_answer: |
+  外径規格内でも分布が圧入荷重に影響するため平均値のみの成績書は不十分。
+  サプライヤにロット別の平均・標準偏差・最大最小・工程能力・測定条件を要求。
+  自社では外径分布と圧入荷重の相関を分析し停止が増える閾値を特定。
+  受入基準は規格内外だけでなく分布幅や工程影響を含めて見直す。
+  対策=サプライヤ工程中心管理・選別・仕様見直し・圧入条件最適化。
+evaluation_rubric:
+  must_have:
+  - 規格内でも工程影響があることの説明
+  - 平均値だけでなく分布管理をサプライヤに要求
+  nice_to_have:
+  - サプライヤ改善と自社受入管理の両面アプローチ
+  - 圧入工程への影響を定量的に捉える分析
+  critical_failures:
+  - 「規格内なので問題なし」としサプライヤ管理を放置する
+reasoning_trace_required: true

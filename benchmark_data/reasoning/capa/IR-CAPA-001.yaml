@@ -1,0 +1,41 @@
+id: IR-CAPA-001
+layer: industrial_reasoning
+category: capa
+domain: automotive
+subdomain: assembly
+difficulty: 5
+estimated_time_min: 60
+title: 市場異音クレームCAPA
+scenario: |
+  車載モータから市場使用後1か月で異音が発生するクレームが増えている。
+  返品品解析では軸受グリス量にばらつきがあり、工程内検査では異音検査の判定値が規格内だった。
+  グリス塗布装置は2か月前にノズル交換されている。
+question: |
+  この市場クレームに対するCAPAを作成せよ。
+  暫定封じ込め、原因調査、是正処置、予防処置、有効性確認を含めよ。
+expected_skills:
+- capa_planning
+- root_cause_analysis
+- containment_planning
+- risk_assessment
+primary_skill: capa_planning
+secondary_skills:
+- root_cause_analysis
+- containment_planning
+- risk_assessment
+reference_answer: |
+  封じ込め=市場品・在庫・仕掛・出荷予定品の対象範囲を特定し必要なら出荷停止。
+  調査=グリス量ばらつき/ノズル交換条件/塗布量管理/異音検査感度/軸受ロット。
+  是正=ノズル条件再設定/塗布量測定/設備点検/異音検査条件見直し。
+  予防=ノズル交換時の変更管理/初品確認/定期塗布量監視。
+  有効性確認=市場クレーム率/工程内異音NG率/グリス量分布。
+evaluation_rubric:
+  must_have:
+  - 市場・在庫・仕掛品の封じ込め範囲設定
+  - グリス塗布ばらつきとノズル交換の調査
+  nice_to_have:
+  - 市場クレーム率や工程内異音率による有効性確認指標の設定
+  - ノズル交換時の変更管理プロセス整備
+  critical_failures:
+  - 市場品の封じ込めを行わずクレーム対応のみで終わらせる
+reasoning_trace_required: true

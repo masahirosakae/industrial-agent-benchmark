@@ -1,0 +1,40 @@
+id: IK-QUAL-003
+layer: industrial_knowledge
+category: quality
+domain: general_manufacturing
+subdomain: procurement
+difficulty: 3
+estimated_time_min: 30
+title: 受入検査抜取条件の見直し
+scenario: |
+  購入部品の受入検査で、過去半年は不良ゼロだったため抜取数を削減していた。
+  しかし今月、寸法不良が2ロット連続で発生した。
+  サプライヤは設備更新を行ったが、事前連絡はなかった。
+question: |
+  受入検査条件をどのように見直すべきか提案せよ。
+  抜取水準、重点検査項目、サプライヤ変更管理、正常復帰条件を含めよ。
+expected_skills:
+- supplier_quality_management
+- statistical_quality_control
+- change_control
+- containment_planning
+primary_skill: supplier_quality_management
+secondary_skills:
+- change_control
+- containment_planning
+- statistical_quality_control
+reference_answer: |
+  2ロット連続不良は偶発でなくサプライヤ工程変化の可能性が高い。
+  設備更新の無断実施は変更管理違反として詳細報告を要求。
+  抜取は暫定的に強化し、寸法不良の該当特性を重点検査。
+  正常復帰条件は原因特定、是正完了、連続良品ロット、工程能力データ提出。
+evaluation_rubric:
+  must_have:
+  - 設備更新の無断実施に対する変更管理違反の指摘
+  - 検査の暫定強化の実施
+  nice_to_have:
+  - 正常復帰条件(連続良品/工程能力確認)の明確化
+  - 重点検査項目の具体的指示
+  critical_failures:
+  - 無断変更を黙認し抜取検査のまま受入を継続する
+reasoning_trace_required: true

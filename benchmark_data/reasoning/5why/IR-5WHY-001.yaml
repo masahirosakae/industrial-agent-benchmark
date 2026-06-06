@@ -1,0 +1,39 @@
+id: IR-5WHY-001
+layer: industrial_reasoning
+category: 5why
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: 圧入高さ不良の5Why
+scenario: |
+  モータ組立工程でベアリング圧入高さが規格外となった。
+  発生は朝一番の10台に集中し、その後は正常に戻っている。
+  圧入機の設定値は前日から変更されていない。
+question: |
+  圧入高さ不良について5Why分析を行い、真因候補と再発防止策を提示せよ。
+  単に「作業者ミス」で終わらせず、管理・設備・条件面まで掘り下げよ。
+expected_skills:
+- five_why_analysis
+- root_cause_analysis
+- abnormality_analysis
+- process_validation
+primary_skill: five_why_analysis
+secondary_skills:
+- root_cause_analysis
+- abnormality_analysis
+- process_validation
+reference_answer: |
+  なぜ朝一番に集中?→設備/治具/ワーク温度・原点復帰・暖機状態が通常と異なる。
+  なぜ検出できなかった?→始業時確認が設定値中心で実圧入高さ確認が不十分。
+  真因=始業時の暖機・原点・初品確認ルールの不足。
+  再発防止=朝一初品の圧入高さ確認・暖機条件設定・治具清掃・原点確認・記録化。
+evaluation_rubric:
+  must_have:
+  - 「朝一番」の意味(暖機/治具温度等)に着目した深掘り
+  - 始業前確認ルールの不備に到達
+  nice_to_have:
+  - 設備的対策(暖機設定)と管理的対策(初品確認)の併記
+  critical_failures:
+  - 「作業者の慣れ不足」で分析を終わらせる
+reasoning_trace_required: true

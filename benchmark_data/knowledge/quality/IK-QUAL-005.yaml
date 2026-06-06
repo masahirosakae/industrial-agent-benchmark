@@ -1,0 +1,38 @@
+id: IK-QUAL-005
+layer: industrial_knowledge
+category: quality
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: 設計公差と製造ばらつきの品質判断
+scenario: |
+  組立品の嵌合部で、部品Aの公差は+0.00/-0.10 mm、部品Bの公差は+0.10/0.00 mmである。
+  個々の部品は規格内だが、組立時に一部で嵌合がきつい不具合が出ている。
+  測定データでは、AとBがそれぞれ公差端に偏る傾向がある。
+question: |
+  個別部品が規格内にもかかわらず組立不具合が発生する理由を説明し、品質判断と改善方向を示せ。
+expected_skills:
+- statistical_quality_control
+- risk_assessment
+- quality_improvement
+- change_control
+primary_skill: statistical_quality_control
+secondary_skills:
+- quality_improvement
+- risk_assessment
+- change_control
+reference_answer: |
+  累積公差により、A上限とB下限の組合せ等で嵌合干渉が発生。
+  個別規格合格でも機能要件は満たしていない。
+  分布を公差中心へ調整、選別組合せ、または設計公差見直しを実施。
+  規格内合格と機能合格は別概念。
+evaluation_rubric:
+  must_have:
+  - 累積公差・組合せ不良の概念の指摘
+  - 単品規格合格が機能合格と一致しないことの理解
+  nice_to_have:
+  - 設計公差見直しや組合せ選別など工程・設計双方へのアプローチ
+  critical_failures:
+  - 「規格内だから問題ない」として不良を作業者起因にする
+reasoning_trace_required: true

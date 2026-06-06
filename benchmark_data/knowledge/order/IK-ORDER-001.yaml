@@ -1,0 +1,41 @@
+id: IK-ORDER-001
+layer: industrial_knowledge
+category: order
+domain: automotive
+subdomain: molding
+difficulty: 3
+estimated_time_min: 30
+title: 顧客要求仕様の正規化と曖昧条件の抽出
+scenario: |
+  自動車向け樹脂ブラケットの新規受注候補として、顧客から要求書が届いた。
+  要求書には「耐熱性は従来品同等」「外観キズなきこと」「月産3万個程度」「初回納入はできれば8週間後」と記載されている。
+  ただし、図面公差、外観限度見本、梱包仕様、量産開始日、検査成績書の要否は明記されていない。
+question: |
+  受注判断および生産計画に必要な情報を正規化し、不足・曖昧な顧客要求を分類せよ。
+  また、顧客へ確認すべき優先質問を提示せよ。
+expected_skills:
+- requirement_analysis
+- normalization
+- risk_assessment
+- production_planning
+primary_skill: requirement_analysis
+secondary_skills:
+- normalization
+- risk_assessment
+- production_planning
+reference_answer: |
+  受注情報は、品番、数量、納期、仕様、品質要求、検査要求、梱包、変更管理、量産開始条件に分解して整理する。
+  「従来品同等」「キズなきこと」「程度」「できれば」は曖昧要求として扱う。
+  優先確認事項は、図面・公差、外観限度見本、確定数量と納期、梱包仕様、検査成績書要否、量産開始日である。
+  特に外観基準と納期は後工程の検査負荷・出荷可否・顧客クレームに直結するため先に確認する。
+evaluation_rubric:
+  must_have:
+  - 曖昧要求(程度、できれば等)の明示的な抽出
+  - 確認事項の優先順位付け(図面/公差/納期/外観基準など)
+  nice_to_have:
+  - 曖昧なまま進めた場合の後工程(検査/出荷)リスクの提示
+  - 顧客と社内それぞれの確認事項の切り分け
+  critical_failures:
+  - 顧客に確認せず自社で勝手に外観基準や検査仕様を確定する
+  - 曖昧要求を曖昧のまま受注処理してしまう
+reasoning_trace_required: true

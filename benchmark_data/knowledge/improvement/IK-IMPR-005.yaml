@@ -1,0 +1,39 @@
+id: IK-IMPR-005
+layer: industrial_knowledge
+category: improvement
+domain: general_manufacturing
+subdomain: inspection
+difficulty: 4
+estimated_time_min: 45
+title: 自動化投資の効果試算とリスク評価
+scenario: |
+  手作業検査工程を画像検査装置へ置き換える投資案がある。
+  現状は作業者3名、月間人件費120万円、不良流出は月2件。
+  装置価格は2,400万円、保守費は年120万円、過検出による手直し増加リスクがある。
+question: |
+  自動化投資の妥当性を評価するため、経済効果、品質効果、運用リスク、回収期間、導入条件を整理せよ。
+expected_skills:
+- cost_benefit_analysis
+- quality_improvement
+- risk_assessment
+- process_validation
+primary_skill: cost_benefit_analysis
+secondary_skills:
+- quality_improvement
+- risk_assessment
+- process_validation
+reference_answer: |
+  人件費削減は年1,440万円相当だが、保守費120万円・過検出手直し増・教育・立上げロスを引き、品質効果(流出削減)を加える。
+  回収期間は単純計算で1.7年程度だが、過検出率や処理能力次第。
+  導入条件は検出率・過検出率・処理能力・品番切替性・限度見本整合・バックアップ運用の検証。
+  ROIだけでなく品質リスク低減・運用安定性で判断。
+evaluation_rubric:
+  must_have:
+  - 人件費だけでなく保守費・過検出対応費を含めたROI算出
+  - 品質効果(流出削減)のリスク評価
+  nice_to_have:
+  - 導入前検証条件(限度見本整合・処理能力テスト)の設定
+  - 回収期間の前提条件の明示
+  critical_failures:
+  - 人件費削減のみで回収を語り過検出や品質リスクを無視する
+reasoning_trace_required: true

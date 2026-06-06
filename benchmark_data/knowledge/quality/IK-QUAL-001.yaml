@@ -1,0 +1,37 @@
+id: IK-QUAL-001
+layer: industrial_knowledge
+category: quality
+domain: general_manufacturing
+subdomain: molding
+difficulty: 3
+estimated_time_min: 30
+title: 外観不良流出時のロット影響範囲特定
+scenario: |
+  顧客から、樹脂カバー表面の擦り傷不良が3件報告された。
+  不良品の出荷日は同一日だが、成形ロットは2種類、梱包作業者は同一である。
+  工程内検査記録では異常は記録されていない。
+question: |
+  影響範囲を特定するために確認すべき情報を整理し、暫定封じ込め範囲をどのように決めるべきか説明せよ。
+expected_skills:
+- traceability_analysis
+- containment_planning
+- risk_assessment
+- quality_improvement
+primary_skill: containment_planning
+secondary_skills:
+- traceability_analysis
+- risk_assessment
+- quality_improvement
+reference_answer: |
+  出荷日・成形ロット・梱包要因を比較。同一作業者・同一日に着目し梱包条件を優先確認。
+  工程内記録なしを「正常」と即断せず見逃しリスクを疑う。
+  暫定封じ込めは同一作業者・同一時間帯・同一梱包条件の出荷品を安全側で設定する。
+evaluation_rubric:
+  must_have:
+  - 同一梱包条件・時間帯を中心とした安全側の暫定封じ込め範囲設定
+  nice_to_have:
+  - 工程内検査記録なしを「正常」と断定せず見逃しリスクを疑う姿勢
+  - 成形ロットと梱包要因の両方を比較する分析手順
+  critical_failures:
+  - クレームのあった3件のみを問題として他ロット調査・封じ込めを行わない
+reasoning_trace_required: true

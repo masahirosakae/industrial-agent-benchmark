@@ -1,0 +1,40 @@
+id: IK-SHIP-003
+layer: industrial_knowledge
+category: shipping
+domain: electronics
+subdomain: logistics
+difficulty: 3
+estimated_time_min: 30
+title: 梱包仕様変更と輸送品質リスク
+scenario: |
+  コスト削減のため、電子機器の緩衝材を厚さ20 mmから15 mmへ変更する案が出ている。
+  国内輸送では問題が出ていないが、海外向けは長時間輸送と積替えが多い。
+  過去には角潰れクレームが発生したことがある。
+question: |
+  梱包仕様変更前に評価すべき品質リスクと試験項目を示せ。
+  国内向けと海外向けで判断を分けるべきかも説明せよ。
+expected_skills:
+- logistics_planning
+- risk_assessment
+- process_validation
+- cost_benefit_analysis
+primary_skill: logistics_planning
+secondary_skills:
+- risk_assessment
+- process_validation
+- cost_benefit_analysis
+reference_answer: |
+  海外輸送は積替え・温湿度変化が過酷で国内同等とは見なせない。
+  落下・振動・圧縮・温湿度・積替え再現・実輸送試験を実施。
+  過去角潰れクレームを踏まえ、海外向けは変更前に追加検証必須。
+  コスト削減効果とクレーム・返品リスクを比較する。
+evaluation_rubric:
+  must_have:
+  - 海外輸送特有の過酷条件(積替え・温湿度等)の考慮
+  - 落下/振動/圧縮等の物理的試験計画の立案
+  nice_to_have:
+  - クレーム時の返品コストと削減効果の費用対効果評価
+  - 国内向けと海外向けの判断分離
+  critical_failures:
+  - 「国内でOKだから」という理由のみで無試験で海外も変更する
+reasoning_trace_required: true

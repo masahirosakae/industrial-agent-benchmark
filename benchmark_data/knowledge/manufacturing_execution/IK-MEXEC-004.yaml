@@ -1,0 +1,39 @@
+id: IK-MEXEC-004
+layer: industrial_knowledge
+category: manufacturing_execution
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: タクト遅れの要因切り分けと応援配置
+scenario: |
+  手組み組立ラインで、計画タクト60秒に対して実績が平均72秒となっている。
+  観察すると、部品取り出し、位置合わせ、検査記録入力に時間がかかっている。
+  応援者を1名投入できるが、どの作業に配置すべきか未決定である。
+question: |
+  タクト遅れの要因を切り分け、応援者の配置方針を提案せよ。
+  作業分解、ボトルネック、品質リスク、短期対策と恒久対策を含めよ。
+expected_skills:
+- shopfloor_control
+- human_factors
+- quality_improvement
+- capacity_planning
+primary_skill: shopfloor_control
+secondary_skills:
+- human_factors
+- quality_improvement
+- capacity_planning
+reference_answer: |
+  作業要素を分解し、部品取り出し・位置合わせ・記録入力のどれがボトルネックか時間観測する。
+  応援者は品質判断を伴う検査ではなく、部品供給・記録補助など品質リスクが低く遅れに効く作業へ配置。
+  恒久対策は部品配置改善、治具化、入力自動化、作業標準見直し。
+evaluation_rubric:
+  must_have:
+  - 要素作業観測によるボトルネックの特定
+  - 品質リスクの低い作業(供給/補助等)への応援配置判断
+  nice_to_have:
+  - 治具化や入力自動化などの恒久対策の提示
+  - 短期と恒久対策の区別
+  critical_failures:
+  - 教育なしの応援者を品質判断を伴う重要作業に配置する
+reasoning_trace_required: true

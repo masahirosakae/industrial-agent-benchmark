@@ -1,0 +1,42 @@
+id: IK-ORDER-004
+layer: industrial_knowledge
+category: order
+domain: medical_device
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: 試作要求から量産条件への移管判断
+scenario: |
+  医療機器向け小型モータの試作を3回実施し、顧客から量産見積依頼を受けた。
+  試作時は熟練作業者による手組みで、全数特性検査を実施していた。
+  顧客は量産単価を試作単価の40%以下にしたいと希望している。
+  ただし量産数量、検査水準、変更管理、工程能力要求は未確定である。
+question: |
+  試作条件をそのまま量産へ移管した場合の問題点を整理し、量産受注前に決めるべき条件を提示せよ。
+  特に、工程設計と品質保証の観点を含めよ。
+expected_skills:
+- requirement_analysis
+- process_validation
+- cost_benefit_analysis
+- launch_readiness
+primary_skill: launch_readiness
+secondary_skills:
+- process_validation
+- cost_benefit_analysis
+- requirement_analysis
+reference_answer: |
+  試作条件は熟練者手組み・全数検査であり、量産の標準作業・タクト・作業者ばらつき・検査負荷を反映していない。
+  試作単価の40%以下にするには工程簡素化・治具化・自動化・抜取検査化等の前提条件が必要。
+  量産受注前に、月産数量、要求Cpk、検査水準、工程変更承認、品質保証範囲、初期流動管理、量産治具費負担を決める。
+  工程能力が確認できない状態で単価のみ合意するのは避ける。
+evaluation_rubric:
+  must_have:
+  - 試作(全数/手組)と量産の前提条件のギャップ指摘
+  - 量産前の検査水準・品質保証範囲の合意要求
+  nice_to_have:
+  - 治具化や自動化投資の負担範囲(顧客か自社か)の確認
+  - 医療機器特有の変更管理・トレーサビリティ要求への言及
+  critical_failures:
+  - 工程能力・検査方法の変更合意なしに単価のみ合意する
+  - 試作条件のまま量産受注を確定する
+reasoning_trace_required: true

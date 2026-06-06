@@ -1,0 +1,40 @@
+id: IR-QI-004
+layer: industrial_reasoning
+category: quality_improvement
+domain: heavy_machinery
+subdomain: welding
+difficulty: 3
+estimated_time_min: 30
+title: 溶接スパッタ不良低減
+scenario: |
+  板金溶接工程でスパッタ付着による外観不良が増えている。
+  発生は特定作業者ではなく、特定板厚の製品に集中している。
+  ワイヤロット変更と溶接電流条件の微調整が同時期に行われた。
+question: |
+  スパッタ不良低減のための原因仮説と検証計画を作成せよ。
+  材料、条件、治具、作業方法、後処理の観点を含めよ。
+expected_skills:
+- quality_improvement
+- root_cause_analysis
+- process_validation
+- statistical_quality_control
+primary_skill: quality_improvement
+secondary_skills:
+- root_cause_analysis
+- process_validation
+- statistical_quality_control
+reference_answer: |
+  特定板厚集中=入熱条件と板厚の組合せが主要仮説。
+  同時期変更がワイヤと電流のため分離検証必要。
+  確認=電流/電圧/速度/ワイヤ材質/シールドガス/治具保持/後処理。
+  DOEまたは条件戻しでスパッタ量を比較。
+  対策=板厚別条件最適化/ワイヤ管理/スパッタ防止剤/後処理標準化。
+evaluation_rubric:
+  must_have:
+  - 特定板厚集中を活用した入熱条件評価
+  - 同時期変更(ワイヤ/電流)の分離検証計画
+  nice_to_have:
+  - DOE等による条件最適化アプローチ
+  critical_failures:
+  - ワイヤと電流変更の影響を分離せず一度に両方変更する
+reasoning_trace_required: true

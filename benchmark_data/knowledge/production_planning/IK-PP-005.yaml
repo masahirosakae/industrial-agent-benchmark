@@ -1,0 +1,40 @@
+id: IK-PP-005
+layer: industrial_knowledge
+category: production_planning
+domain: general_manufacturing
+subdomain: inspection
+difficulty: 3
+estimated_time_min: 30
+title: 検査能力制約下の出荷計画
+scenario: |
+  完成品組立ラインは1日1,200台生産できるが、最終検査装置は1日900台分の能力しかない。
+  月末に顧客向け3,600台の出荷が予定されている。
+  検査は出荷前必須で、検査後の保管可能期間は10日である。
+question: |
+  出荷遅延を防ぐため、検査能力を考慮した生産・検査・出荷計画を作成する際の考え方を示せ。
+  また、検査能力不足への短期対策を挙げよ。
+expected_skills:
+- production_planning
+- capacity_planning
+- shipment_control
+- risk_assessment
+primary_skill: capacity_planning
+secondary_skills:
+- production_planning
+- shipment_control
+- risk_assessment
+reference_answer: |
+  検査は900台/日でボトルネックなので3,600台には最低4日必要。
+  生産は検査能力に合わせて平準化し、保管期間10日を活かして前倒し検査する。
+  短期対策は検査シフト延長、検査員増員、治具増設、優先品の先行検査、外部検査活用。
+evaluation_rubric:
+  must_have:
+  - 検査能力(900台/日)をベースにした後工程引取型の計画立案
+  - 保管期限を利用した検査の前倒し実施
+  nice_to_have:
+  - 検査シフトの延長や人員応援などの短期能力拡張策
+  - 外部検査活用の選択肢提示
+  critical_failures:
+  - 生産能力(1200台)ペースで作り続け検査仕掛をパンクさせる
+  - 検査を省略して出荷を強行する
+reasoning_trace_required: true

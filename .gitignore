@@ -1,0 +1,11 @@
+results/
+judgements/
+leaderboard.csv
+benchmark_report.md
+benchmark_audit_report.md
+**/__pycache__/
+**pycache**/
+*.pyc
+scripts/build_prompts.py
+scripts/prepare_fugu_judge_inputs.py
+scripts/write_fugu_answers.py

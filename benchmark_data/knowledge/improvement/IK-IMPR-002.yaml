@@ -1,0 +1,38 @@
+id: IK-IMPR-002
+layer: industrial_knowledge
+category: improvement
+domain: electronics
+subdomain: assembly
+difficulty: 4
+estimated_time_min: 45
+title: OEE低下要因の優先順位付け
+scenario: |
+  自動組立ラインのOEEが78%から62%へ低下した。
+  稼働率低下、速度低下、不良率上昇のすべてが見られるが、特にチョコ停が増加している。
+  設備ログでは部品供給エラーと画像検査リトライが多い。
+question: |
+  OEE低下の主要因を切り分ける分析手順を示し、改善テーマの優先順位を決定せよ。
+expected_skills:
+- quality_improvement
+- abnormality_analysis
+- data_integration
+- risk_assessment
+primary_skill: abnormality_analysis
+secondary_skills:
+- quality_improvement
+- data_integration
+- risk_assessment
+reference_answer: |
+  OEEを稼働率・性能・品質率に分解して損失額を算出。
+  チョコ停の部品供給エラーと画像検査リトライを停止時間・回数・復旧時間で分析。
+  供給は姿勢・部品ばらつき・フィーダ状態、画像は照明・閾値・位置決め・実不良を確認。
+  発生頻度・停止時間・品質影響・対策容易性で優先順位を決定。
+evaluation_rubric:
+  must_have:
+  - OEE構成要素(稼働率/性能/品質)への分解
+  - 部品供給・画像リトライの詳細要因分析
+  nice_to_have:
+  - 改善効果と実行難易度(投資要否等)の比較マトリクス提案
+  critical_failures:
+  - OEE低下を単一の原因に決めつけ全体構造分析を行わない
+reasoning_trace_required: true

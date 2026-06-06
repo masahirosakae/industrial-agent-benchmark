@@ -1,0 +1,42 @@
+id: IK-PP-001
+layer: industrial_knowledge
+category: production_planning
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: 多品種混流ラインの週次負荷平準化
+scenario: |
+  組立ラインではA品番、B品番、C品番を混流生産している。
+  Aはタクト45秒、Bは60秒、Cは90秒で、日次稼働時間は7.5時間である。
+  今週の必要数はA: 1,800台、B: 1,200台、C: 600台。
+  C品番は段取り替えに30分かかり、1日1回までが望ましい。
+question: |
+  週次生産計画を作成する際の負荷計算と平準化方針を示せ。
+  また、欠品・残業・段取り増加のリスクを最小化する計画上の注意点を述べよ。
+expected_skills:
+- capacity_planning
+- production_planning
+- shopfloor_control
+- risk_assessment
+primary_skill: production_planning
+secondary_skills:
+- capacity_planning
+- shopfloor_control
+- risk_assessment
+reference_answer: |
+  必要工数はA 81,000秒、B 72,000秒、C 54,000秒で合計207,000秒、約57.5時間。
+  1日7.5時間×5日=37.5時間の単一ラインでは不足するため、残業・増員・能力前提の再確認が必要。
+  Cは段取り30分・1日1回が望ましいので、日別負荷を見ながらまとめる。
+  平準化では日別タクト負荷、段取り回数、出荷優先度、欠品リスクを同時に評価する。
+evaluation_rubric:
+  must_have:
+  - 総負荷工数の計算による「能力不足」の検知
+  - C品番の段取り制約を考慮したまとめ生産の提案
+  nice_to_have:
+  - 増員・残業など具体的な能力拡張案の提示
+  - 出荷優先度と日別配分の整合性への言及
+  critical_failures:
+  - 稼働時間を超える生産計画をそのまま立案する
+  - 段取り時間を計画に含めず能力評価を行う
+reasoning_trace_required: true

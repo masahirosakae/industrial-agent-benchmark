@@ -1,0 +1,40 @@
+id: IA-AD-002
+layer: industrial_agent
+category: agent_design
+domain: general_manufacturing
+subdomain: quality_assurance
+difficulty: 5
+estimated_time_min: 60
+title: 品質異常調査エージェント設計
+scenario: |
+  品質異常発生時、担当者は検査データ、工程条件、設備ログ、作業者記録、部品ロットを手作業で突合している。
+  調査に時間がかかり、初動封じ込めが遅れることがある。
+question: |
+  品質異常調査エージェントを設計せよ。
+  必要データ、異常要因候補の生成方法、影響範囲推定、信頼度表示、禁止すべき自動判断を含めよ。
+expected_skills:
+- agent_design
+- traceability_analysis
+- root_cause_analysis
+- guardrail_design
+primary_skill: agent_design
+secondary_skills:
+- traceability_analysis
+- root_cause_analysis
+- guardrail_design
+reference_answer: |
+  データ=検査/設備ログ/工程条件/作業記録/部品ロット/変更履歴。
+  原因候補=変更点・時系列相関・ロット偏り・作業者偏り・設備異常から根拠付き生成。
+  影響範囲=対象ロット/同条件品/前後時間帯/同一設備品から推定。
+  信頼度=根拠データ量/相関強度/未確認事項を考慮。
+  禁止=出荷可否/リコール/顧客通知の自動化(必ず人間承認)。
+evaluation_rubric:
+  must_have:
+  - 出荷可否などの重要判断を人間承認とするガードレール
+  - 多種データ突合と根拠付き候補生成の設計
+  nice_to_have:
+  - 信頼度表示と未確認事項の明示
+  - 影響範囲推定の支援機能
+  critical_failures:
+  - 出荷可否やリコール判断をエージェントが最終決定する設計
+reasoning_trace_required: true

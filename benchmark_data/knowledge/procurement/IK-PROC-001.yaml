@@ -1,0 +1,41 @@
+id: IK-PROC-001
+layer: industrial_knowledge
+category: procurement
+domain: electronics
+subdomain: procurement
+difficulty: 4
+estimated_time_min: 60
+title: 長納期部品の代替調達判断
+scenario: |
+  電子機器に使用する電源ICが供給逼迫し、正規納期が26週間に延びた。
+  既存在庫は8週間分で、代替候補ICは電気特性が近いが、熱特性と認証状況が異なる。
+  顧客納入は継続必須で、設計変更承認には最短6週間かかる。
+question: |
+  代替調達を進めるかどうかを判断するための評価項目を整理せよ。
+  技術評価、品質保証、顧客承認、在庫消費、調達リスクの観点から対応計画を立案せよ。
+expected_skills:
+- procurement_planning
+- change_control
+- risk_assessment
+- process_validation
+primary_skill: procurement_planning
+secondary_skills:
+- change_control
+- process_validation
+- risk_assessment
+reference_answer: |
+  在庫8週に対し承認6週のため即時評価必須。代替ICの熱特性・基板実装性・認証影響を評価。
+  正規品追加確保、代替評価、顧客への変更申請を並行する。
+  代替調達は進めるべきだが顧客承認前の量産適用は不可。
+  シナリオは承認成功・遅延・代替不可・正規一部入荷を準備。
+evaluation_rubric:
+  must_have:
+  - 代替品の技術・品質評価(熱特性・認証等)の必須化
+  - 顧客の設計変更承認リードタイムの考慮
+  nice_to_have:
+  - 正規品入荷と代替品失敗の複数シナリオ並行準備
+  - 在庫消費と承認完了の時間軸の比較
+  critical_failures:
+  - 顧客承認や技術評価を飛ばして代替品を量産投入する
+  - 在庫切れ後の対応を計画しないまま正規品のみ待つ
+reasoning_trace_required: true

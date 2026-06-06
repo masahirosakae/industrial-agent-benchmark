@@ -1,0 +1,42 @@
+id: IK-PP-002
+layer: industrial_knowledge
+category: production_planning
+domain: electronics
+subdomain: smt
+difficulty: 4
+estimated_time_min: 45
+title: ボトルネック工程を考慮した納期回答
+scenario: |
+  電子部品の生産工程は、実装、リフロー、ICT検査、外観検査、梱包で構成される。
+  実装とリフローは十分な能力があるが、ICT検査機は1台のみで、
+  1台あたり検査時間は75秒、稼働率は85%である。
+  顧客から5営業日後に3,000台の追加納入可否を問い合わせられている。
+question: |
+  ボトルネック工程を特定し、5営業日後の納入可否を判断せよ。
+  不足する場合は、どのような代替策を検討すべきか優先順位を付けて提示せよ。
+expected_skills:
+- capacity_planning
+- production_planning
+- risk_assessment
+- shipment_control
+primary_skill: capacity_planning
+secondary_skills:
+- production_planning
+- shipment_control
+- risk_assessment
+reference_answer: |
+  ボトルネックはICT検査。1台75秒×稼働率85%で1日7.5時間なら有効能力は約306台/日、5日で約1,530台で3,000台には不足。
+  納入可否は通常条件では不可と回答すべき。
+  代替策はシフト延長、検査機追加・外注検査、休日対応、顧客との分納交渉、検査の簡略化(顧客承認要)の順で検討。
+  顧客承認なしの検査省略は禁止。
+evaluation_rubric:
+  must_have:
+  - ICT検査の能力上限の定量算出(約1530台/5日)
+  - 納入不可の明確な回答と代替案(シフト延長・分納等)の提示
+  nice_to_have:
+  - 検査時間短縮や外注活用など踏み込んだ代替案
+  - 代替策の優先順位付けと根拠
+  critical_failures:
+  - 能力不足を無視した受注または楽観的な納期回答
+  - 顧客承認なしに検査省略を提案する
+reasoning_trace_required: true

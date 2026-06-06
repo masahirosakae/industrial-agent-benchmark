@@ -1,0 +1,44 @@
+id: IA-AD-001
+layer: industrial_agent
+category: agent_design
+domain: general_manufacturing
+subdomain: production_control
+difficulty: 4
+estimated_time_min: 60
+title: 生産計画支援エージェントの役割設計
+scenario: |
+  中堅製造業の生産管理部門で、生産計画策定をAIエージェントで支援したい。
+  データソースはERP（受注情報・1日1回更新）、MES（実績・15分間隔更新）、現場Excel（段取り時間・人手更新）に分散している。
+  生産は1日7.5時間×2交代、10ライン稼働、月間受注は900件/月規模である。
+  AIエージェントには計画案の自動生成と現場の確認・承認支援を期待するが、最終承認は生産管理責任者が必ず行う運用とする。
+question: |
+  生産計画支援エージェントの役割と責務分離を設計せよ。
+  ERP/MES/現場Excelのデータ鮮度の違いをどう扱うか、エージェントが自動化してよい処理と人間が承認すべき判断点をどのように区別するか、構造化出力の項目とガードレールを含めて説明せよ。
+expected_skills:
+- agent_design
+- production_planning
+- data_integration
+- human_in_the_loop
+primary_skill: agent_design
+secondary_skills:
+- production_planning
+- data_integration
+- human_in_the_loop
+reference_answer: |
+  エージェントは「データ取得→正規化→計画案生成→根拠提示→人間承認待ち」の責務に限定し、最終承認権限は生産管理責任者に残す。
+  データ鮮度はERPを日次基準、MESを準リアルタイム、現場Excelを15分以上古い場合は警告フラグを付与し、Excelが未更新の場合は段取り時間を前回値で代用しつつ"stale=true"を出力に明示する。
+  自動化してよいのは受注集約・能力計算・代替案候補の列挙・KPI試算であり、納期遅延の顧客連絡、特殊ライン割当の最終決定、外注切替などは人間判断とする。
+  構造化出力はplan_id, version, data_timestamp（ERP/MES/Excel別）、各ラインの割当オーダー、能力使用率、リスク要因、人間承認に必要な決定項目をJSON化する。
+  ガードレールとして、データ鮮度閾値超過時の自動承認禁止、過去計画との大幅乖離時の差分提示、納期遅延を伴う計画は必ずHITL確認、を実装する。
+evaluation_rubric:
+  must_have:
+  - ERP/MES/現場Excelのデータ鮮度差を明示的に扱う設計がある
+  - エージェント自動化範囲と人間承認範囲の区別が示されている
+  - 構造化出力項目とガードレールが具体化されている
+  nice_to_have:
+  - データタイムスタンプを含むJSONスキーマ例がある
+  - 過去計画との差分提示などの説明可能性配慮がある
+  critical_failures:
+  - AIエージェントが生産計画を最終決定し人間承認をスキップする設計
+  - データ鮮度差を無視し現場Excelを常に最新として扱う設計
+reasoning_trace_required: true

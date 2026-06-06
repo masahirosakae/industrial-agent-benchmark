@@ -1,0 +1,38 @@
+id: IA-MAC-003
+layer: industrial_agent
+category: multi_agent_coordination
+domain: general_manufacturing
+subdomain: production_control
+difficulty: 5
+estimated_time_min: 60
+title: 営業(納期優先)と製造(平準化優先)のエージェント間調停
+scenario: |
+  営業エージェントは顧客満足度最大化のため「小ロット・多頻度・短納期」の注文を次々に入れたい。
+  製造エージェントは効率最大化のため「大ロット・まとめ生産・段取り最小化」を主張している。
+question: |
+  両者の評価指標の対立を解消し、受注の可否や納期回答を自動で行うための「納期・価格の動的調整(ダイナミックプライシング/LT)」メカニズムを設計せよ。
+expected_skills:
+- multi_agent_coordination
+- production_planning
+- cost_benefit_analysis
+- human_in_the_loop
+primary_skill: multi_agent_coordination
+secondary_skills:
+- production_planning
+- cost_benefit_analysis
+- human_in_the_loop
+reference_answer: |
+  営業Aが受注希望を提示→製造Aが「短納期・小ロット時の段取りコスト増と能力低下」を算出。
+  製造Aが「短納期なら特急料金+20%、2週間待てるなら通常価格」のオプション付き回答を返す。
+  営業Aは顧客重要度と許容価格モデルに基づきオプション選択。
+  複数注文の束ね(キャンバス化)による段取りコスト低減も視野。
+evaluation_rubric:
+  must_have:
+  - 段取りコストを価格/納期オプションへ変換して返すメカニズム
+  - 営業と製造がトレードオフを金額/利益率で比較できる仕組み
+  nice_to_have:
+  - 複数注文を束ねる営業A側の工夫
+  - 顧客重要度に応じた特急料金自社負担の判断
+  critical_failures:
+  - 営業または製造のKPIを一方的に優先し他方を無視する設計
+reasoning_trace_required: true

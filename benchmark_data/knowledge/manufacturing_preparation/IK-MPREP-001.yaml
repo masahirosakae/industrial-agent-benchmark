@@ -1,0 +1,39 @@
+id: IK-MPREP-001
+layer: industrial_knowledge
+category: manufacturing_preparation
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: 工程変更前の作業標準と治具確認
+scenario: |
+  組立工程で、部品挿入治具を手動式から半自動式へ変更する計画がある。
+  期待効果は作業時間20%短縮だが、治具位置決め方式が変わるため、挿入深さ不良の発生リスクがある。
+question: |
+  工程変更前に確認・準備すべき事項を整理せよ。
+  作業標準、治具検証、品質確認、作業者教育、変更承認の観点を含めよ。
+expected_skills:
+- process_validation
+- work_standardization
+- change_control
+- risk_assessment
+primary_skill: change_control
+secondary_skills:
+- process_validation
+- work_standardization
+- risk_assessment
+reference_answer: |
+  半自動治具への変更では位置決め変更による挿入深さ不良が主要リスク。
+  治具精度・繰返し性・ワークばらつき・異常時停止・初品確認・作業標準更新を確認。
+  作業者には新セット方法・異常時対応・品質確認ポイントを教育。
+  量産前に変更承認・試作検証・初期流動の重点監視を設定。
+evaluation_rubric:
+  must_have:
+  - 治具位置決め変更による品質リスク(深さ不良)の事前特定と検証
+  - 作業標準の更新と作業者への事前教育
+  nice_to_have:
+  - 量産適用時の初期流動監視(重点チェック)の設定
+  - 変更承認プロセスの組み込み
+  critical_failures:
+  - 精度検証や変更承認なしに量産ラインへ治具を投入する
+reasoning_trace_required: true

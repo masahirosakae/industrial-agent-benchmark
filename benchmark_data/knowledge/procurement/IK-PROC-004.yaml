@@ -1,0 +1,41 @@
+id: IK-PROC-004
+layer: industrial_knowledge
+category: procurement
+domain: general_manufacturing
+subdomain: procurement
+difficulty: 4
+estimated_time_min: 60
+title: 部品終息通知への対応計画
+scenario: |
+  産業機器に搭載するマイコンについて、メーカーから12か月後のEOL通知が届いた。
+  対象製品は保守供給を含めて今後7年間の出荷責任がある。
+  最終購入数量の申告期限は3か月後で、代替設計には1年以上かかる可能性がある。
+question: |
+  EOL通知を受けた場合の対応計画を作成せよ。
+  最終購入、保管リスク、代替設計、顧客通知、保守責任の観点から整理せよ。
+expected_skills:
+- product_lifecycle_management
+- procurement_planning
+- inventory_planning
+- change_control
+primary_skill: product_lifecycle_management
+secondary_skills:
+- procurement_planning
+- inventory_planning
+- change_control
+reference_answer: |
+  保守供給7年のため最終購入と代替設計を並行。
+  最終購入数は販売予測・保守需要・歩留まり・不良交換・在庫劣化・廃棄リスクから算出。
+  マイコンは長期保管の酸化・湿度・はんだ性・プログラム書込保証のリスクがあり保管条件と定期確認が必要。
+  代替設計は1年以上かかるので顧客への早期通知が必須。
+evaluation_rubric:
+  must_have:
+  - 保守期間(7年)分を見越した最終発注(LTB)数量の計算ロジック
+  - 長期保管による電子部品の劣化リスク対策
+  nice_to_have:
+  - 代替設計への移行と顧客通知計画のタイムライン作成
+  - 需要・歩留まり・不良交換を含む需要要素の分解
+  critical_failures:
+  - 最終購入のみで7年保守をカバーするとし保管劣化を無視する
+  - 顧客への早期通知を行わず代替設計に着手しない
+reasoning_trace_required: true

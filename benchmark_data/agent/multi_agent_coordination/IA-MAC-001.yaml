@@ -1,0 +1,38 @@
+id: IA-MAC-001
+layer: industrial_agent
+category: multi_agent_coordination
+domain: general_manufacturing
+subdomain: supply_chain_management
+difficulty: 5
+estimated_time_min: 60
+title: 調達エージェントと生産計画エージェントの競合解消設計
+scenario: |
+  調達エージェントは「欠品を防ぐため、LT変動リスクを考慮し早めに大ロットで発注したい」。
+  生産計画エージェントは「在庫保管費用とキャッシュフロー最適化のため、ジャストインタイムで発注したい」。
+  両者の目標が相反している。
+question: |
+  この2つのエージェント間の対立を調停し、工場全体での最適解を導出するためのコーディネーション（交渉）プロトコルを設計せよ。
+expected_skills:
+- multi_agent_coordination
+- inventory_planning
+- cost_benefit_analysis
+- human_in_the_loop
+primary_skill: multi_agent_coordination
+secondary_skills:
+- inventory_planning
+- cost_benefit_analysis
+- human_in_the_loop
+reference_answer: |
+  共通評価関数=欠品によるライン停止損失+在庫保管費用+発注コスト の最小化。
+  プロセス=調達Aが「LT変動リスクに基づく必要前倒し日数と在庫増コスト」を提示→計画Aが「許容するか別品番計画変更コストを算出」→全体コストが低い案を採用。
+  合意できない場合は人間(工場長等)へエスカレーション。
+evaluation_rubric:
+  must_have:
+  - 相反する目的を統一指標(全体コスト等)で評価する仕組み
+  - 代替案(計画変更vs在庫増)を出し合う交渉プロセス
+  nice_to_have:
+  - 共通評価関数の重みを市場環境で動的に変える仕組み
+  - 合意不成立時の人間エスカレーション条件
+  critical_failures:
+  - どちらか一方の意見を無条件で優先しコーディネーションが成立しない設計
+reasoning_trace_required: true

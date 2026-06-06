@@ -1,0 +1,40 @@
+id: IR-CAPA-005
+layer: industrial_reasoning
+category: capa
+domain: electronics
+subdomain: assembly
+difficulty: 5
+estimated_time_min: 60
+title: ソフト書込ミスCAPA
+scenario: |
+  電子機器の出荷後、一部製品に旧バージョンのファームウェアが書き込まれていたことが判明した。
+  書込装置は自動でバージョン判定する仕様だが、当該期間にサーバ上のマスタファイル更新作業が行われていた。
+  製品機能には安全関連機能が含まれる。
+question: |
+  ソフト書込ミスに対するCAPAを作成せよ。
+  対象範囲特定、出荷停止、顧客影響評価、マスタ管理、書込検証、再発防止を含めよ。
+expected_skills:
+- capa_planning
+- change_control
+- traceability_analysis
+- guardrail_design
+primary_skill: capa_planning
+secondary_skills:
+- change_control
+- traceability_analysis
+- guardrail_design
+reference_answer: |
+  対象期間・シリアル・書込ログ・マスタ更新履歴を突合し影響範囲特定。
+  安全関連機能を含むため対象品出荷停止・既出荷品の顧客影響評価。
+  原因=サーバ上マスタ更新手順/版数管理/装置の自動判定仕様/更新時承認ログ。
+  是正=マスタ版数固定/電子承認/チェックサム照合/書込後読戻し確認。
+  予防=構成管理システム化/更新時二重承認/旧版自動ブロック。
+evaluation_rubric:
+  must_have:
+  - 安全関連機能としての出荷停止と影響評価
+  - マスタ更新手順不備の是正
+  nice_to_have:
+  - 書込後読戻し(チェックサム)確認や電子承認などのシステム的予防
+  critical_failures:
+  - 安全関連機能を含むにも関わらず出荷停止や顧客通知を行わない
+reasoning_trace_required: true

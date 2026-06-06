@@ -1,0 +1,44 @@
+id: IR-FMEA-004
+layer: industrial_reasoning
+category: fmea
+domain: electronics
+subdomain: logistics
+difficulty: 4
+estimated_time_min: 45
+title: 物流梱包FMEA
+scenario: |
+  電子機器を海外顧客へ輸出している。輸送経路はトラック→港湾→海上→港湾→トラックで、総輸送日数は21日、うち海上7日、積替えが4回発生する。
+  現行梱包は1個あたり650円かかっており、顧客から目標梱包コスト550円への低減を要求されている。
+  候補A：520円。落下試験（30cm×30回）で2/30NG、振動試験は基準クリア。
+  候補B：610円。落下試験はOK、振動試験は7時間連続で基準クリア。
+  輸送中破損が発生した場合の市場クレーム費用は1件あたり12万円であり、過去1年で発生実績は10件/年である。
+question: |
+  物流梱包FMEAとして、故障モード・原因・影響・現状管理・S/O/D・RPNを整理せよ。
+  目標コスト550円の制約下で候補A/Bの採否、追加試験、改良の方向性を提案し、判断根拠を定量的に示せ。
+expected_skills:
+- fmea_analysis
+- logistics_planning
+- risk_assessment
+- process_validation
+primary_skill: fmea_analysis
+secondary_skills:
+- logistics_planning
+- risk_assessment
+- process_validation
+reference_answer: |
+  故障モードは「外装破損」「内部部品損傷」「ESD不良」「水濡れ」、原因は落下衝撃・積替え時の繰返し衝撃・長時間振動・湿度などとなる。
+  候補A：520円で目標達成だが落下試験2/30NGはOccurrenceが許容できない。クレーム費用12万円×想定発生件数を踏まえると、コスト差130円/個では到底回収できないため、追加緩衝材または内装変更を施した派生案A'で再評価する必要がある。
+  候補B：610円で目標未達だが落下・振動とも基準クリア。コスト差60円を顧客と再交渉する、または積替え回数削減やヘッダー材変更で内装簡素化を行い550円目標に近づける改良が現実的。
+  結論：現状ではBベースでの改良を本命、Aは緩衝材改良で再試験する派生案として並行検証し、ESD・水濡れも含めた追加環境試験を実施する。
+evaluation_rubric:
+  must_have:
+  - 故障モード・S/O/D・RPNの基本構造で評価している
+  - 候補Aの落下試験NGをリスクとして適切に評価している
+  - 候補Bのコスト超過に対する改良または交渉案が提示されている
+  nice_to_have:
+  - 輸送21日・海上7日・積替え4回の条件を反映している
+  - 落下/振動/ESD/水濡れの環境を網羅している
+  critical_failures:
+  - 目標550円を満たすため候補Aを無条件採用する
+  - クレーム費用を無視して候補Bを単純拒否する
+reasoning_trace_required: true

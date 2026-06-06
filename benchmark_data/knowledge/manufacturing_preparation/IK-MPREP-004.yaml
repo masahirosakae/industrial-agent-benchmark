@@ -1,0 +1,41 @@
+id: IK-MPREP-004
+layer: industrial_knowledge
+category: manufacturing_preparation
+domain: general_manufacturing
+subdomain: inspection
+difficulty: 4
+estimated_time_min: 45
+title: 検査治具GR&Rと量産判定
+scenario: |
+  寸法公差±0.05 mmの樹脂部品について、新規検査治具を導入する。
+  予備測定では同一部品の測定値が作業者によって最大0.035 mmばらついた。
+  顧客は量産前に測定システムの妥当性確認を求めている。
+question: |
+  この検査治具を量産で使用できるか判断するための評価手順を示せ。
+  GR&R、測定分解能、作業者差、判定リスクの観点を含めよ。
+expected_skills:
+- measurement_system_analysis
+- statistical_quality_control
+- process_validation
+- risk_assessment
+primary_skill: measurement_system_analysis
+secondary_skills:
+- statistical_quality_control
+- process_validation
+- risk_assessment
+reference_answer: |
+  公差幅0.10 mmに対し作業者差0.035 mmは大きく、誤判定リスクが高い。
+  GR&Rを実施し繰返し性・再現性・部品間変動・作業者差を分解。
+  測定分解能は公差に対し十分細かい必要があり、一般に0.01 mm以下が望ましい。
+  GR&Rが高い場合は治具位置決め・測定手順・作業者教育・測定器改善を行う。
+  判定可否はGR&Rと誤判定リスクをもとに判断。
+evaluation_rubric:
+  must_have:
+  - 公差幅に対する測定ばらつきの大きさ(リスク)の指摘
+  - GR&Rの実施と要因(測定器/作業者)の分解
+  nice_to_have:
+  - 測定分解能の要求や測定手順見直しの提示
+  - 改善後の量産可否判断の数値基準
+  critical_failures:
+  - ばらつきが大きいまま「気をつけて測定する」精神論で量産開始する
+reasoning_trace_required: true

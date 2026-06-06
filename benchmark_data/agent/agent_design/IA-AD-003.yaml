@@ -1,0 +1,39 @@
+id: IA-AD-003
+layer: industrial_agent
+category: agent_design
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 4
+estimated_time_min: 45
+title: 現場作業者の暗黙知抽出エージェント設計
+scenario: |
+  熟練工が退職間近だが、機械の「異音」や「振動」に基づく微調整のノウハウがマニュアル化されていない。
+  作業中にウェアラブルマイクとカメラで記録を取得し、エージェントがインタビューを行う。
+question: |
+  暗黙知を抽出・構造化するためのエージェントを設計せよ。
+  どのようなトリガーで質問を発し、どのようなデータ構造で保存するか。
+expected_skills:
+- agent_design
+- human_factors
+- knowledge_extraction
+- work_standardization
+primary_skill: agent_design
+secondary_skills:
+- knowledge_extraction
+- human_factors
+- work_standardization
+reference_answer: |
+  トリガー=普段と異なる操作(手動介入/滞留時間増)/AIが検知した異音発生時。
+  質問=「今、なぜその設定値を変更しましたか」「どの音/手応えで判断しましたか」
+  データ構造=[現象(Sensor)/作業者認知(Text)/行動(Action)/期待結果(Goal)]のJSON。
+  作業を邪魔しないインタラプト設計と感覚表現の定量化プロンプトが必須。
+evaluation_rubric:
+  must_have:
+  - 熟練工の作業を邪魔しないインタラプト(トリガー)設計
+  - 感覚的表現を文脈化するプロンプト設計
+  nice_to_have:
+  - センサーデータと作業者発話のリンク保存
+  - 若手トレーニング教材への自動変換
+  critical_failures:
+  - 作業中に頻繁な質問で熟練工の作業安全を阻害する設計
+reasoning_trace_required: true

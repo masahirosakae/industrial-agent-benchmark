@@ -1,0 +1,42 @@
+id: IR-FTA-001
+layer: industrial_reasoning
+category: fta
+domain: automotive
+subdomain: assembly
+difficulty: 4
+estimated_time_min: 45
+title: ねじ締め不良のFTA
+scenario: |
+  OBC組立工程で、M3ねじの締付不良が0.5%発生している。
+  対象はアルミ雌ねじで、材料変更はない。ただし、先週から電動ドライバを新機種へ変更し、作業者も2名入れ替わった。
+  不良は「ねじ浮き」と「ねじ山損傷」の両方が含まれる。
+question: |
+  締付不良をトップ事象とするFTAを作成し、主要な中間事象と基本事象を整理せよ。
+  条件から最も可能性の高い原因候補を優先順位付きで示せ。
+expected_skills:
+- fta_structuring
+- root_cause_analysis
+- process_validation
+- risk_assessment
+primary_skill: fta_structuring
+secondary_skills:
+- root_cause_analysis
+- process_validation
+- risk_assessment
+reference_answer: |
+  トップ事象=M3ねじ締付不良。ねじ浮き系とねじ山損傷系に分割。
+  ねじ浮き基本事象=トルク不足/ビット浮き/斜め締め/異物噛み込み/順序ミス/ドライバ設定不良。
+  ねじ山損傷基本事象=過トルク/締付速度過大/アルミ強度不足/斜め挿入/再締付過多。
+  変更点が新ドライバと作業者2名なので、ドライバ設定・締付制御・教育不足を優先候補。
+  検証はトルクログ・破壊トルク・作業観察・作業者別不良率。
+evaluation_rubric:
+  must_have:
+  - 「ねじ浮き」と「ねじ山損傷」を物理メカニズム別に系統分解
+  - ドライバ変更・作業者入替を優先原因とする推論
+  nice_to_have:
+  - 電動ドライバ設定や締付制御データ(ログ)の検証計画
+  - 作業者別不良率による検証提案
+  critical_failures:
+  - 物理現象を無視し全てを「作業者ミス」で片付ける
+  - 材料変更ないことを根拠にアルミ強度を完全に除外する
+reasoning_trace_required: true

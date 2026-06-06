@@ -1,0 +1,40 @@
+id: IR-AA-003
+layer: industrial_reasoning
+category: abnormality_analysis
+domain: general_manufacturing
+subdomain: inspection
+difficulty: 3
+estimated_time_min: 30
+title: 検査機OK率急変
+scenario: |
+  自動外観検査機のOK率が通常96%から82%へ急落した。
+  実不良確認では、半数以上が過検出だった。
+  直前に照明ユニット清掃と検査プログラムの軽微な更新が行われている。
+question: |
+  OK率急変をどのように分析すべきか示せ。
+  検査機異常、製品異常、環境変化、プログラム変更の切り分けを含めよ。
+expected_skills:
+- abnormality_analysis
+- measurement_system_analysis
+- change_control
+- risk_assessment
+primary_skill: abnormality_analysis
+secondary_skills:
+- measurement_system_analysis
+- change_control
+- risk_assessment
+reference_answer: |
+  OK率低下を製品不良増と即断せず、実不良と過検出を分ける。
+  過検出が半数以上で直前に照明清掃・プログラム更新があるため検査条件変化を優先確認。
+  確認=照明位置/輝度/カメラ設定/閾値/更新内容/マスター画像/製品ロット。
+  暫定=人手再判定/二次判定で見逃しと過検出を両立。
+  プログラム戻しは変更管理下で実施。
+evaluation_rubric:
+  must_have:
+  - 実不良と過検出の切り分け
+  - 照明清掃・プログラム更新の優先確認
+  nice_to_have:
+  - 人手再判定フローの暫定導入による出荷品質担保
+  critical_failures:
+  - OK率低下を製品不良増と即断し製造工程の対策に直行する
+reasoning_trace_required: true

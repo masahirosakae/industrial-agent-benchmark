@@ -1,0 +1,41 @@
+id: IR-AA-005
+layer: industrial_reasoning
+category: abnormality_analysis
+domain: automotive
+subdomain: machining
+difficulty: 5
+estimated_time_min: 60
+title: 特定ロット摩耗粉異常
+scenario: |
+  ギヤユニットの耐久試験で、特定ロットのみ摩耗粉が通常の3倍検出された。
+  寸法検査は全て規格内で、硬度も規格内である。
+  ただし、熱処理炉の負荷量が通常より多かった日とロットが一致している。
+question: |
+  摩耗粉異常の原因仮説を立て、追加分析と暫定処置を示せ。
+  規格内データで問題なしとせず、熱処理、表面状態、組付け、潤滑の観点を含めよ。
+expected_skills:
+- abnormality_analysis
+- root_cause_analysis
+- process_validation
+- containment_planning
+primary_skill: abnormality_analysis
+secondary_skills:
+- root_cause_analysis
+- process_validation
+- containment_planning
+reference_answer: |
+  寸法・硬度規格内でも摩耗粉3倍なら機能異常として扱う。
+  熱処理炉負荷量と一致するため炉内温度分布・浸炭/焼入条件・表面硬化層を確認。
+  追加分析=表面粗さ/金属組織/硬化層深さ/残留応力/潤滑/組付け荷重。
+  対象ロット暫定隔離し同条件熱処理ロットも確認。
+  規格項目だけでなく耐久機能特性を評価。
+evaluation_rubric:
+  must_have:
+  - 規格内でも機能異常(摩耗粉増)を重視する姿勢
+  - 熱処理炉過負荷と熱処理品質の関連付け
+  nice_to_have:
+  - 硬化層深さ・組織分析など耐久性に関わる追加分析
+  - 同条件熱処理ロットの暫定隔離
+  critical_failures:
+  - 「規格内なので異常なし」と判断し対象ロットを通常出荷する
+reasoning_trace_required: true

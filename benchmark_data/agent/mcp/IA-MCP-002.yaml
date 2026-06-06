@@ -1,0 +1,46 @@
+id: IA-MCP-002
+layer: industrial_agent
+category: mcp
+domain: general_manufacturing
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 45
+title: 品質検査画像DBとチャットUIを繋ぐMCPツール定義
+scenario: |
+  自動車部品の外観検査AIシステムで、検査担当者が不良画像をチャットUIから検索・確認できるようにしたい。
+  検査画像は画像DBに蓄積され、1枚あたり最大20MB、日次で約8,000件登録される。
+  画像にはロットID・不良種別・撮影日時・検査ライン・判定結果のメタデータが付与されているが、メタデータの整合性チェックで約2%にDB登録ミス（メタ不整合）が確認されている。
+  画像アクセスログは90日間保持されている。
+  チャットUIの応答はユーザ体感として10秒以内に収める必要がある。
+question: |
+  LLMエージェントから画像DBへ安全にアクセスするためのMCPツール定義（tools/resources）を設計せよ。
+  画像サイズ・応答時間・権限・監査ログ・メタ不整合の扱いを踏まえ、Tool/Resourceの責務分離と必要なガードレールを示せ。
+expected_skills:
+- mcp_design
+- evidence_management
+- data_integration
+- guardrail_design
+primary_skill: mcp_design
+secondary_skills:
+- evidence_management
+- data_integration
+- guardrail_design
+reference_answer: |
+  Tool: search_defects(lot_id, defect_type, date_range, limit, requester_role) を定義し、検索結果はimage_id・thumbnail_uri・resource_uriなどIDとメタのみを返し、画像バイナリは返さない。
+  Resource: mcp://qa-images/{image_id}?size=thumbnail | full を定義し、サムネイル（10秒以内応答可能なサイズ）と原寸を分離。原寸はリクエスタ権限を検証してから返す。
+  MCPサーバ側でアクセス制御（ロール・ラインスコープ）、レート制限、image_id単位の90日監査ログを実装する。
+  メタ不整合率2%対策として、metadata_status=conflict のレコードはAIへ直接渡さず人手確認フローへ送る。画像はURLまたはBase64の選択肢があるが、LLMコンテキストには直接Base64でフル画像を渡さず、必要時のみResource経由で個別取得させる。
+evaluation_rubric:
+  must_have:
+  - Tool（検索系）とResource（画像取得系）の責務分離が明確
+  - 画像サイズと10秒応答制約を踏まえたMCP設計になっている
+  - 権限・監査ログ・UIレイテンシを考慮したガードレールがある
+  - メタデータconflict時のAI非経由フローがある
+  nice_to_have:
+  - 画像ID参照ベースでコンテキスト肥大を防ぐ設計
+  - limit やページングなどの応答時間配慮
+  critical_failures:
+  - 全画像をBase64でLLMコンテキストに渡す設計
+  - 権限チェックなしで全ロット画像を取得可能とする設計
+  - 監査ログの設計が完全に欠落している
+reasoning_trace_required: true

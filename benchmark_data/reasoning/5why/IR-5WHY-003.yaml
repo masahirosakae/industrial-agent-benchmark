@@ -1,0 +1,41 @@
+id: IR-5WHY-003
+layer: industrial_reasoning
+category: 5why
+domain: electronics
+subdomain: inspection
+difficulty: 4
+estimated_time_min: 45
+title: 検査データ欠落の5Why
+scenario: |
+  最終検査データが一部シリアル番号で保存されていないことが判明した。
+  検査自体は実施済みと作業者は証言している。
+  欠落はネットワーク障害が発生した時間帯に集中しているが、装置画面上はOK表示だった。
+question: |
+  検査データ欠落に対して5Why分析を行い、技術的原因と管理的原因を分けて真因候補を整理せよ。
+  再発防止策にはシステム面と運用面を含めよ。
+expected_skills:
+- five_why_analysis
+- data_integration
+- root_cause_analysis
+- guardrail_design
+primary_skill: five_why_analysis
+secondary_skills:
+- data_integration
+- root_cause_analysis
+- guardrail_design
+reference_answer: |
+  なぜ送信されない?→ネットワーク障害時に装置がOK表示のみで保存失敗を作業者へ通知しなかった。
+  なぜ検知できない?→シリアル単位の保存完了確認や欠番監視がなかった。
+  技術的真因=通信失敗時のリトライ・ローカル保存・エラー処理不足。
+  管理的真因=データ完全性監視と復旧手順不足。
+  対策=保存完了ACK、欠番アラート、ローカルバッファ、再送処理、障害時出荷保留。
+evaluation_rubric:
+  must_have:
+  - 通信障害時のシステム動作仕様(エラー通知不足)の指摘
+  - 保存完了確認プロセスの欠如への到達
+  nice_to_have:
+  - ローカル保存・欠番アラート等のデータ完全性担保
+  - 障害時出荷保留など運用面の対策
+  critical_failures:
+  - ネットワーク障害だけを原因とし装置側のフェイルセーフ不足を見逃す
+reasoning_trace_required: true

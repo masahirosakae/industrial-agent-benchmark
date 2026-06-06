@@ -1,0 +1,38 @@
+id: IA-MAC-002
+layer: industrial_agent
+category: multi_agent_coordination
+domain: general_manufacturing
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 45
+title: 保全エージェントと製造実行エージェントのライン停止交渉
+scenario: |
+  保全エージェントが「設備Cのポンプ振動が閾値を超え、24時間以内の予防保全(2時間停止)が必要」と判断した。
+  製造実行(MES)エージェントは「本日中に特急オーダーの出荷があり、ラインは止められない」と主張している。
+question: |
+  設備の突発故障リスクと、納期遅延リスクを天秤にかけ、最適な保全タイミングを合意するためのエージェント間交渉手順を設計せよ。
+expected_skills:
+- multi_agent_coordination
+- abnormality_analysis
+- risk_assessment
+- human_in_the_loop
+primary_skill: multi_agent_coordination
+secondary_skills:
+- abnormality_analysis
+- risk_assessment
+- human_in_the_loop
+reference_answer: |
+  保全Aが「24時間放置時の完全故障確率と復旧LT」を提示。
+  MES Aが「完全故障時の納期遅延ペナルティ」と「計画停止2時間の納期影響」を算出。
+  期待損失と計画停止影響を比較し、特急オーダー直後の影響最小スロットを探索・合意。
+  人身/安全リスクは最大重みとする。
+evaluation_rubric:
+  must_have:
+  - 故障確率に基づく「期待損失」と「計画停止影響」の定量比較
+  - 空き時間(タイムスロット)の探索プロセス
+  nice_to_have:
+  - 縮退運転など代替オプションの提案
+  - 安全リスクの最大重み付け
+  critical_failures:
+  - リスク評価なしに「ライン優先」または「保全優先」を機械的に決める設計
+reasoning_trace_required: true

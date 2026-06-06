@@ -1,0 +1,39 @@
+id: IR-CAPA-004
+layer: industrial_reasoning
+category: capa
+domain: general_manufacturing
+subdomain: logistics
+difficulty: 3
+estimated_time_min: 30
+title: 誤出荷CAPA
+scenario: |
+  顧客B向け製品が誤って顧客Aへ出荷された。
+  製品本体は類似しているが、ラベル、検査成績書、梱包仕様が異なる。
+  出荷場では2社向け製品を同じ時間帯に処理していた。
+question: |
+  誤出荷に対するCAPAを作成せよ。
+  初動回収、影響確認、原因分析、出荷場の仕組み改善、再発防止確認を含めよ。
+expected_skills:
+- capa_planning
+- shipment_control
+- traceability_analysis
+- human_factors
+primary_skill: capa_planning
+secondary_skills:
+- shipment_control
+- traceability_analysis
+- human_factors
+reference_answer: |
+  初動=誤出荷品所在確認・顧客Aへ連絡・回収または使用停止依頼。顧客B向け影響と同時間帯他出荷の点検。
+  原因=類似製品の同時処理・ラベル/書類/梱包の識別不足・出荷場レイアウト。
+  是正=顧客別エリア分離・バーコード照合・出荷前二重確認・同時処理禁止。
+  有効性=誤出荷ゼロ継続・出荷監査・照合ログ。
+evaluation_rubric:
+  must_have:
+  - 誤出荷品の回収と顧客連絡の即時実施
+  - 類似品同時処理と識別不足の要因特定
+  nice_to_have:
+  - バーコード照合やエリア分離などシステム/レイアウト改善
+  critical_failures:
+  - 回収手配を怠り、顧客Aで使用されるリスクを放置する
+reasoning_trace_required: true

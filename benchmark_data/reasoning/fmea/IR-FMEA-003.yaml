@@ -1,0 +1,40 @@
+id: IR-FMEA-003
+layer: industrial_reasoning
+category: fmea
+domain: general_manufacturing
+subdomain: molding
+difficulty: 4
+estimated_time_min: 45
+title: 樹脂部品工程変更FMEA
+scenario: |
+  樹脂成形品の生産を、既存金型はそのままで別成形機へ移管する計画がある。
+  新成形機は型締力が大きく、制御応答も異なる。
+  寸法、反り、外観、バリのリスクが懸念される。
+question: |
+  工程移管に伴う変更FMEAを作成せよ。
+  故障モード、原因、影響、検出方法、量産前確認項目を整理し、重点リスクを示せ。
+expected_skills:
+- fmea_analysis
+- change_control
+- process_validation
+- risk_assessment
+primary_skill: fmea_analysis
+secondary_skills:
+- change_control
+- process_validation
+- risk_assessment
+reference_answer: |
+  故障モード=寸法外れ/反り/バリ/ショート/外観ムラ/離型不良。
+  原因=条件再現不足/型締過大/圧力応答差/冷却差。
+  検出方法=初品寸法/外観/反り測定/工程能力比較/成形条件ログ比較。
+  重点リスク=型締力差によるバリ・寸法変化と、制御応答差による反り。
+evaluation_rubric:
+  must_have:
+  - 設備差(型締力・制御応答)による成形条件変化の考慮
+  - 寸法・外観・機能リスクの網羅
+  nice_to_have:
+  - 量産前検証項目(初品/工程能力比較)の具体提示
+  - 移管前後比較の観点
+  critical_failures:
+  - 金型が同じだから条件もそのままでよいと判断する
+reasoning_trace_required: true

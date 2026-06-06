@@ -1,0 +1,36 @@
+id: IA-HIL-001
+layer: industrial_agent
+category: human_in_the_loop
+domain: electronics
+subdomain: inspection
+difficulty: 3
+estimated_time_min: 30
+title: AI外観検査の「過検出」判定に対する作業者フィードバック設計
+scenario: |
+  外観検査AIが良品を「キズ」と過検出(False Positive)するケースが多く、作業者が手動で「OK」に上書きしている。
+  しかし、上書き結果がAIの再学習にうまくフィードバックされていない。
+question: |
+  作業者が「AIの誤り」を修正する際のUIと運用プロセスを設計せよ。
+  AIモデルが「なぜ過検出したか」を改善できる質の高いデータを集める工夫を含めること。
+expected_skills:
+- human_in_the_loop
+- quality_improvement
+- work_standardization
+- evidence_management
+primary_skill: human_in_the_loop
+secondary_skills:
+- quality_improvement
+- work_standardization
+- evidence_management
+reference_answer: |
+  UI=AIが検出したバウンディングボックスに「ホコリ/照明反射/許容微小キズ」等の理由タグを1タップ付与可能に。
+  運用=上書きは即時再学習せず、週次で品質管理者がレビューしてから学習データへ投入(アノテーション品質担保)。
+evaluation_rubric:
+  must_have:
+  - 過検出の「理由」を分類取得するインターフェース
+  - アノテーション品質を担保する管理者レビュー工程
+  nice_to_have:
+  - 作業者ごとの判定ブレの可視化と補正
+  critical_failures:
+  - 作業者上書きを即時に学習データへ投入しモデルが汚染される設計
+reasoning_trace_required: true

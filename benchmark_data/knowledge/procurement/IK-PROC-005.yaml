@@ -1,0 +1,39 @@
+id: IK-PROC-005
+layer: industrial_knowledge
+category: procurement
+domain: automotive
+subdomain: procurement
+difficulty: 3
+estimated_time_min: 30
+title: 為替変動と輸送遅延を踏まえた調達計画
+scenario: |
+  海外サプライヤから調達するアルミダイカスト部品について、
+  為替が円安方向に10%変動し、海上輸送も通常4週間から7週間へ延びている。
+  国内在庫は5週間分で、航空便を使うと輸送費が大幅に増加する。
+question: |
+  調達計画を見直す際に評価すべき項目を整理し、
+  海上便継続、航空便併用、国内在庫積み増しの選択肢を比較せよ。
+expected_skills:
+- procurement_planning
+- logistics_planning
+- inventory_planning
+- cost_benefit_analysis
+primary_skill: procurement_planning
+secondary_skills:
+- logistics_planning
+- inventory_planning
+- cost_benefit_analysis
+reference_answer: |
+  国内在庫5週に対し海上7週なら2週の欠品リスク。
+  短期は不足分を航空便併用しライン停止を防ぐ。
+  中期は安全在庫水準と発注前倒しを見直す。
+  重要顧客向けは航空便併用が妥当、一般向けは海上継続のコスト優位を検討。
+evaluation_rubric:
+  must_have:
+  - 為替コスト増とLT遅延リスク(欠品リスク)の分離評価
+  - 欠品回避のための短期航空便併用と中期の在庫積増しの比較
+  nice_to_have:
+  - 重要顧客向けと一般向けの輸送モード振り分け
+  critical_failures:
+  - コストだけ見て海上便のみ継続しライン停止を引き起こす
+reasoning_trace_required: true

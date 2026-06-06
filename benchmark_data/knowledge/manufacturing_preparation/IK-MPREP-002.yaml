@@ -1,0 +1,40 @@
+id: IK-MPREP-002
+layer: industrial_knowledge
+category: manufacturing_preparation
+domain: electronics
+subdomain: smt
+difficulty: 4
+estimated_time_min: 45
+title: はんだ付け条件の量産移行判定
+scenario: |
+  新しい基板の試作では、リフロー温度プロファイルAで外観不良は少なかったが、一部部品の温度上限に近い結果となった。
+  プロファイルBでは部品温度余裕はあるが、未濡れが増加した。
+  量産では部品ロット差と装置間差も見込まれる。
+question: |
+  量産条件としてどちらのプロファイルを採用すべきか判断するため、
+  追加評価項目と判定基準を提示せよ。品質、信頼性、工程能力の観点を含めよ。
+expected_skills:
+- process_validation
+- risk_assessment
+- quality_improvement
+- launch_readiness
+primary_skill: process_validation
+secondary_skills:
+- risk_assessment
+- quality_improvement
+- launch_readiness
+reference_answer: |
+  Aは部品温度上限に近く信頼性・部品劣化リスク。Bは未濡れによる接合信頼性リスク。
+  追加で部品ロット差・基板面内温度差・装置間差・接合強度・断面観察・温度マージン・長期信頼性試験を行う。
+  採用条件は部品温度余裕と濡れ性・接合強度を同時に満たすこと。必要ならA/B中間条件を探索。外観だけで決めない。
+evaluation_rubric:
+  must_have:
+  - 外観だけでなく部品温度・接合強度のトレードオフ評価
+  - 量産ばらつき(装置差・基板差・部品ロット)の考慮
+  nice_to_have:
+  - 長期信頼性試験の実施、またはA/B中間条件の探索提案
+  - 断面観察など物理的検証手段の追加
+  critical_failures:
+  - 外観だけを見てプロファイルAを無条件で採用する
+  - 部品温度上限超過リスクを無視して採用判断する
+reasoning_trace_required: true

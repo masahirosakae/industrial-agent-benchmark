@@ -1,0 +1,37 @@
+id: IK-IMPR-004
+layer: industrial_knowledge
+category: improvement
+domain: general_manufacturing
+subdomain: logistics
+difficulty: 3
+estimated_time_min: 30
+title: 部品供給動線の改善案評価
+scenario: |
+  組立ラインで作業者が部品棚まで歩く時間が多く、1台あたり平均12秒の歩行ロスが発生している。
+  部品棚を近づけると歩行は減るが、通路幅が狭くなり台車搬送に影響する。
+question: |
+  部品供給動線の改善案を評価し、作業効率、安全性、物流性、スペース制約の観点から最適案を提案せよ。
+expected_skills:
+- quality_improvement
+- human_factors
+- logistics_planning
+- risk_assessment
+primary_skill: logistics_planning
+secondary_skills:
+- quality_improvement
+- human_factors
+- risk_assessment
+reference_answer: |
+  棚を近づけると歩行ロスは減るが安全通路と台車搬送が悪化する可能性がある。
+  評価軸は作業時間削減・安全通路幅・台車動線・補充頻度・誤品リスク。
+  最適案は棚移動ではなく頻出部品の手元化・キッティング・補充ルート再設計を組み合わせる。
+  効果確認は歩行時間・タクト・台車待ち・ヒヤリハット・欠品頻度。
+evaluation_rubric:
+  must_have:
+  - 歩行ロス削減と安全/台車通路幅のトレードオフ評価
+  nice_to_have:
+  - キッティングや水すまし等の物流手法の提案
+  - 効果確認指標(タクト・ヒヤリハット等)の設定
+  critical_failures:
+  - 通路幅低下による安全リスクを無視して棚配置を変更する
+reasoning_trace_required: true

@@ -1,0 +1,38 @@
+id: IA-WD-004
+layer: industrial_agent
+category: workflow_design
+domain: general_manufacturing
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 45
+title: 設備予知保全と部品発注の連動ワークフロー
+scenario: |
+  IoTセンサーによる振動・温度データから設備のベアリング劣化をAIが予知した。
+  ただし、交換部品は海外手配でLTが4週間かかり、ライン停止は週末しか許されない。
+question: |
+  異常予知から、部品発注、生産計画調整、保全実施までの自律ワークフローを設計せよ。
+  人間の承認が必要なポイントと、自動化してよい処理を明確に分けよ。
+expected_skills:
+- workflow_design
+- human_in_the_loop
+- procurement_planning
+- containment_planning
+primary_skill: workflow_design
+secondary_skills:
+- human_in_the_loop
+- procurement_planning
+- containment_planning
+reference_answer: |
+  自動化=劣化予知/必要部品特定/在庫引当/発注ドラフト作成/週末停止考慮の計画調整案生成。
+  人間承認=発注確定(コスト発生)/生産計画変更(納期影響)/保全作業許可。
+  誤検知時は中止プロセスを設ける。
+evaluation_rubric:
+  must_have:
+  - 部品手配LTと生産停止可能日(週末)をマッチングさせるフロー
+  - コスト・納期影響箇所での人間承認ゲート
+  nice_to_have:
+  - 誤検知(False Positive)時の中止プロセス
+  - 在庫有無による分岐設計
+  critical_failures:
+  - AIの予知のみで部品発注やライン停止を自動実行する設計
+reasoning_trace_required: true

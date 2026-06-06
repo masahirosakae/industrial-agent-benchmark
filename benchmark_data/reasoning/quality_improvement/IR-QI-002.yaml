@@ -1,0 +1,40 @@
+id: IR-QI-002
+layer: industrial_reasoning
+category: quality_improvement
+domain: electronics
+subdomain: smt
+difficulty: 3
+estimated_time_min: 30
+title: はんだブリッジ削減
+scenario: |
+  基板実装工程で、狭ピッチIC周辺のはんだブリッジが増えている。
+  発生は特定ロットの基板で多く、印刷後検査でははんだ量がやや多い傾向がある。
+  メタルマスクは量産開始時から変更していない。
+question: |
+  はんだブリッジ削減に向けた改善仮説と検証手順を示せ。
+  印刷条件、基板状態、部品搭載、リフロー条件の観点を含めよ。
+expected_skills:
+- quality_improvement
+- root_cause_analysis
+- process_validation
+- statistical_quality_control
+primary_skill: quality_improvement
+secondary_skills:
+- root_cause_analysis
+- process_validation
+- statistical_quality_control
+reference_answer: |
+  はんだ量過多と特定基板ロットがキー。印刷条件(スキージ速度・圧・分離速度)・メタルマスク開口状態を優先確認。
+  特定基板の表面処理・反り・レジスト位置・パッド寸法を確認。
+  部品搭載ずれやリフロー温度過多もブリッジ要因として確認。
+  DOEや条件戻しでブリッジ率を比較し、効果は過剰修正の有無で評価。
+evaluation_rubric:
+  must_have:
+  - はんだ量過多を重要要因として扱う
+  - 特定基板ロットとの関係を確認する分析
+  nice_to_have:
+  - 印刷/部品/リフロー複数工程の影響評価
+  - 効果確認指標(ブリッジ率/過剰修正)の提示
+  critical_failures:
+  - マスク変更なしを理由に印刷工程を対象から除外する
+reasoning_trace_required: true

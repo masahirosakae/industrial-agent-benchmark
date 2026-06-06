@@ -1,0 +1,38 @@
+id: IR-5WHY-005
+layer: industrial_reasoning
+category: 5why
+domain: general_manufacturing
+subdomain: production_control
+difficulty: 4
+estimated_time_min: 45
+title: 納期遅延連鎖の5Why
+scenario: |
+  ある特注製品で、部品入荷遅れ、加工遅れ、検査待ちが重なり納期遅延となった。
+  各部門は「前工程が遅れたため」と説明している。
+  受注時点では標準リードタイム内と判断されていたが、特注仕様の工数見積は過去類似品を流用していた。
+question: |
+  納期遅延について5Why分析を行い、部門別責任追及ではなく、計画・見積・進捗管理の仕組み上の真因を特定せよ。
+expected_skills:
+- five_why_analysis
+- production_planning
+- root_cause_analysis
+- workflow_design
+primary_skill: five_why_analysis
+secondary_skills:
+- production_planning
+- root_cause_analysis
+- workflow_design
+reference_answer: |
+  なぜ連鎖?→特注仕様の工数とLT見積が実態より甘い。
+  なぜ甘い?→過去類似品を流用し特注差分の工数・調達・検査影響を評価していない。
+  なぜ早期検知できない?→部門別進捗のみで全体クリティカルパスを管理していない。
+  真因=特注受注時の見積プロセスと進捗管理ゲート不足。
+  対策=特注差分レビュー・工程別LT再見積・重要部品先行手配・進捗アラート。
+evaluation_rubric:
+  must_have:
+  - 部門責任ではなく見積プロセス・全体進捗管理欠如への掘り下げ
+  nice_to_have:
+  - クリティカルパス管理や特注差分レビューの追加提案
+  critical_failures:
+  - 「前工程の遅延が原因」で分析を終わらせる
+reasoning_trace_required: true

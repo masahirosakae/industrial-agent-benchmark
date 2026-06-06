@@ -1,0 +1,40 @@
+id: IK-MEXEC-001
+layer: industrial_knowledge
+category: manufacturing_execution
+domain: automotive
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: 混流組立での欠品・段取り替え判断
+scenario: |
+  混流組立ラインでA品番とB品番を生産中、B品番専用部品が2時間後に欠品する見込みとなった。
+  A品番は部品在庫が十分あるが、AからBへの段取り替えには20分かかる。
+  当日出荷はAとBの両方に予定がある。
+question: |
+  現場責任者として、当日の生産順序をどう変更すべきか判断せよ。
+  欠品、段取り、出荷優先度、仕掛在庫の観点から対応案を比較せよ。
+expected_skills:
+- shopfloor_control
+- production_planning
+- inventory_planning
+- shipment_control
+primary_skill: shopfloor_control
+secondary_skills:
+- production_planning
+- inventory_planning
+- shipment_control
+reference_answer: |
+  B部品欠品が2時間後のため、Bの当日出荷必要分まで優先生産しその後Aへ切替が基本。
+  ただしBの当日出荷必要数・Aの出荷優先度・部品入荷見込みを確認する。
+  段取り20分があるためA/B頻繁切替は避ける。
+  Bの仕掛は欠品後に滞留するため出荷必要数と後工程能力に合わせて制限。
+evaluation_rubric:
+  must_have:
+  - B品専用部品欠品時刻を起点とした順序入替判断
+  - 出荷優先度の確認と仕掛滞留防止の考慮
+  nice_to_have:
+  - 段取り時間(20分)を考慮した過度な切替防止
+  - 部品入荷見込みの確認に関する言及
+  critical_failures:
+  - 欠品まで漫然とBを作り続けライン全停止を招く
+reasoning_trace_required: true

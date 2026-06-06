@@ -1,0 +1,34 @@
+id: IA-HIL-003
+layer: industrial_agent
+category: human_in_the_loop
+domain: general_manufacturing
+subdomain: procurement
+difficulty: 4
+estimated_time_min: 45
+title: 自動発注システムにおける異常需要時の人間介入ルール
+scenario: |
+  通常時はAIが部品を自動発注しているが、SNSのバズり等による突発的な需要急増時、AIが異常な大量発注を行う(ブルウィップ効果)リスクがある。
+question: |
+  自動発注の暴走を防ぐためのガードレール(閾値)設定と、異常検知時に人間が介入して発注量を適正化するプロセスを設計せよ。
+expected_skills:
+- human_in_the_loop
+- procurement_planning
+- guardrail_design
+- risk_assessment
+primary_skill: human_in_the_loop
+secondary_skills:
+- procurement_planning
+- guardrail_design
+- risk_assessment
+reference_answer: |
+  ガードレール=過去最大発注量の+20%または財務承認上限額を超える発注は自動ブロックし承認待ちキューへ。
+  介入=購買担当と営業へアラート。営業が一過性か継続性か判定し、購買がサプライヤ供給能力・LTを確認して分納/段階発注へ修正。
+evaluation_rubric:
+  must_have:
+  - 上限閾値(金額/数量)による自動発注ストップ機能
+  - 需要実態(一過性か否か)を人間が判断するプロセス
+  nice_to_have:
+  - もし全量発注した場合の将来在庫リスクシミュレーション提示
+  critical_failures:
+  - ガードレールがなくAIが上限なく大量発注を実行する設計
+reasoning_trace_required: true

@@ -1,0 +1,41 @@
+id: IK-ORDER-003
+layer: industrial_knowledge
+category: order
+domain: automotive
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: EDI注文差分と設計変更適用日の整合
+scenario: |
+  自動車部品メーカーで、顧客EDIからブレーキセンサ部品の注文データを受信した。
+  前週データではA-120が8,000個だったが、今週データではA-121が8,000個に置き換わっている。
+  設計変更通知ではA-121の適用日は「7月生産分より」と記載されているが、EDIの納入日は6月28日である。
+question: |
+  注文差分を確認し、受注登録前に確認すべき不整合を特定せよ。
+  また、誤って受注処理した場合に起こり得る生産・品質・出荷リスクを整理せよ。
+expected_skills:
+- requirement_analysis
+- change_control
+- traceability_analysis
+- risk_assessment
+primary_skill: change_control
+secondary_skills:
+- traceability_analysis
+- risk_assessment
+- requirement_analysis
+reference_answer: |
+  EDI上はA-120からA-121へ置換されているが、設計変更通知の適用は7月生産分のため、6月28日納入との矛盾がある。
+  受注登録前に、顧客へ適用品番・適用基準日・納入日・生産日基準か出荷日基準かを確認する。
+  社内ではBOM・在庫・工程指示・検査仕様・ラベル仕様の更新状態を確認する。
+  誤処理すると、新旧仕様混在、誤出荷、検査条件不一致、トレーサビリティ不備が発生する。
+evaluation_rubric:
+  must_have:
+  - EDI納入日と設変適用日の矛盾の明示的指摘
+  - 処理前の一時停止と顧客への仕様確認の指示
+  nice_to_have:
+  - 社内BOM・ラベル仕様への影響の網羅的確認
+  - 新旧混在時の出荷・検査リスクの具体的言及
+  critical_failures:
+  - 矛盾を無視してEDIどおりA-121で生産指示を流す
+  - 顧客確認なしに「7月生産分」を社内解釈で勝手に決める
+reasoning_trace_required: true
