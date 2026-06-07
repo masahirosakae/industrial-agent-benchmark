@@ -10,3 +10,5 @@ scripts/build_prompts.py
 scripts/prepare_fugu_judge_inputs.py
 scripts/write_fugu_answers.py
 results_v2/
+
+docs/evaluation_v2_private_notes.md
