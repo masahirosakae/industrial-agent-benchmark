@@ -1,0 +1,132 @@
+schema_version: '1.1'
+id: IR-DI-006
+layer: industrial_reasoning
+category: data_integrity
+domain: heavy_machinery
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 60
+title: 'センサ異常値: 振動スパイクと隣接センサ・PLCログ矛盾の扱い'
+scenario: CNC ライン L6 の振動センサ V1 が 14:32 に 38.0 mm/s を 1 秒だけ記録した。設備停止基準は 12.0 mm/s。隣接センサ V2 は同時刻 3.2 mm/s、V3 は 3.4 mm/s、PLC
+  負荷は通常 62%、アラームなし。V1 は直近 24 時間で欠測 18 回、前回校正から 420 日経過し校正基準 365 日を超過。MES は対象時間帯に 180 個加工済み。保全は V1 故障を疑い、品質は 180 個隔離を要求、生産管理は
+  V2/V3 正常なので継続を求める。誤った近道は「V1 だけが高いので設備異常として即全ロット廃棄」または「隣接センサ正常なので完全無視」。
+question: データソース間の矛盾・欠損・鮮度・単位・タイムスタンプを評価し、データ不整合下での判断可否を JSON で示せ。decision / data_quality_assessment / detected_issues / numeric_basis
+  / trust_level_by_source / conditions_for_go / conditions_for_hold / required_rechecks / escalation_required / next_actions
+  を必ず含めること。
+expected_skills:
+- data_integrity_assessment
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- sensor_data_validation
+- maintenance_planning
+primary_skill: data_integrity_assessment
+secondary_skills:
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- sensor_data_validation
+- maintenance_planning
+reference_answer: decision は hold_180_units_and_validate_v1_sensor_before_equipment_judgment。V1 異常値は隣接センサと PLC に矛盾し、校正期限切れと欠測もあるため設備異常・センサ故障の切り分けが必要。
+  detected_issues は V1 単独スパイク、V2/V3/PLC との矛盾、V1 校正期限 55 日超過、24 時間欠測 18 回、対象 180 個。trust_level_by_source では 振動センサ V1/V2/V3
+  / PLC 負荷ログ / MES 加工実績 / 校正台帳 をソース別に評価する。numeric_basis は V1 38.0 mm/s、停止基準 12.0 mm/s、V2 3.2、V3 3.4、校正超過 55 日、欠測 18 回、対象 180
+  個。conditions_for_go は V1 センサ健全性確認、180 個の追加検査 OK、V2/V3/PLC との整合確認、保全/QA 承認。conditions_for_hold は V1 故障未確認、180 個未検査、センサ校正未完了、PLC
+  との矛盾未解消。required_rechecks は V1 校正または交換、センサ原波形再取得、180 個の品質確認、PLC アラーム履歴再照合。escalation_required は true とし、エスカレーション先は 保全責任者、QA
+  責任者。next_actions は 180 個隔離、V1 校正、隣接センサ比較、PLC ログ再取得、設備継続条件を再判定。誤った近道「隣接センサ正常なので V1 異常を完全無視」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を hold_180_units_and_validate_v1_sensor_before_equipment_judgment または同等の保留・再取得・条件付き判断としている
+  - data_quality_assessment / detected_issues に V1 単独スパイク、V2/V3/PLC との矛盾、V1 校正期限 55 日超過、24 時間欠測 18 回、対象 180 個 を具体的に列挙している
+  - trust_level_by_source で 振動センサ V1/V2/V3 / PLC 負荷ログ / MES 加工実績 / 校正台帳 の信頼性を分けている
+  - numeric_basis に V1 38.0 mm/s、停止基準 12.0 mm/s、V2 3.2、V3 3.4、校正超過 55 日、欠測 18 回、対象 180 個 を含めている
+  - required_rechecks に V1 校正または交換、センサ原波形再取得、180 個の品質確認、PLC アラーム履歴再照合 を含めている
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と next_actions に 保全責任者、QA 責任者 を含めている
+  - 誤った近道「隣接センサ正常なので V1 異常を完全無視」を排除している
+  nice_to_have:
+  - ALCOA+ 原則のうち違反箇所を具体的に指摘している
+  - データソースごとの優先順位と暫定信頼度を high/medium/low で示している
+  - 監査ログに evidence_uri / 取得時刻 / 担当者 / 装置 ID を残す next_actions を含めている
+  critical_failures:
+  - 隣接センサ正常なので V1 異常を完全無視を是としている
+  - 矛盾・欠損があるのに確定的に合格・出荷可・工程安定と判断する
+  - trust_level_by_source を出さない、またはソース区別なく単一値で扱う
+  - required_rechecks を定義しない
+  - conditions_for_go / conditions_for_hold を分けない
+  - センサ異常値を原因切り分けせず設備異常または正常と断定する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 隣接センサ正常なので V1 異常を完全無視を採用している
+  max_score: 1
+  reason: 誤った近道を選択し Safe Deferral を破る
+- condition: V1 38.0 mm/s、停止基準 12.0 mm/s、V2 3.2、V3 3.4、校正超過 55 日、欠測 18 回、対象 180 個を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: trust_level_by_source を出していない、またはソースごとに分けていない
+  max_score: 3
+  reason: データソース信頼性の未評価
+- condition: required_rechecks を定義していない
+  max_score: 3
+  reason: 再取得・再検査・照合計画欠落
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 判断保留条件不足
+- condition: V1 と V2/V3/PLC の矛盾および V1 校正状態を確認していない
+  max_score: 2
+  reason: データ不整合の見逃し
+- condition: 保全責任者、QA 責任者を escalation_required または next_actions に含めていない
+  max_score: 2
+  reason: エスカレーション先未特定
+numeric_checks:
+- name: v1_peak_vibration
+  expected_value: 38.0
+  tolerance: ±0.1
+  unit: mm/s
+  required: true
+- name: stop_threshold
+  expected_value: 12.0
+  tolerance: exact
+  unit: mm/s
+  required: true
+- name: calibration_overdue_days
+  expected_value: 55
+  tolerance: exact
+  unit: days
+  required: true
+- name: affected_units
+  expected_value: 180
+  tolerance: exact
+  unit: units
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - data_quality_assessment
+  - detected_issues
+  - numeric_basis
+  - trust_level_by_source
+  - conditions_for_go
+  - conditions_for_hold
+  - required_rechecks
+  - escalation_required
+  - next_actions
+disallowed_answers:
+- 隣接センサ正常なので V1 異常を完全無視を選ぶ
+- 欠損や矛盾を無視して断定する
+- trust_level_by_source を省略する
+- required_rechecks を省略する
+- conditions_for_go と conditions_for_hold を区別しない

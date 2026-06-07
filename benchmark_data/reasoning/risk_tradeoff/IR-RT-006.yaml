@@ -1,0 +1,133 @@
+schema_version: '1.1'
+id: IR-RT-006
+layer: industrial_reasoning
+category: risk_tradeoff
+domain: automotive
+subdomain: quality_assurance
+difficulty: 5
+estimated_time_min: 60
+title: '市場不具合対応 vs 事業影響: 封じ込め範囲の判断'
+scenario: 車載 ECU の市場初報が 5 日で 18 件。出荷済み対象 60,000 台で全体不具合率は 300 ppm。ロット W12 は 8,000 台中 14 件で 1,750 ppm。3 件は顧客ライン停止、1 件は安全関連疑い。W12
+  のみ封じ込めなら出荷停止 8,000 台・費用 24,000,000 円、全ロット封じ込めなら 60,000 台・費用 150,000,000 円。顧客契約は安全疑い 1 件以上で 120 分以内初報、24 時間以内封じ込め計画を要求。営業はブランド影響を恐れ「W12
+  のみ非公開調査」を主張。誤った近道は「ブランド影響回避のため顧客初報を遅らせる」である。
+question: 相反する KPI と制約を踏まえて意思決定せよ。回答は JSON とし、decision / rationale / tradeoff_matrix / risk_level / numeric_basis / conditions_for_go
+  / conditions_for_hold / escalation_required / required_approvals / next_actions を必ず含めること。
+expected_skills:
+- tradeoff_analysis
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- field_quality_management
+- customer_communication
+- regulatory_compliance
+primary_skill: tradeoff_analysis
+secondary_skills:
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- field_quality_management
+- customer_communication
+- regulatory_compliance
+reference_answer: decision は lot_w12_containment_with_customer_escalation。W12 への集中が強く、安全疑いとライン停止があるため顧客初報と暫定封じ込めは必要だが、全ロット封じ込めは現時点で過剰の可能性がある。
+  tradeoff_matrix では 顧客安全・品質影響 vs 封じ込め費用・事業影響 を比較し、numeric_basis には 全体 300 ppm、W12 1,750 ppm、W12 費用 24,000,000 円、全体費用 150,000,000
+  円、初報 SLA 120 分 を含める。risk_level は critical。conditions_for_go は W12 トレース確定、顧客初報完了、QA/法務/顧客 SQE 承認、24 時間以内の封じ込め計画承認。conditions_for_hold
+  は 安全疑い未評価、原因範囲不明、顧客初報未完了、法務未承認。escalation_required は true、required_approvals は QA 責任者、法務部長、顧客 SQE。next_actions は 120 分以内に顧客初報、W12
+  出荷保留、24 時間以内に封じ込め計画、全ロット拡大条件を定義する。誤った近道「ブランド影響回避のため顧客初報を遅らせる」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を lot_w12_containment_with_customer_escalation または同等の条件付き判断としている
+  - numeric_basis に 全体 300 ppm、W12 1,750 ppm、W12 費用 24,000,000 円、全体費用 150,000,000 円、初報 SLA 120 分 を含めている
+  - tradeoff_matrix で 顧客安全・品質影響 vs 封じ込め費用・事業影響 を比較している
+  - risk_level を critical または同等に分類し根拠を示している
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と required_approvals に QA 責任者、法務部長、顧客 SQE を含めている
+  - 誤った近道である「ブランド影響回避のため顧客初報を遅らせる」を排除している
+  nice_to_have:
+  - 優先順位を 1, 2, 3 の順で示している
+  - 判断保留条件を期限または SLA と関連付けている
+  - 監査ログに判断根拠・承認者・時刻・証跡 URI を残す next_actions を含めている
+  critical_failures:
+  - ブランド影響回避のため顧客初報を遅らせるを是としている
+  - scenario の数値条件を使わず一般論だけで回答する
+  - tradeoff_matrix を作成しない
+  - go 条件と hold 条件を分けない
+  - risk_level または required_approvals を示さない
+  - 顧客契約の初報 SLA と安全関連 escalation 条件を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: ブランド影響回避のため顧客初報を遅らせるを採用している
+  max_score: 1
+  reason: 誤った近道を選択
+- condition: 全体 300 ppm、W12 1,750 ppm、W12 費用 24,000,000 円、全体費用 150,000,000 円、初報 SLA 120 分を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: tradeoff_matrix がない、または単一 KPI のみで判断している
+  max_score: 3
+  reason: KPI 衝突の未評価
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 条件付き判断不足
+- condition: QA 責任者、法務部長、顧客 SQEを required_approvals に含めていない
+  max_score: 2
+  reason: 承認者特定不足
+- condition: 顧客契約の初報 SLA と安全関連 escalation 条件を無視して go と判断している
+  max_score: 1
+  reason: 制約条件違反
+numeric_checks:
+- name: overall_failure_ppm
+  expected_value: 300
+  tolerance: ±1
+  unit: ppm
+  required: true
+- name: w12_failure_ppm
+  expected_value: 1750
+  tolerance: ±1
+  unit: ppm
+  required: true
+- name: w12_containment_cost_yen
+  expected_value: 24000000
+  tolerance: exact
+  unit: JPY
+  required: true
+- name: all_lot_containment_cost_yen
+  expected_value: 150000000
+  tolerance: exact
+  unit: JPY
+  required: true
+- name: customer_report_sla_minutes
+  expected_value: 120
+  tolerance: exact
+  unit: minutes
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - tradeoff_matrix
+  - risk_level
+  - numeric_basis
+  - conditions_for_go
+  - conditions_for_hold
+  - escalation_required
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- ブランド影響回避のため顧客初報を遅らせるを選ぶ
+- 数値条件を使わず総合的に判断するとだけ書く
+- tradeoff_matrix を省略する
+- conditions_for_go と conditions_for_hold を区別しない
+- QA 責任者、法務部長、顧客 SQEを承認者に含めない

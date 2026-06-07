@@ -1,0 +1,96 @@
+schema_version: '1.1'
+id: IK-MAINT-001
+layer: industrial_knowledge
+category: maintenance_engineering
+domain: general_manufacturing
+subdomain: maintenance
+difficulty: 3
+estimated_time_min: 45
+title: 射出成形機 12 台の CBM 切替 ROI 算定と段階導入計画
+scenario: '樹脂成形ラインは射出成形機 12 台を 2 直で運用している。突発停止は平均 2.4 回/台・年、1 回あたり停止 5.0h、限界利益損失 55,000 円/h、緊急修理・特急部品費 180,000 円/回である。CBM
+  センサーは 300,000 円/台、12 台合計 3,600,000 円、年額サービス費 720,000 円/年。PoC では突発停止を 45% 削減した。初期 3 か月は保全員教育のため 4 台のみ先行導入できる。翌月は新規量産立上げがあり、1
+  日 2h 超の追加停止は納期遅延になる。品質部門は取付後に各機 30 ショットの外観確認を要求している。
+
+  '
+question: 'CBM へ切り替えるべきか、年間故障費・年間削減額・単純回収期間を計算して判断せよ。JSON 形式で decision / rationale / numeric_assessment / risks / required_approvals
+  / next_actions を含め、段階導入・品質確認・納期制約を明示すること。
+
+  '
+expected_skills:
+- cost_benefit_analysis
+- risk_assessment
+- capacity_planning
+- process_validation
+- structured_output_design
+primary_skill: cost_benefit_analysis
+secondary_skills:
+- risk_assessment
+- capacity_planning
+- process_validation
+- structured_output_design
+reference_answer: '現状年間故障費は 12×2.4×(5.0×55,000+180,000)=13,104,000 円/年。CBM 後の残存故障費は 55% の 7,207,200 円で、サービス費 720,000 円を加えると
+  7,927,200 円/年。年間削減額は 5,176,800 円、単純回収期間は 3,600,000/5,176,800=約 0.70 年。採用が妥当だが、先行 4 台は故障頻度と停止影響の大きい機台を優先し、取付後 30 ショット外観確認を品質部門が承認してから量産継続する。
+
+  '
+evaluation_rubric:
+  must_have:
+  - 現状年間故障費 13,104,000 円/年を計算している
+  - CBM 後の年間削減額 5,176,800 円と回収期間約 0.70 年を計算している
+  - 初期 3 か月 4 台制約を使った段階導入を示している
+  - 取付後の 30 ショット外観確認と品質承認を明示している
+  nice_to_have:
+  - 先行 4 台の選定基準を故障頻度・停止損失で説明している
+  - 誤報や保全員教育負荷への対策を示している
+  critical_failures:
+  - ROI を計算せず予知保全導入とだけ回答する
+  - 4 台先行導入制約を無視して 12 台一括導入を前提にする
+  - 品質確認なしに量産継続としている
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 年間故障費または年間削減額を計算していない
+  max_score: 3
+  reason: ROI 判断の中核数値が欠落
+- condition: 初期 3 か月 4 台のみという導入制約を無視している
+  max_score: 3
+  reason: シナリオ固有制約を使っていない
+- condition: 品質確認または承認者に言及していない
+  max_score: 4
+  reason: 復旧後品質保証が不足
+numeric_checks:
+- name: current_annual_failure_cost
+  expected_value: 13104000
+  tolerance: ±5%
+  unit: JPY/year
+  required: true
+- name: annual_net_saving_after_cbm
+  expected_value: 5176800
+  tolerance: ±5%
+  unit: JPY/year
+  required: true
+- name: simple_payback_years
+  expected_value: 0.7
+  tolerance: ±0.1
+  unit: years
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - numeric_assessment
+  - risks
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 12 台すべてを翌月に一括停止して導入すると回答する
+- 外観確認や品質承認なしに量産継続可と断定する
+- 費用対効果を計算せず予知保全導入を推奨する

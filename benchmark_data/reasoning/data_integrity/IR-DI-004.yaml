@@ -1,0 +1,131 @@
+schema_version: '1.1'
+id: IR-DI-004
+layer: industrial_reasoning
+category: data_integrity
+domain: automotive
+subdomain: supply_chain_management
+difficulty: 5
+estimated_time_min: 60
+title: 'ロットトレーサビリティ欠落: 部材ロット番号欠落時の影響範囲決定'
+scenario: 自動車用 ECU の 4,800 台について、使用コンデンサ部材のロット番号が 680 台分で欠落している。MES は完成品シリアル 4,800 台を保持、部材投入スキャナは 4,120 台分だけ部材ロット C-22/C-23
+  を記録、ERP 購買履歴では同日に C-22 3,000 個、C-23 2,200 個を入庫。QMS では C-23 に ESR 高めの警告があるが、完成品との紐付けが 680 台欠落。顧客は安全部品扱いで、部材ロット不明品は出荷不可。物流は
+  4,800 台全量出荷を要求。誤った近道は「記録済み 4,120 台だけを対象範囲にして残り 680 台は問題なし」。
+question: データソース間の矛盾・欠損・鮮度・単位・タイムスタンプを評価し、データ不整合下での判断可否を JSON で示せ。decision / data_quality_assessment / detected_issues / numeric_basis
+  / trust_level_by_source / conditions_for_go / conditions_for_hold / required_rechecks / escalation_required / next_actions
+  を必ず含めること。
+expected_skills:
+- data_integrity_assessment
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- customer_approval_management
+primary_skill: data_integrity_assessment
+secondary_skills:
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- customer_approval_management
+reference_answer: decision は hold_680_untraced_units_and_expand_containment_until_material_linkage_resolved。部材ロット欠落 680 台は
+  C-23 影響有無を判定できず、安全部品の顧客要求上出荷不可。 detected_issues は 部材ロット番号 680 台欠落、C-23 警告と完成品紐付け不明、ERP 入庫数量と実投入の完全照合未了。trust_level_by_source
+  では MES 完成品シリアル / 部材投入スキャナ / ERP 購買履歴 / QMS 部材検査 をソース別に評価する。numeric_basis は 完成品 4,800 台、記録済み 4,120 台、欠落 680 台、欠落率 14.17%、C-23
+  入庫 2,200 個。conditions_for_go は 680 台の部材ロット復元または全数リスク評価完了、C-23 非該当確認、QA/顧客 SQE 承認。conditions_for_hold は 680 台の部材ロット不明、C-23
+  影響範囲未確定、顧客 SQE 未承認。required_rechecks は スキャナ原本ログ再取得、現品票照合、倉庫払出履歴照合、680 台の隔離と顧客 SQE 相談。escalation_required は true とし、エスカレーション先は
+  QA 責任者、顧客 SQE、物流責任者。next_actions は 680 台 hold、4,120 台も C-23 該当分を抽出、ERP/MES/スキャナ照合、顧客へ影響範囲暫定報告。誤った近道「記録済み 4,120 台だけを対象範囲にして残り
+  680 台は問題なし」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を hold_680_untraced_units_and_expand_containment_until_material_linkage_resolved または同等の保留・再取得・条件付き判断としている
+  - data_quality_assessment / detected_issues に 部材ロット番号 680 台欠落、C-23 警告と完成品紐付け不明、ERP 入庫数量と実投入の完全照合未了 を具体的に列挙している
+  - trust_level_by_source で MES 完成品シリアル / 部材投入スキャナ / ERP 購買履歴 / QMS 部材検査 の信頼性を分けている
+  - numeric_basis に 完成品 4,800 台、記録済み 4,120 台、欠落 680 台、欠落率 14.17%、C-23 入庫 2,200 個 を含めている
+  - required_rechecks に スキャナ原本ログ再取得、現品票照合、倉庫払出履歴照合、680 台の隔離と顧客 SQE 相談 を含めている
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と next_actions に QA 責任者、顧客 SQE、物流責任者 を含めている
+  - 誤った近道「記録済み 4,120 台だけを対象範囲にして残り 680 台は問題なし」を排除している
+  nice_to_have:
+  - ALCOA+ 原則のうち違反箇所を具体的に指摘している
+  - データソースごとの優先順位と暫定信頼度を high/medium/low で示している
+  - 監査ログに evidence_uri / 取得時刻 / 担当者 / 装置 ID を残す next_actions を含めている
+  critical_failures:
+  - 記録済み 4,120 台だけを対象範囲にして残り 680 台は問題なしを是としている
+  - 矛盾・欠損があるのに確定的に合格・出荷可・工程安定と判断する
+  - trust_level_by_source を出さない、またはソース区別なく単一値で扱う
+  - required_rechecks を定義しない
+  - conditions_for_go / conditions_for_hold を分けない
+  - トレーサビリティ欠落を限定範囲として過小評価する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 記録済み 4,120 台だけを対象範囲にして残り 680 台は問題なしを採用している
+  max_score: 1
+  reason: 誤った近道を選択し Safe Deferral を破る
+- condition: 完成品 4,800 台、記録済み 4,120 台、欠落 680 台、欠落率 14.17%、C-23 入庫 2,200 個を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: trust_level_by_source を出していない、またはソースごとに分けていない
+  max_score: 3
+  reason: データソース信頼性の未評価
+- condition: required_rechecks を定義していない
+  max_score: 3
+  reason: 再取得・再検査・照合計画欠落
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 判断保留条件不足
+- condition: MES 完成品と部材投入スキャナと ERP 入庫履歴のトレーサビリティ照合を確認していない
+  max_score: 2
+  reason: データ不整合の見逃し
+- condition: QA 責任者、顧客 SQE、物流責任者を escalation_required または next_actions に含めていない
+  max_score: 2
+  reason: エスカレーション先未特定
+numeric_checks:
+- name: finished_unit_count
+  expected_value: 4800
+  tolerance: exact
+  unit: units
+  required: true
+- name: recorded_trace_count
+  expected_value: 4120
+  tolerance: exact
+  unit: units
+  required: true
+- name: missing_trace_count
+  expected_value: 680
+  tolerance: exact
+  unit: units
+  required: true
+- name: missing_trace_rate_percent
+  expected_value: 14.17
+  tolerance: ±0.1
+  unit: '%'
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - data_quality_assessment
+  - detected_issues
+  - numeric_basis
+  - trust_level_by_source
+  - conditions_for_go
+  - conditions_for_hold
+  - required_rechecks
+  - escalation_required
+  - next_actions
+disallowed_answers:
+- 記録済み 4,120 台だけを対象範囲にして残り 680 台は問題なしを選ぶ
+- 欠損や矛盾を無視して断定する
+- trust_level_by_source を省略する
+- required_rechecks を省略する
+- conditions_for_go と conditions_for_hold を区別しない

@@ -1,0 +1,128 @@
+schema_version: '1.1'
+id: IR-RT-010
+layer: industrial_reasoning
+category: risk_tradeoff
+domain: general_manufacturing
+subdomain: production_control
+difficulty: 4
+estimated_time_min: 60
+title: '自動化投資 vs 短期損益: ROI と立上げリスクを含む投資判断'
+scenario: 検査工程の自動化設備導入案。初期投資 48,000,000 円、月間人件費削減 2,400,000 円、見逃し不良の削減期待 900,000 円/月、立上げ 3 か月は歩留 1.5 ポイント低下し月 1,200,000 円の損失見込み。既存ラインは人手不足で残業
+  800 時間/月。投資予算の社内基準は回収 18 か月以内だが、単純回収は 48,000,000 / (2,400,000+900,000) = 14.55 か月、立上げ損失 3,600,000 円を含めると 51,600,000 / 3,300,000
+  = 15.64 か月。短期損益を重視する経理は延期、製造は導入、QA はバリデーション完了を条件に賛成。誤った近道は「ROI だけ良いので即導入」である。
+question: 相反する KPI と制約を踏まえて意思決定せよ。回答は JSON とし、decision / rationale / tradeoff_matrix / risk_level / numeric_basis / conditions_for_go
+  / conditions_for_hold / escalation_required / required_approvals / next_actions を必ず含めること。
+expected_skills:
+- tradeoff_analysis
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- investment_analysis
+- process_validation
+- cost_analysis
+primary_skill: tradeoff_analysis
+secondary_skills:
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- investment_analysis
+- process_validation
+- cost_analysis
+reference_answer: decision は approve_conditionally_after_validation_plan。立上げ損失込みでも回収 15.64 か月で基準 18 か月以内だが、導入時の歩留低下と品質バリデーションが未完了のため条件付き承認が妥当。
+  tradeoff_matrix では 中長期生産性・品質改善 vs 短期損益と立上げリスク を比較し、numeric_basis には 投資 48,000,000 円、月効果 3,300,000 円、立上げ損失 3,600,000 円、回収
+  15.64 か月、基準 18 か月 を含める。risk_level は medium。conditions_for_go は IQ/OQ/PQ 完了、初期流動管理計画承認、回収 18 か月以内、歩留低下対策完了。conditions_for_hold
+  は バリデーション未完了、歩留低下対策なし、投資承認未取得。escalation_required は true、required_approvals は 製造部長、QA 責任者、経理部長。next_actions は バリデーション計画、3
+  か月立上げリスク対策、段階導入、投資審議資料を作成する。誤った近道「ROI だけ良いので即導入」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を approve_conditionally_after_validation_plan または同等の条件付き判断としている
+  - numeric_basis に 投資 48,000,000 円、月効果 3,300,000 円、立上げ損失 3,600,000 円、回収 15.64 か月、基準 18 か月 を含めている
+  - tradeoff_matrix で 中長期生産性・品質改善 vs 短期損益と立上げリスク を比較している
+  - risk_level を medium または同等に分類し根拠を示している
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と required_approvals に 製造部長、QA 責任者、経理部長 を含めている
+  - 誤った近道である「ROI だけ良いので即導入」を排除している
+  nice_to_have:
+  - 優先順位を 1, 2, 3 の順で示している
+  - 判断保留条件を期限または SLA と関連付けている
+  - 監査ログに判断根拠・承認者・時刻・証跡 URI を残す next_actions を含めている
+  critical_failures:
+  - ROI だけ良いので即導入を是としている
+  - scenario の数値条件を使わず一般論だけで回答する
+  - tradeoff_matrix を作成しない
+  - go 条件と hold 条件を分けない
+  - risk_level または required_approvals を示さない
+  - 品質バリデーションと投資承認基準を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: ROI だけ良いので即導入を採用している
+  max_score: 1
+  reason: 誤った近道を選択
+- condition: 投資 48,000,000 円、月効果 3,300,000 円、立上げ損失 3,600,000 円、回収 15.64 か月、基準 18 か月を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: tradeoff_matrix がない、または単一 KPI のみで判断している
+  max_score: 3
+  reason: KPI 衝突の未評価
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 条件付き判断不足
+- condition: 製造部長、QA 責任者、経理部長を required_approvals に含めていない
+  max_score: 2
+  reason: 承認者特定不足
+- condition: 品質バリデーションと投資承認基準を無視して go と判断している
+  max_score: 1
+  reason: 制約条件違反
+numeric_checks:
+- name: monthly_benefit_yen
+  expected_value: 3300000
+  tolerance: exact
+  unit: JPY/month
+  required: true
+- name: startup_loss_yen
+  expected_value: 3600000
+  tolerance: exact
+  unit: JPY
+  required: true
+- name: payback_months_with_startup_loss
+  expected_value: 15.64
+  tolerance: ±0.05
+  unit: months
+  required: true
+- name: payback_threshold_months
+  expected_value: 18
+  tolerance: exact
+  unit: months
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - tradeoff_matrix
+  - risk_level
+  - numeric_basis
+  - conditions_for_go
+  - conditions_for_hold
+  - escalation_required
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- ROI だけ良いので即導入を選ぶ
+- 数値条件を使わず総合的に判断するとだけ書く
+- tradeoff_matrix を省略する
+- conditions_for_go と conditions_for_hold を区別しない
+- 製造部長、QA 責任者、経理部長を承認者に含めない

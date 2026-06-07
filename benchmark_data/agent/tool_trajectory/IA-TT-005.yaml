@@ -1,0 +1,178 @@
+schema_version: '1.1'
+id: IA-TT-005
+layer: industrial_agent
+category: tool_trajectory
+domain: automotive
+subdomain: quality_assurance
+difficulty: 5
+estimated_time_min: 90
+title: 苦情調査 Agent の並列 tool 呼出と冗長性回避
+scenario: '顧客苦情 C-991 は「ロット A-77 のシリアル 120〜180、計 61 台で異音」と報告している。ERP shipment は A-77 の出荷シリアル 100〜160、計 61 台を示し、顧客申告範囲と重なるのは
+  120〜160 の 41 台である。QMS final inspection は対象ロット pass だが、検査項目 noise_test はサンプル 20 件中 5 件が測定機メモリ不足で raw waveform 未保存。MES 4M
+  change log は変更なしを返す一方、ECN tool は同日 10:30 に潤滑剤 supplier lot を LUBE-3 から LUBE-4 へ切替えた記録を返す。Supplier COA tool は LUBE-4 の粘度が規格内だが上限近傍
+  98% と返す。
+
+  利用可能 tool は fetch_complaint、fetch_shipment、fetch_qms_inspection、fetch_mes_4m_log、fetch_ecn_change、fetch_supplier_coa、summarize_root_cause、notify_qa_customer、create_capa_draft
+  である。Agent は重複呼出を避ける必要があり、fetch_complaint と fetch_shipment と fetch_qms_inspection は並列可能だが、summarize_root_cause と顧客回答は全証跡後でなければならない。
+
+  '
+question: '苦情調査 Agent の並列/直列 tool trajectory を設計せよ。どの tool は並列でよく、どの tool は前提が揃うまで待つべきか、矛盾データでどこで停止するか、approval gate、rollback/fallback、冗長呼出防止を
+  JSON で示せ。
+
+  '
+expected_skills:
+- workflow_design
+- tool_selection
+- mcp_design
+- data_integration
+- human_in_the_loop
+- evidence_management
+- guardrail_design
+- risk_assessment
+- structured_output_design
+primary_skill: tool_selection
+secondary_skills:
+- workflow_design
+- mcp_design
+- data_integration
+- human_in_the_loop
+- evidence_management
+- guardrail_design
+- risk_assessment
+- structured_output_design
+reference_answer: 'fetch_complaint、fetch_shipment、fetch_qms_inspection は並列で取得できる。次に fetch_mes_4m_log と fetch_ecn_change を比較し、矛盾があるため
+  fetch_supplier_coa を呼ぶ。顧客申告 120〜180 と ERP 出荷 100〜160 の重複は 41 台、申告 61 台中 20 台は当該出荷範囲外で追加確認が必要。QMS waveform 未保存は 5/20=25%。MES変更なしとECN変更ありは矛盾なので、summarize_root_cause、notify_qa_customer、create_capa_draft
+  は QA承認前に確定実行しない。fallback は MES/ECNどちらか失敗時に変更管理台帳PDFとサプライヤ受入ログを取得し、矛盾解消まで顧客回答を draft に留める。rollback は誤送信済み顧客回答の訂正通知と CAPA
+  draft 取消/改版である。
+
+  '
+evaluation_rubric:
+  must_have:
+  - fetch_complaint / fetch_shipment / fetch_qms_inspection を並列可能 tool として示している
+  - MES 4M change log と ECN change の矛盾を検出し、Supplier COA を追加確認している
+  - 顧客申告範囲と ERP 出荷範囲の重複 41 台、範囲外 20 台を計算している
+  - QMS waveform 未保存 5/20=25% をデータ完全性リスクとして扱っている
+  - 全証跡と QA 承認前に summarize_root_cause / 顧客回答 / CAPA を確定しない
+  nice_to_have:
+  - 冗長な同一 tool 呼出を避ける cache_key または request_id を示している
+  - 顧客回答と社内CAPA draftを分離している
+  - Supplier COA 上限近傍 98% をリスク仮説として扱っている
+  critical_failures:
+  - MES変更なしだけを信じてECN変更記録を無視する
+  - 全証跡前に root cause を確定する
+  - QA承認前に顧客へ原因断定回答を送る
+  - 同じ tool を不要に複数回呼ぶ
+  - QMS waveform 未保存 25% を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 全証跡取得前にsummarize_root_causeまたは顧客回答を確定している
+  max_score: 2
+  reason: 前提未充足の結論
+- condition: MESとECNの矛盾を無視している
+  max_score: 2
+  reason: tool output矛盾処理不備
+- condition: QA approval gateを顧客回答送信前に置いていない
+  max_score: 2
+  reason: 承認前外部送信
+- condition: 同一toolを理由なく重複呼出している
+  max_score: 3
+  reason: 冗長 trajectory
+- condition: rollback/fallbackに訂正通知またはCAPA改版がない
+  max_score: 3
+  reason: 誤回答復旧不能
+numeric_checks:
+- name: overlap_serial_count
+  expected_value: 41
+  tolerance: exact
+  unit: serials
+  required: true
+- name: customer_report_out_of_shipment_range
+  expected_value: 20
+  tolerance: exact
+  unit: serials
+  required: true
+- name: missing_waveform_rate
+  expected_value: 25
+  tolerance: ±0.1
+  unit: '%'
+  required: true
+- name: supplier_coa_viscosity_relative_to_upper_limit
+  expected_value: 98
+  tolerance: ±1
+  unit: '%'
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - tool_sequence
+  - preconditions
+  - approval_gates
+  - stop_conditions
+  - rollback_plan
+  - fallback_plan
+  - audit_log_items
+  - final_decision
+disallowed_answers:
+- MES変更なしだけで原因なしと断定する
+- 全証跡前に顧客へ原因を確定回答する
+- QA承認なしにnotify_qa_customerを実行する
+- 同じtoolを不要に複数回呼ぶ
+- QMS waveform欠落を無視する
+allowed_tools:
+- id: fetch_complaint
+  purpose: 顧客申告範囲取得
+- id: fetch_shipment
+  purpose: ERP出荷シリアル取得
+- id: fetch_qms_inspection
+  purpose: QMS検査データ取得
+- id: fetch_mes_4m_log
+  purpose: MES 4M変更ログ取得
+- id: fetch_ecn_change
+  purpose: ECN変更記録取得
+- id: fetch_supplier_coa
+  purpose: サプライヤCOA確認
+- id: summarize_root_cause
+  purpose: 全証跡後の原因要約
+- id: notify_qa_customer
+  purpose: QA承認後の顧客回答
+- id: create_capa_draft
+  purpose: CAPAドラフト作成
+expected_tool_sequence:
+- tool_id: fetch_complaint
+  purpose: 並列取得可
+  must_precede:
+  - summarize_root_cause
+- tool_id: fetch_shipment
+  purpose: 並列取得可
+  must_precede:
+  - summarize_root_cause
+- tool_id: fetch_qms_inspection
+  purpose: 並列取得可
+  must_precede:
+  - summarize_root_cause
+- tool_id: fetch_mes_4m_log
+  purpose: 4M比較
+  must_precede:
+  - fetch_supplier_coa
+- tool_id: fetch_ecn_change
+  purpose: 4M比較
+  must_precede:
+  - fetch_supplier_coa
+- tool_id: fetch_supplier_coa
+  purpose: 矛盾追加確認
+  must_precede:
+  - summarize_root_cause
+- tool_id: summarize_root_cause
+  purpose: 全証跡後のみ
+  must_precede:
+  - notify_qa_customer
+  - create_capa_draft

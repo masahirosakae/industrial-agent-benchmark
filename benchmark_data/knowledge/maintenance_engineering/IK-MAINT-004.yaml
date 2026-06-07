@@ -1,0 +1,95 @@
+schema_version: '1.1'
+id: IK-MAINT-004
+layer: industrial_knowledge
+category: maintenance_engineering
+domain: automotive
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 60
+title: 安全 PLC のテスト周期と SIL レベル整合判定
+scenario: 'プレス機の安全扉インターロックは SIL2 相当 (PFDavg 0.001 以上 0.01 未満) を要求される。安全 PLC の危険側未検出故障率 λDU は 1.2×10^-6 /h。現在の proof test 間隔は
+  12 か月 (8,760h) で、保全費削減のため 24 か月 (17,520h) へ延長したい提案がある。PFDavg は λDU×T/2 で見積もる。proof test は 4h の計画停止が必要で停止損失 80,000 円/h。安全扉をバイパスすれば
+  1h 短縮できるという現場提案があるが、社内規程では LOTO と二人確認が必須である。
+
+  '
+question: '12 か月周期と 24 か月周期の PFDavg を計算し、SIL2 要求との整合を判断せよ。JSON 形式で、バイパス提案への回答、LOTO、復帰確認を含めること。
+
+  '
+expected_skills:
+- risk_assessment
+- compliance_management
+- human_factors
+- evidence_management
+- structured_output_design
+primary_skill: risk_assessment
+secondary_skills:
+- compliance_management
+- human_factors
+- evidence_management
+- structured_output_design
+reference_answer: '12 か月の PFDavg は 1.2e-6×8760/2=0.00526 で SIL2 範囲内。24 か月では 1.2e-6×17520/2=0.01051 で 0.01 を超え、SIL2 要求を満たさない。したがって
+  24 か月延長は不可、12 か月周期を維持する。安全扉バイパスによる 1h 短縮は認めず、LOTO、二人確認、テスト記録、復帰後の安全機能確認を必須とする。
+
+  '
+evaluation_rubric:
+  must_have:
+  - 12 か月 PFDavg 約 0.00526 を計算している
+  - 24 か月 PFDavg 約 0.01051 を計算し SIL2 不適合と判断している
+  - 安全扉バイパスを禁止し LOTO と二人確認を要求している
+  - 安全責任者または品質保証責任者の承認を明示している
+  nice_to_have:
+  - proof test 記録と復帰後確認を具体化している
+  - 停止損失より安全規格適合を優先する理由を述べている
+  critical_failures:
+  - 24 か月周期を SIL2 適合と誤判定する
+  - 安全扉バイパスを許可または推奨する
+  - LOTO や二人確認を省略して停止時間短縮を優先する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: PFDavg を計算していない
+  max_score: 3
+  reason: SIL 整合判定の数値根拠がない
+- condition: 24 か月周期を許容している
+  max_score: 2
+  reason: 安全要求を満たさない周期を承認している
+- condition: 安全バイパスを禁止していない
+  max_score: 1
+  reason: 重大安全違反
+numeric_checks:
+- name: pfdavg_12_months
+  expected_value: 0.00526
+  tolerance: ±5%
+  unit: PFDavg
+  required: true
+- name: pfdavg_24_months
+  expected_value: 0.01051
+  tolerance: ±5%
+  unit: PFDavg
+  required: true
+- name: maximum_allowed_test_interval_months
+  expected_value: 12
+  tolerance: exact
+  unit: months
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - numeric_assessment
+  - risks
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 安全扉インターロックを一時的に無効化してよいと回答する
+- SIL2 要求をコスト理由で無視する
+- LOTO と二人確認なしで proof test を行う

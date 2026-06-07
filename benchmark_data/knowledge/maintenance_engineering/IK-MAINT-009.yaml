@@ -1,0 +1,102 @@
+schema_version: '1.1'
+id: IK-MAINT-009
+layer: industrial_knowledge
+category: maintenance_engineering
+domain: general_manufacturing
+subdomain: maintenance
+difficulty: 5
+estimated_time_min: 90
+title: 老朽化ライン更新 vs OH 延命 5 年の NPV / IRR 比較と撤退条件
+scenario: '老朽化した組立ラインを 5 年延命するか新ラインへ更新するかを判断する。OH 延命案は即時費用 55,000,000 円と停止損失 8,000,000 円。新ライン案は設備費 180,000,000 円と立上げ停止損失 12,000,000
+  円。新ラインは OH 案に比べ、突発停止削減 42,000,000 円/年、スクラップ低減 18,000,000 円/年の便益がある。5 年後残存価値は 20,000,000 円、割引率は 8%。差額投資は (180M+12M)-(55M+8M)=129M。旧ラインには過去投資
+  80,000,000 円の未償却残があるが既に支出済み。安全部品の供給を 5 年継続する顧客契約がある。
+
+  '
+question: '差額投資として新ライン更新の NPV、単純回収期間、IRR を算定し、OH 延命と比較して判断せよ。JSON 形式で未償却残の扱い、品質リスク、撤退条件も示すこと。
+
+  '
+expected_skills:
+- cost_benefit_analysis
+- risk_assessment
+- production_planning
+- process_validation
+- structured_output_design
+primary_skill: cost_benefit_analysis
+secondary_skills:
+- risk_assessment
+- production_planning
+- process_validation
+- structured_output_design
+reference_answer: '追加投資は 129,000,000 円。年間便益は 60,000,000 円/年、5 年後残存価値 20,000,000 円。割引率 8% の 5 年年金現価係数は約 3.993、残存価値現価は約 13.6M
+  なので、差額 NPV は -129M + 60M×3.993 + 13.6M = 約 +124.2M 円。単純回収は 129M/60M=2.15 年、IRR は約 38.6%。新ライン更新が合理的。過去投資 80M はサンクコストで判断に含めない。便益が
+  2 四半期連続で計画 70% 未満、または重大品質流出時は再評価する。
+
+  '
+evaluation_rubric:
+  must_have:
+  - 追加投資差額 129,000,000 円を計算している
+  - 差額 NPV 約 +124,000,000 円を計算している
+  - 単純回収期間約 2.15 年と IRR 約 38.6% を示している
+  - 未償却残 80,000,000 円をサンクコストとして除外している
+  - 撤退または再評価条件を数値で示している
+  nice_to_have:
+  - 初期流動品質ゲートや顧客供給責任を具体化している
+  - 便益の感度分析や保守部品リスクに言及している
+  critical_failures:
+  - 過去投資 80,000,000 円を意思決定に含めて更新を否定する
+  - NPV または回収期間を計算せず老朽化だから更新と回答する
+  - 安全部品の供給責任や品質流出リスクを無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: NPV を計算していない
+  max_score: 3
+  reason: 投資判断の主要指標が欠落
+- condition: 未償却残 80,000,000 円を意思決定に含めている
+  max_score: 2
+  reason: サンクコスト誤謬
+- condition: 撤退条件または再評価条件を示していない
+  max_score: 4
+  reason: 投資後ガバナンス不足
+numeric_checks:
+- name: incremental_initial_investment
+  expected_value: 129000000
+  tolerance: ±1%
+  unit: JPY
+  required: true
+- name: incremental_npv_5years_8pct
+  expected_value: 124200000
+  tolerance: ±5%
+  unit: JPY
+  required: true
+- name: simple_payback_years
+  expected_value: 2.15
+  tolerance: ±0.2
+  unit: years
+  required: true
+- name: incremental_irr
+  expected_value: 38.6
+  tolerance: ±3
+  unit: '%'
+  required: false
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - numeric_assessment
+  - risks
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 過去投資 80,000,000 円を回収するため旧ラインを延命すると回答する
+- NPV や回収期間なしに更新可否を断定する
+- 重大品質流出時も計画を継続すると回答する

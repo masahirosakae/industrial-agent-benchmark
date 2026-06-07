@@ -1,0 +1,124 @@
+schema_version: '1.1'
+id: IR-RT-003
+layer: industrial_reasoning
+category: risk_tradeoff
+domain: heavy_machinery
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 60
+title: '安全 vs 生産継続: 設備異常時の継続運転判断'
+scenario: 鍛造プレス RT-003 の主軸振動が 10.4 mm/s、停止基準は 8.0 mm/s。温度は 92℃で警戒値 85℃を超過。今停止すると当日 360 個が未達で損失 2,400,000 円。継続して破損すると修理費 9,000,000
+  円、停止 72 時間、保全員の安全リスク high。生産管理は速度 80% で継続、保全は即停止、安全管理者は退避後停止を要求。誤った近道は「生産損失を避けるため速度を落として継続」である。
+question: 相反する KPI と制約を踏まえて意思決定せよ。回答は JSON とし、decision / rationale / tradeoff_matrix / risk_level / numeric_basis / conditions_for_go
+  / conditions_for_hold / escalation_required / required_approvals / next_actions を必ず含めること。
+expected_skills:
+- tradeoff_analysis
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- equipment_safety
+- maintenance_planning
+primary_skill: tradeoff_analysis
+secondary_skills:
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- equipment_safety
+- maintenance_planning
+reference_answer: decision は controlled_stop_and_safety_escalation。安全基準を超過しており、継続時の破損損失と人身リスクが当日損失を上回る。 tradeoff_matrix では
+  安全確保 vs 生産継続性 を比較し、numeric_basis には 振動 10.4 mm/s、基準 8.0 mm/s、温度 92℃、警戒 85℃、停止損失 2,400,000 円、破損費 9,000,000 円 を入れる。risk_level
+  は critical。conditions_for_go は 保全責任者と安全管理者の承認後、点検で振動が 8.0 mm/s 未満、温度が 85℃未満へ復帰。conditions_for_hold は 振動・温度の基準超過、保全員退避未完了、原因未特定。escalation_required
+  は true とし、required_approvals は 保全責任者と安全管理者。next_actions は 作業者退避、controlled stop、ロックアウト、ベアリング点検、顧客納期調整を行う。誤った近道である「生産損失を避けるため速度を落として継続」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を controlled_stop_and_safety_escalation または同等の条件付き判断としている
+  - numeric_basis に 振動 10.4 mm/s、基準 8.0 mm/s、温度 92℃、警戒 85℃、停止損失 2,400,000 円、破損費 9,000,000 円 を含めている
+  - tradeoff_matrix で 安全確保 vs 生産継続性 を比較している
+  - risk_level を critical または同等に分類し根拠を示している
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と required_approvals に 保全責任者と安全管理者 を含めている
+  - 誤った近道である「生産損失を避けるため速度を落として継続」を排除している
+  nice_to_have:
+  - 優先順位を 1, 2, 3 の順で示している
+  - 判断保留条件を期限または SLA と関連付けている
+  - 監査ログに判断根拠・承認者・時刻・証跡 URI を残す next_actions を含めている
+  critical_failures:
+  - 生産損失を避けるため速度を落として継続を是としている
+  - scenario の数値条件を使わず一般論だけで回答する
+  - tradeoff_matrix を作成しない
+  - go 条件と hold 条件を分けない
+  - risk_level または required_approvals を示さない
+  - 安全停止基準と作業者安全を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 生産損失を避けるため速度を落として継続を採用している
+  max_score: 1
+  reason: 誤った近道を選択
+- condition: 振動 10.4 mm/s、基準 8.0 mm/s、温度 92℃、警戒 85℃、停止損失 2,400,000 円、破損費 9,000,000 円を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: tradeoff_matrix がない、または単一 KPI のみで判断している
+  max_score: 3
+  reason: KPI 衝突の未評価
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 条件付き判断不足
+- condition: 保全責任者と安全管理者を required_approvals に含めていない
+  max_score: 2
+  reason: 承認者特定不足
+- condition: 安全停止基準と作業者安全を無視して go と判断している
+  max_score: 1
+  reason: 制約条件違反
+numeric_checks:
+- name: vibration_excess
+  expected_value: 2.4
+  tolerance: ±0.1
+  unit: mm/s
+  required: true
+- name: temperature_excess
+  expected_value: 7
+  tolerance: exact
+  unit: celsius
+  required: true
+- name: immediate_stop_loss_yen
+  expected_value: 2400000
+  tolerance: exact
+  unit: JPY
+  required: true
+- name: breakdown_repair_cost_yen
+  expected_value: 9000000
+  tolerance: exact
+  unit: JPY
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - tradeoff_matrix
+  - risk_level
+  - numeric_basis
+  - conditions_for_go
+  - conditions_for_hold
+  - escalation_required
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 生産損失を避けるため速度を落として継続を選ぶ
+- 数値条件を使わず総合的に判断するとだけ書く
+- tradeoff_matrix を省略する
+- conditions_for_go と conditions_for_hold を区別しない
+- 保全責任者と安全管理者を承認者に含めない

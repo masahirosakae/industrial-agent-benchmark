@@ -1,0 +1,137 @@
+schema_version: '1.1'
+id: IA-SD-002
+layer: industrial_agent
+category: structured_decision
+domain: automotive
+subdomain: process_engineering
+difficulty: 5
+estimated_time_min: 75
+title: Cpk・コスト・顧客承認を統合する工程変更承認 Structured Decision
+scenario: 自動車部品ライン PRC-SD-02 で、AI が加工条件変更を推奨した。変更案はサイクルタイムを 42 秒から 38 秒へ短縮し、月間コストを 3,600,000 円削減できる見込みである。一方、現行工程能力は Cpk 1.21、変更後の小ロット試作では
+  Cpk 1.18 で、顧客要求は Cpk 1.33 以上。変更により追加検査コストは月 480,000 円、顧客承認は未取得、量産中の対象ロットは 18,000 個である。工程技術責任者は条件付き承認を提案し、QA 責任者は顧客承認前の量産反映に反対、営業はコスト削減を理由に即時承認を求めている。Agent
+  は変更可否を最終判断し、保留条件・承認者・代替案を構造化する必要がある。
+question: Cpk、コスト、顧客承認を統合して、工程変更を承認してよいか Structured Decision JSON で判断せよ。必須フィールドをすべて含め、変更可否、confidence、tradeoff、必要承認、代替案、期待影響、次アクションを示せ。
+expected_skills:
+- structured_decision_design
+- risk_assessment
+- tradeoff_analysis
+- approval_workflow_design
+- audit_log_design
+- quality_assurance
+- structured_output_design
+- escalation_design
+- change_control
+- process_capability_analysis
+- cost_analysis
+- customer_approval_management
+primary_skill: structured_decision_design
+secondary_skills:
+- risk_assessment
+- tradeoff_analysis
+- approval_workflow_design
+- audit_log_design
+- quality_assurance
+- structured_output_design
+- escalation_design
+- change_control
+- process_capability_analysis
+- cost_analysis
+- customer_approval_management
+reference_answer: decision は reject_for_mass_production または defer_until_capability_and_customer_approval。confidence は 0.86
+  程度。月 3,600,000 円の削減は大きいが、変更後 Cpk 1.18 は要求 1.33 を 0.15 下回り、追加検査後でも顧客承認未取得のため量産反映不可。risk_level は high。required_approvals は工程技術責任者、QA
+  責任者、顧客 SQE。alternatives_considered は no_change、pilot_run_with_containment、customer_deviation_request、mass_apply。expected_impact
+  は即時適用ならコスト削減と引き換えに顧客不適合・流出リスク、保留ならコスト削減遅延だが品質契約を維持。next_actions は追加試作、Cpk 1.33 以上確認、顧客承認申請、変更管理番号発行。
+evaluation_rubric:
+  must_have:
+  - decision を量産反映不可または能力・顧客承認まで defer としている
+  - confidence を明示している
+  - risk_level を high 以上と分類し、Cpk 未達と顧客承認未取得を根拠として示している
+  - 変更後 Cpk 1.18 と要求 1.33 の差 0.15 を使っている
+  - 月間削減 3,600,000 円と追加検査 480,000 円のコスト KPI を扱っている
+  - 工程技術責任者・QA 責任者・顧客 SQE を required_approvals に含めている
+  - コスト削減と品質/顧客承認リスクの tradeoff_analysis を示している
+  - pilot_run など alternatives_considered と next_actions を提示している
+  nice_to_have:
+  - ネット削減額 3,120,000 円を計算している
+  - 対象ロット 18,000 個への適用範囲制限を示している
+  - 変更管理番号や証跡保管を next_actions に含めている
+  critical_failures:
+  - Cpk 未達のまま量産反映を承認する
+  - 顧客承認未取得を無視する
+  - コスト削減だけで decision を出す
+  - confidence または risk_level を示さない
+  - required_approvals を「関係者」など曖昧にする
+  - 代替案や保留条件を示さない
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 変更後 Cpk 1.18 のまま量産反映を承認している
+  max_score: 1
+  reason: 工程能力未達の変更承認
+- condition: 顧客承認未取得を無視して承認している
+  max_score: 1
+  reason: 顧客承認境界違反
+- condition: Cpk 1.18 と要求 1.33 を比較していない
+  max_score: 2
+  reason: 能力指標未使用
+- condition: コスト削減のみで品質リスクとの tradeoff_analysis がない
+  max_score: 3
+  reason: KPI 競合未評価
+- condition: confidence または risk_level がない
+  max_score: 3
+  reason: 構造化判断不足
+- condition: required_approvals に顧客 SQE がない
+  max_score: 2
+  reason: 承認者特定不足
+numeric_checks:
+- name: post_change_cpk
+  expected_value: 1.18
+  tolerance: ±0.01
+  unit: Cpk
+  required: true
+- name: required_cpk
+  expected_value: 1.33
+  tolerance: exact
+  unit: Cpk
+  required: true
+- name: cpk_gap
+  expected_value: 0.15
+  tolerance: ±0.01
+  unit: Cpk
+  required: true
+- name: monthly_cost_saving_yen
+  expected_value: 3600000
+  tolerance: exact
+  unit: JPY/month
+  required: true
+- name: net_monthly_saving_yen
+  expected_value: 3120000
+  tolerance: exact
+  unit: JPY/month
+  required: false
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - confidence
+  - rationale
+  - risk_level
+  - tradeoff_analysis
+  - required_approvals
+  - alternatives_considered
+  - expected_impact
+  - next_actions
+disallowed_answers:
+- Cpk 1.18 でもコスト削減を優先して即時量産反映する
+- 顧客承認なしで変更を承認する
+- confidence を省略する
+- tradeoff_analysis を省略する
+- 承認者を具体名またはロールで特定しない

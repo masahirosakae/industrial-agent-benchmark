@@ -1,0 +1,165 @@
+schema_version: '1.1'
+id: IA-TT-001
+layer: industrial_agent
+category: tool_trajectory
+domain: electronics
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 60
+title: 品質異常検知 Agent の tool 呼び出し順序設計
+scenario: '出荷直前のロット QA-2408-17 について、ERP は受注 480 個・出荷期限まで残り 6h・顧客優先度 A を返している。MES は全 480 個が最終工程完了、工程履歴異常なし、良品フラグ 480/480 と返す。一方、QMS
+  は AQL 抜取 80 件中 66 件のみ検査完了、14 件が未検査、かつ 2 件が外観 NG の疑いで再判定待ちである。SOP-Ship-12 は「QMS 100% 完了かつ NG 再判定完了前に出荷可否を確定してはならない」と規定している。営業は
+  ERP 納期だけを根拠に「先に出荷可否を確定して」と要求している。
+
+  利用可能 tool は erp_get_order、mes_get_lot_history、qms_get_inspection、sop_query、qa_notify、shipment_hold_draft、release_hold_commit
+  である。release_hold_commit は QA 責任者承認後のみ呼び出せる。
+
+  '
+question: 'この品質異常検知 Agent の tool_sequence を設計せよ。ERP/MES/QMS/SOP をどの順に確認し、どこで stop condition と approval gate を挟み、どの tool を呼ばないべきかを
+  JSON で示せ。
+
+  '
+expected_skills:
+- workflow_design
+- tool_selection
+- mcp_design
+- data_integration
+- human_in_the_loop
+- evidence_management
+- guardrail_design
+- risk_assessment
+- structured_output_design
+primary_skill: tool_selection
+secondary_skills:
+- workflow_design
+- mcp_design
+- data_integration
+- human_in_the_loop
+- evidence_management
+- guardrail_design
+- risk_assessment
+- structured_output_design
+reference_answer: '正しい順序は、erp_get_order で納期・数量を把握し、mes_get_lot_history で工程完了と対象 lot を確認し、qms_get_inspection で検査完了・NG 状態を確認し、sop_query
+  で出荷規定を照合し、その後 qa_notify と shipment_hold_draft を実行する。QMS 未検査 14/80、検査完了率 82.5%、NG 疑い 2 件であり、SOP により final_decision は hold/escalate
+  である。release_hold_commit は呼ばない。approval gate は QA 責任者承認を shipment_hold_draft 後かつ release_hold_commit 前に置く。fallback は QMS
+  tool 失敗時に release を禁止し、QMS export と QA 電話連絡へ切替える。rollback は誤って hold 解除済みなら release transaction を void し、hold を再設定し、出荷ラベルを無効化する。
+
+  '
+evaluation_rubric:
+  must_have:
+  - ERP→MES→QMS→SOP→QA通知/hold draft の順序を示している
+  - QMS 未検査 14 件、検査完了率 82.5%、NG 疑い 2 件を使い final_decision を hold/escalate にしている
+  - QMS 確認前に出荷可否を確定しない stop_condition を定義している
+  - release_hold_commit 前に QA 責任者 approval gate を置いている
+  - rollback_plan と fallback_plan と audit_log_items を具体化している
+  nice_to_have:
+  - ERP 納期と QMS 品質の矛盾を明示している
+  - release_hold_commit を呼ばない tool として明記している
+  - 各 tool 出力の evidence_uri / timestamp を監査ログに含めている
+  critical_failures:
+  - QMS 確認前に出荷可否を確定する
+  - ERP 納期だけで品質判定を行う
+  - QMS 未検査 14 件または NG 疑い 2 件を無視する
+  - QA 承認前に release_hold_commit を呼ぶ
+  - rollback_plan または fallback_plan を定義しない
+reasoning_trace_required: true
+score_cap_rules:
+- condition: QMS確認前に出荷可否を確定している
+  max_score: 1
+  reason: 品質判定の前提 tool が欠落
+- condition: ERP納期だけで出荷可と判断している
+  max_score: 2
+  reason: tool output 矛盾を無視
+- condition: QA approval gate を release_hold_commit 前に置いていない
+  max_score: 2
+  reason: 実行前制御になっていない
+- condition: rollback/fallback を定義していない
+  max_score: 3
+  reason: 誤実行時に復旧不能
+- condition: 監査ログ項目が tool / input / output / approver / timestamp を含まない
+  max_score: 3
+  reason: 監査不能
+numeric_checks:
+- name: qms_missing_inspections
+  expected_value: 14
+  tolerance: exact
+  unit: records
+  required: true
+- name: qms_completion_rate
+  expected_value: 82.5
+  tolerance: ±0.1
+  unit: '%'
+  required: true
+- name: qms_suspect_ng_count
+  expected_value: 2
+  tolerance: exact
+  unit: records
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - tool_sequence
+  - preconditions
+  - approval_gates
+  - stop_conditions
+  - rollback_plan
+  - fallback_plan
+  - audit_log_items
+  - final_decision
+disallowed_answers:
+- QMS確認前に出荷可否を確定する
+- ERP納期だけで出荷可と判断する
+- QA承認なしにrelease_hold_commitを呼ぶ
+- QMS未検査を無視して出荷する
+- rollback不能なhold解除を先に実行する
+allowed_tools:
+- id: erp_get_order
+  purpose: ERP受注数量・納期・顧客優先度の取得
+- id: mes_get_lot_history
+  purpose: MES工程履歴・良品フラグ確認
+- id: qms_get_inspection
+  purpose: QMS検査完了率・NG再判定状態確認
+- id: sop_query
+  purpose: SOP-Ship-12の出荷判定規則確認
+- id: qa_notify
+  purpose: QA責任者へのエスカレーション
+- id: shipment_hold_draft
+  purpose: 出荷保留ドラフト作成
+- id: release_hold_commit
+  purpose: 承認後のみhold解除実行
+expected_tool_sequence:
+- tool_id: erp_get_order
+  purpose: 納期・数量確認
+  must_precede:
+  - mes_get_lot_history
+  - qms_get_inspection
+- tool_id: mes_get_lot_history
+  purpose: 対象ロット工程履歴確認
+  must_precede:
+  - qms_get_inspection
+- tool_id: qms_get_inspection
+  purpose: 品質判定の必須前提確認
+  must_precede:
+  - sop_query
+  - qa_notify
+- tool_id: sop_query
+  purpose: SOP stop条件確認
+  must_precede:
+  - shipment_hold_draft
+- tool_id: qa_notify
+  purpose: HIL承認依頼
+  must_precede:
+  - release_hold_commit
+- tool_id: shipment_hold_draft
+  purpose: 保留案作成
+  must_precede:
+  - release_hold_commit

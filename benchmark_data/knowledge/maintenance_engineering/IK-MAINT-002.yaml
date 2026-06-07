@@ -1,0 +1,94 @@
+schema_version: '1.1'
+id: IK-MAINT-002
+layer: industrial_knowledge
+category: maintenance_engineering
+domain: electronics
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 60
+title: MTBF 480h / MTTR 6h 設備で Availability 99.5% を満たす冗長台数
+scenario: '検査工程のリークテスターは 1 台稼働で日産 900 個を処理できるが、顧客納期には 99.5% 以上の可用性が必要である。現行設備の MTBF は 480h、MTTR は 6h。故障時はライン全体が停止し、停止損失 95,000
+  円/h、出荷遅延ペナルティ 1,200,000 円/日が発生する。同型予備機を並列冗長にした場合、片方が稼働していれば最低能力を維持できる。予備機購入費は 8,500,000 円、設置は週末 10h 停止のみ可能。品質保証は検査工程停止による未検査品流出を懸念している。
+
+  '
+question: '単体 Availability と並列 2 台構成時の Availability を計算し、99.5% 要求を満たす構成を判断せよ。JSON 形式で、設備台数、切替試験、未検査品流出防止策を含めること。
+
+  '
+expected_skills:
+- capacity_planning
+- risk_assessment
+- cost_benefit_analysis
+- process_validation
+- structured_output_design
+primary_skill: capacity_planning
+secondary_skills:
+- risk_assessment
+- cost_benefit_analysis
+- process_validation
+- structured_output_design
+reference_answer: '単体 Availability は 480/(480+6)=0.98765=98.77% で 99.5% 要求を満たさない。独立故障を仮定した 2 台並列では 1-(1-0.98765)^2=0.99985=99.985%
+  で要求を満たす。最低構成は合計 2 台、追加は 1 台。設置停止は週末 10h に限定し、切替試験・検査マスタ確認・未検査品隔離ルールを QA 承認後に運用する。
+
+  '
+evaluation_rubric:
+  must_have:
+  - 単体 Availability 約 98.77% を計算している
+  - 2 台並列 Availability 約 99.985% を計算している
+  - 要求 99.5% に対し合計 2 台が必要と判断している
+  - 未検査品流出防止と QA 承認を示している
+  nice_to_have:
+  - 共通原因故障や切替失敗リスクに言及している
+  - 設置停止 10h の生産計画調整を示している
+  critical_failures:
+  - MTBF 480h だけを見て冗長不要と断定する
+  - Availability 式を誤り 99.5% を満たすと誤判定する
+  - 未検査品隔離や QA 承認を省略する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 単体 Availability と 99.5% 要求を比較していない
+  max_score: 3
+  reason: MTBF/MTTR 判断が欠落
+- condition: 必要設備台数を整数で示していない
+  max_score: 3
+  reason: 設備数は整数切上げが必要
+- condition: 未検査品流出防止または QA 承認がない
+  max_score: 4
+  reason: 検査工程の品質制約が不足
+numeric_checks:
+- name: single_machine_availability
+  expected_value: 98.77
+  tolerance: ±0.2
+  unit: '%'
+  required: true
+- name: parallel_two_machine_availability
+  expected_value: 99.985
+  tolerance: ±0.05
+  unit: '%'
+  required: true
+- name: minimum_total_machines
+  expected_value: 2
+  tolerance: exact
+  unit: machines
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - numeric_assessment
+  - risks
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- MTBF が長いので予備機不要と断定する
+- 1.5 台など実在しない設備数で計画する
+- 故障中も未検査品を通常出荷してよいと回答する

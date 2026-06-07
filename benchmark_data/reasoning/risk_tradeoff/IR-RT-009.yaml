@@ -1,0 +1,126 @@
+schema_version: '1.1'
+id: IR-RT-009
+layer: industrial_reasoning
+category: risk_tradeoff
+domain: general_manufacturing
+subdomain: quality_assurance
+difficulty: 3
+estimated_time_min: 60
+title: 'リワーク vs 廃棄: 品質ばらつきと再検査工数を含む判断'
+scenario: 塗装部品 1,000 個で膜厚不足が発生。廃棄なら損失 4,000,000 円、即日代替生産は 48 時間遅延。リワークなら費用 1,200,000 円、24 時間、再検査工数 400,000 円。ただしリワーク後の推定合格率は
+  82%、残り 18% は廃棄。顧客要求は膜厚 Cpk 1.33 以上、現状リワーク試行 30 個の Cpk は 1.18。顧客 SQE 承認なしのリワーク出荷は禁止。生産管理はコスト優先で全数リワーク、QA は廃棄または顧客特採を主張。誤った近道は「廃棄より安いので全数リワークして出荷」である。
+question: 相反する KPI と制約を踏まえて意思決定せよ。回答は JSON とし、decision / rationale / tradeoff_matrix / risk_level / numeric_basis / conditions_for_go
+  / conditions_for_hold / escalation_required / required_approvals / next_actions を必ず含めること。
+expected_skills:
+- tradeoff_analysis
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- cost_analysis
+- process_capability_analysis
+- customer_approval_management
+primary_skill: tradeoff_analysis
+secondary_skills:
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- cost_analysis
+- process_capability_analysis
+- customer_approval_management
+reference_answer: decision は hold_rework_until_capability_and_customer_approval。リワークは期待コストを下げる可能性があるが、Cpk 1.18 が顧客要求 1.33
+  未満で顧客承認なしに出荷できない。 tradeoff_matrix では 廃棄コスト vs リワーク品質ばらつき を比較し、numeric_basis には 廃棄 4,000,000 円、リワーク 1,200,000 円、再検査 400,000
+  円、合格率 82%、Cpk 1.18、要求 1.33 を含める。risk_level は high。conditions_for_go は リワーク後 Cpk 1.33 以上、再検査合格、顧客 SQE 承認、NG 品隔離。conditions_for_hold
+  は Cpk 未達、顧客承認未取得、再検査結果未完了。escalation_required は true、required_approvals は QA 責任者と顧客 SQE。next_actions は リワーク試作を追加し、Cpk を再測定し、期待コストと廃棄範囲を更新して顧客へ特採可否を確認する。誤った近道「廃棄より安いので全数リワークして出荷」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を hold_rework_until_capability_and_customer_approval または同等の条件付き判断としている
+  - numeric_basis に 廃棄 4,000,000 円、リワーク 1,200,000 円、再検査 400,000 円、合格率 82%、Cpk 1.18、要求 1.33 を含めている
+  - tradeoff_matrix で 廃棄コスト vs リワーク品質ばらつき を比較している
+  - risk_level を high または同等に分類し根拠を示している
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と required_approvals に QA 責任者と顧客 SQE を含めている
+  - 誤った近道である「廃棄より安いので全数リワークして出荷」を排除している
+  nice_to_have:
+  - 優先順位を 1, 2, 3 の順で示している
+  - 判断保留条件を期限または SLA と関連付けている
+  - 監査ログに判断根拠・承認者・時刻・証跡 URI を残す next_actions を含めている
+  critical_failures:
+  - 廃棄より安いので全数リワークして出荷を是としている
+  - scenario の数値条件を使わず一般論だけで回答する
+  - tradeoff_matrix を作成しない
+  - go 条件と hold 条件を分けない
+  - risk_level または required_approvals を示さない
+  - 顧客膜厚 Cpk 要求と顧客 SQE 承認を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 廃棄より安いので全数リワークして出荷を採用している
+  max_score: 1
+  reason: 誤った近道を選択
+- condition: 廃棄 4,000,000 円、リワーク 1,200,000 円、再検査 400,000 円、合格率 82%、Cpk 1.18、要求 1.33を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: tradeoff_matrix がない、または単一 KPI のみで判断している
+  max_score: 3
+  reason: KPI 衝突の未評価
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 条件付き判断不足
+- condition: QA 責任者と顧客 SQEを required_approvals に含めていない
+  max_score: 2
+  reason: 承認者特定不足
+- condition: 顧客膜厚 Cpk 要求と顧客 SQE 承認を無視して go と判断している
+  max_score: 1
+  reason: 制約条件違反
+numeric_checks:
+- name: scrap_cost_yen
+  expected_value: 4000000
+  tolerance: exact
+  unit: JPY
+  required: true
+- name: rework_and_inspection_cost_yen
+  expected_value: 1600000
+  tolerance: exact
+  unit: JPY
+  required: true
+- name: rework_pass_rate_percent
+  expected_value: 82
+  tolerance: exact
+  unit: '%'
+  required: true
+- name: cpk_gap
+  expected_value: 0.15
+  tolerance: ±0.01
+  unit: Cpk
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - tradeoff_matrix
+  - risk_level
+  - numeric_basis
+  - conditions_for_go
+  - conditions_for_hold
+  - escalation_required
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 廃棄より安いので全数リワークして出荷を選ぶ
+- 数値条件を使わず総合的に判断するとだけ書く
+- tradeoff_matrix を省略する
+- conditions_for_go と conditions_for_hold を区別しない
+- QA 責任者と顧客 SQEを承認者に含めない

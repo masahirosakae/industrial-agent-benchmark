@@ -1,0 +1,138 @@
+schema_version: '1.1'
+id: IA-SD-003
+layer: industrial_agent
+category: structured_decision
+domain: heavy_machinery
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 60
+title: 故障リスク・生産影響・安全影響を統合する設備停止 Structured Decision
+scenario: 鍛造プレス FP-10 で異常振動が発生した。現在の振動値は 9.2 mm/s、社内停止基準は 8.0 mm/s、温度は 86℃で警戒値 80℃を超過している。過去 30 日の類似パターンでは 6 件中 4 件が 12 時間以内に主軸ベアリング交換に至った。即時停止すると当日生産
+  420 個が未達となり、遅延損失は 2,100,000 円。継続運転で破損した場合、修理停止 48 時間、修理費 8,000,000 円、安全ガード内作業者の退避が必要で人身リスク medium-high。生産管理は slowdown で継続を提案し、安全管理者は
+  stop を要求、保全責任者は 30 分以内の計画停止を提案している。Agent は設備停止判断を構造化し、誤った近道として「当日生産完了まで継続」を避ける必要がある。
+question: 故障リスク、生産影響、安全影響を統合し、FP-10 を continue / slowdown / controlled_stop / emergency_stop のどれにするか Structured Decision JSON
+  で判断せよ。confidence、リスク分類、tradeoff、承認者、代替案、期待影響、next_actions を含めること。
+expected_skills:
+- structured_decision_design
+- risk_assessment
+- tradeoff_analysis
+- approval_workflow_design
+- audit_log_design
+- quality_assurance
+- structured_output_design
+- escalation_design
+- maintenance_planning
+- equipment_safety
+- abnormality_analysis
+- production_control
+primary_skill: structured_decision_design
+secondary_skills:
+- risk_assessment
+- tradeoff_analysis
+- approval_workflow_design
+- audit_log_design
+- quality_assurance
+- structured_output_design
+- escalation_design
+- maintenance_planning
+- equipment_safety
+- abnormality_analysis
+- production_control
+reference_answer: decision は controlled_stop_now または 30 分以内の計画停止、confidence は 0.84 程度。振動 9.2 mm/s は基準 8.0 を 1.2 mm/s 超過し、温度
+  86℃ は警戒値を 6℃超過。類似 6 件中 4 件で 12 時間以内に重大保全に至っており、継続運転は不適切。risk_level は critical または high。tradeoff は即時停止損失 2,100,000 円より、破損時修理費
+  8,000,000 円 + 48 時間停止 + 安全影響が重い。required_approvals は保全責任者と安全管理者、必要に応じて生産管理へ納期調整承認。alternatives_considered は continue、slowdown、controlled_stop、emergency_stop。next_actions
+  は安全退避、計画停止、ベアリング点検、代替設備への負荷移管、顧客納期調整。
+evaluation_rubric:
+  must_have:
+  - decision を controlled_stop または同等の停止判断にしている
+  - confidence を明示している
+  - risk_level を critical または high と分類し、安全影響と重大故障リスクを根拠として示している
+  - 振動 9.2 と基準 8.0 の差、温度 86 と警戒値 80 の差を使っている
+  - 生産損失 2,100,000 円と破損時 8,000,000 円/48 時間停止を tradeoff_analysis に含めている
+  - 安全管理者と保全責任者を required_approvals に含めている
+  - continue / slowdown / controlled_stop / emergency_stop の alternatives_considered を扱っている
+  - expected_impact と next_actions に安全退避・点検・納期調整を含めている
+  nice_to_have:
+  - 類似発生率 4/6=66.7% を故障確率根拠として扱っている
+  - emergency_stop ではなく controlled_stop を選ぶ理由を説明している
+  - 代替設備や負荷移管の具体策を示している
+  critical_failures:
+  - 当日生産完了まで continue とする
+  - 安全影響を risk_level に反映しない
+  - confidence を出さない
+  - 故障コストと生産損失の tradeoff を書かない
+  - 保全責任者または安全管理者を承認者に含めない
+  - 代替案を示さない
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 振動・温度基準超過を無視して continue と判断している
+  max_score: 1
+  reason: 安全・設備リスクの重大見落とし
+- condition: 安全影響を risk_level に反映していない
+  max_score: 2
+  reason: 安全 KPI 未評価
+- condition: 振動 9.2/基準 8.0 または温度 86/警戒 80 を使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: 生産損失と破損損失の tradeoff_analysis がない
+  max_score: 3
+  reason: KPI 競合未評価
+- condition: confidence または alternatives_considered がない
+  max_score: 3
+  reason: Structured Decision 必須要素欠落
+- condition: required_approvals に安全管理者がない
+  max_score: 3
+  reason: 安全承認者特定不足
+numeric_checks:
+- name: vibration_excess
+  expected_value: 1.2
+  tolerance: ±0.1
+  unit: mm/s
+  required: true
+- name: temperature_excess
+  expected_value: 6
+  tolerance: exact
+  unit: celsius
+  required: true
+- name: similar_failure_rate
+  expected_value: 66.7
+  tolerance: ±0.5
+  unit: '%'
+  required: true
+- name: immediate_stop_loss_yen
+  expected_value: 2100000
+  tolerance: exact
+  unit: JPY
+  required: true
+- name: breakdown_repair_cost_yen
+  expected_value: 8000000
+  tolerance: exact
+  unit: JPY
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - confidence
+  - rationale
+  - risk_level
+  - tradeoff_analysis
+  - required_approvals
+  - alternatives_considered
+  - expected_impact
+  - next_actions
+disallowed_answers:
+- 基準超過でも当日生産完了まで継続する
+- confidence を省略する
+- 安全影響を低リスクとして扱う
+- 代替案を提示しない
+- 保全責任者と安全管理者の承認を不要とする

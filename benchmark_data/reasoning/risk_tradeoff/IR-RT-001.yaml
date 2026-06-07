@@ -1,0 +1,124 @@
+schema_version: '1.1'
+id: IR-RT-001
+layer: industrial_reasoning
+category: risk_tradeoff
+domain: electronics
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 60
+title: '品質 vs 納期: 検査未完了ロットの出荷判断'
+scenario: 電子コネクタロット RT-001 は 2,400 個。出荷期限まで残り 72 時間、遅延ペナルティは 1 日 1,800,000 円。出荷前 AQL 抜取 200 件中 4 件が外観 NG で不良率 2.0%、顧客基準は 0.5%
+  以下。再判定待ちは 3 件。全数選別は 24 時間と 600,000 円、再加工は 36 時間と 900,000 円で歩留 95%。顧客 OEM は基準超過時に顧客 SQE 承認を要求する。営業は納期優先出荷、QA は保留、生産管理は選別を主張。誤った近道は「再サンプリングで合格なら出荷」である。
+question: 相反する KPI と制約を踏まえて意思決定せよ。回答は JSON とし、decision / rationale / tradeoff_matrix / risk_level / numeric_basis / conditions_for_go
+  / conditions_for_hold / escalation_required / required_approvals / next_actions を必ず含めること。
+expected_skills:
+- tradeoff_analysis
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- shipment_control
+- customer_approval_management
+primary_skill: tradeoff_analysis
+secondary_skills:
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- shipment_control
+- customer_approval_management
+reference_answer: decision は full_screening_then_conditional_ship。不良率 2.0% は顧客基準 0.5% を超過し、未完了 3 件も残るため無条件出荷は不可。納期損失より全数選別と顧客承認を優先する。
+  tradeoff_matrix では 品質保証 vs 納期遅延ペナルティ を比較し、numeric_basis には 不良率 2.0%、基準 0.5%、選別 600,000 円、遅延 1,800,000 円/日 を入れる。risk_level
+  は high。conditions_for_go は 全数選別完了、NG 隔離、再判定 3 件完了、QA と顧客 SQE 承認。conditions_for_hold は 選別後も NG 残存、顧客 SQE 未承認、再判定未完了。escalation_required
+  は true とし、required_approvals は QA 責任者と顧客 SQE。next_actions は 全数選別を開始し、再判定を完了し、顧客 SQE へ特採または納期影響を連絡する。誤った近道である「納期優先で検査未完了のまま出荷」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を full_screening_then_conditional_ship または同等の条件付き判断としている
+  - numeric_basis に 不良率 2.0%、基準 0.5%、選別 600,000 円、遅延 1,800,000 円/日 を含めている
+  - tradeoff_matrix で 品質保証 vs 納期遅延ペナルティ を比較している
+  - risk_level を high または同等に分類し根拠を示している
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と required_approvals に QA 責任者と顧客 SQE を含めている
+  - 誤った近道である「納期優先で検査未完了のまま出荷」を排除している
+  nice_to_have:
+  - 優先順位を 1, 2, 3 の順で示している
+  - 判断保留条件を期限または SLA と関連付けている
+  - 監査ログに判断根拠・承認者・時刻・証跡 URI を残す next_actions を含めている
+  critical_failures:
+  - 納期優先で検査未完了のまま出荷を是としている
+  - scenario の数値条件を使わず一般論だけで回答する
+  - tradeoff_matrix を作成しない
+  - go 条件と hold 条件を分けない
+  - risk_level または required_approvals を示さない
+  - 顧客品質基準と顧客 SQE 承認条件を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 納期優先で検査未完了のまま出荷を採用している
+  max_score: 1
+  reason: 誤った近道を選択
+- condition: 不良率 2.0%、基準 0.5%、選別 600,000 円、遅延 1,800,000 円/日を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: tradeoff_matrix がない、または単一 KPI のみで判断している
+  max_score: 3
+  reason: KPI 衝突の未評価
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 条件付き判断不足
+- condition: QA 責任者と顧客 SQEを required_approvals に含めていない
+  max_score: 2
+  reason: 承認者特定不足
+- condition: 顧客品質基準と顧客 SQE 承認条件を無視して go と判断している
+  max_score: 1
+  reason: 制約条件違反
+numeric_checks:
+- name: defect_rate_percent
+  expected_value: 2.0
+  tolerance: ±0.1
+  unit: '%'
+  required: true
+- name: defect_threshold_percent
+  expected_value: 0.5
+  tolerance: exact
+  unit: '%'
+  required: true
+- name: screening_cost_yen
+  expected_value: 600000
+  tolerance: exact
+  unit: JPY
+  required: true
+- name: daily_delay_penalty_yen
+  expected_value: 1800000
+  tolerance: exact
+  unit: JPY/day
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - tradeoff_matrix
+  - risk_level
+  - numeric_basis
+  - conditions_for_go
+  - conditions_for_hold
+  - escalation_required
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 納期優先で検査未完了のまま出荷を選ぶ
+- 数値条件を使わず総合的に判断するとだけ書く
+- tradeoff_matrix を省略する
+- conditions_for_go と conditions_for_hold を区別しない
+- QA 責任者と顧客 SQEを承認者に含めない

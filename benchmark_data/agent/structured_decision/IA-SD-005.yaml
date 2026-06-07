@@ -1,0 +1,139 @@
+schema_version: '1.1'
+id: IA-SD-005
+layer: industrial_agent
+category: structured_decision
+domain: automotive
+subdomain: quality_assurance
+difficulty: 5
+estimated_time_min: 75
+title: 不具合率・顧客影響・法規制を統合する市場不具合封じ込め Structured Decision
+scenario: 顧客 A 向け車載制御モジュール MDL-SD-05 で、市場初報が 72 時間以内に 11 件届いた。出荷済み対象は 18,000 台で、初報不具合率は約 611 ppm。11 件中 3 件は顧客ライン停止を伴い、2 件は安全関連の疑いがある。暫定解析では同一ロット偏りがあり、ロット
+  T-91 の出荷 4,000 台中 8 件が集中している。統計的有意性は未確定で p 値 0.12、原因仮説ははんだクラック、ソフト閾値誤判定、顧客側ハーネス不良の 3 つ。顧客契約はライン停止 2 件以上または安全疑い 1 件以上で 120
+  分以内の初報、24 時間以内の封じ込め計画、正式リコール判断は品質役員・法務・顧客 SQE 承認後のみと定める。営業は統計的有意性がないため様子見を提案し、QA は暫定封じ込めを主張している。Agent は意思決定品質を問われる。
+question: 市場不具合封じ込めについて、不具合率、顧客影響、法規制を統合して Structured Decision JSON で最終判断を示せ。confidence、risk_level、tradeoff_analysis、required_approvals、alternatives_considered、expected_impact、next_actions
+  を必ず含めること。
+expected_skills:
+- structured_decision_design
+- risk_assessment
+- tradeoff_analysis
+- approval_workflow_design
+- audit_log_design
+- quality_assurance
+- structured_output_design
+- escalation_design
+- field_quality_management
+- complaint_handling
+- regulatory_compliance
+- customer_communication
+primary_skill: structured_decision_design
+secondary_skills:
+- risk_assessment
+- tradeoff_analysis
+- approval_workflow_design
+- audit_log_design
+- quality_assurance
+- structured_output_design
+- escalation_design
+- field_quality_management
+- complaint_handling
+- regulatory_compliance
+- customer_communication
+reference_answer: decision は immediate_containment_and_escalation。confidence は 0.80 程度。全体 ppm は 11/18,000×1,000,000=611.1
+  ppm、ロット T-91 は 8/4,000×1,000,000=2,000 ppm。p 値 0.12 で統計的有意性未確定でも、ライン停止 3 件、安全疑い 2 件が契約 escalation 条件を満たすため様子見は不可。risk_level
+  は critical。tradeoff は過剰封じ込めによる供給影響と、安全・法規制・顧客信頼毀損リスクの競合で、暫定封じ込めを優先。required_approvals は QA 責任者、品質役員、法務部長、顧客 SQE。alternatives_considered
+  は monitor_only、lot_T91_containment、all_lot_containment、recall_candidate_review。expected_impact は T-91 出荷停止と顧客初報で供給影響があるが重大流出を抑止。next_actions
+  は 120 分以内初報、24 時間以内封じ込め計画、T-91 トレース、原因仮説別調査、リコール候補レビュー。
+evaluation_rubric:
+  must_have:
+  - decision を immediate_containment_and_escalation または同等の暫定封じ込め判断にしている
+  - confidence を明示している
+  - 全体 611.1 ppm と T-91 2,000 ppm を計算している
+  - p 値 0.12 だけで様子見にせず、ライン停止 3 件・安全疑い 2 件を risk_level に反映している
+  - tradeoff_analysis に過剰封じ込めによる供給影響と、安全・法規制・顧客信頼毀損リスクの競合を明示している
+  - 顧客初報 120 分、封じ込め計画 24 時間を next_actions または expected_impact に含めている
+  - QA 責任者・品質役員・法務部長・顧客 SQE を required_approvals に含めている
+  - monitor_only / lot containment / all lot containment / recall review など alternatives_considered を提示している
+  nice_to_have:
+  - ロット T-91 集中のリスクを全体 ppm と分けて評価している
+  - 正式リコール判断と暫定封じ込めを分離している
+  - 原因仮説 3 件ごとの調査 next_actions を示している
+  critical_failures:
+  - 統計的有意性が未確定という理由だけで monitor_only とする
+  - 顧客初報 120 分を無視する
+  - 法務または顧客 SQE 承認なしに正式リコールを決める
+  - confidence または risk_level を示さない
+  - 不具合 ppm を計算しない
+  - alternatives_considered を示さない
+reasoning_trace_required: true
+score_cap_rules:
+- condition: p 値 0.12 のみを理由に様子見としている
+  max_score: 1
+  reason: 顧客影響・安全条件の無視
+- condition: ライン停止 3 件または安全疑い 2 件を escalation 条件に含めていない
+  max_score: 2
+  reason: 重大影響の未評価
+- condition: 全体 ppm または T-91 ppm を計算していない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: confidence / risk_level / tradeoff_analysis のいずれかがない
+  max_score: 3
+  reason: 構造化意思決定の不足
+- condition: required_approvals に法務または顧客 SQE がない
+  max_score: 2
+  reason: 法規制・顧客承認者不足
+- condition: alternatives_considered がない
+  max_score: 3
+  reason: 代替案評価不足
+numeric_checks:
+- name: overall_failure_ppm
+  expected_value: 611.1
+  tolerance: ±1.0
+  unit: ppm
+  required: true
+- name: lot_t91_failure_ppm
+  expected_value: 2000.0
+  tolerance: ±1.0
+  unit: ppm
+  required: true
+- name: line_stop_count
+  expected_value: 3
+  tolerance: exact
+  unit: cases
+  required: true
+- name: safety_suspect_count
+  expected_value: 2
+  tolerance: exact
+  unit: cases
+  required: true
+- name: customer_report_sla_minutes
+  expected_value: 120
+  tolerance: exact
+  unit: minutes
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - confidence
+  - rationale
+  - risk_level
+  - tradeoff_analysis
+  - required_approvals
+  - alternatives_considered
+  - expected_impact
+  - next_actions
+disallowed_answers:
+- 統計的有意性が確定するまで顧客報告しない
+- confidence を省略する
+- 不具合率を計算しない
+- 法務と顧客 SQE を承認者に含めない
+- 正式リコールと暫定封じ込めを区別しない

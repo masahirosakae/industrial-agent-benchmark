@@ -1,0 +1,94 @@
+schema_version: '1.1'
+id: IK-MAINT-007
+layer: industrial_knowledge
+category: maintenance_engineering
+domain: automotive
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 60
+title: 振動値とトルク値が矛盾する設備の故障モード推定
+scenario: '塗装前処理ポンプで異常音が発生した。振動速度は 7.2 mm/s、社内警報値は 4.5 mm/s、停止基準は 7.1 mm/s。軸受温度は通常 62℃ に対し 78℃。一方、モータ電流は定格 82% で過負荷ではなく、トルク推定値も通常範囲である。生産はあと
+  6h 続ければ当日出荷分を完了できる。停止損失は 60,000 円/h、不良流出時の選別・再塗装コストは 1 ロット 1,500,000 円。品質保証は前処理液流量低下による塗装密着不良を懸念している。
+
+  '
+question: '振動・温度・トルクの矛盾をどう解釈し、継続運転 / 速度低下 / 停止点検のどれを選ぶべきか判断せよ。JSON 形式で追加計測と品質封じ込めを示すこと。
+
+  '
+expected_skills:
+- abnormality_analysis
+- risk_assessment
+- containment_planning
+- process_validation
+- structured_output_design
+primary_skill: abnormality_analysis
+secondary_skills:
+- risk_assessment
+- containment_planning
+- process_validation
+- structured_output_design
+reference_answer: '振動 7.2 mm/s は停止基準 7.1 mm/s を 0.1 mm/s 超過し、警報値 4.5 mm/s の 160% である。軸受温度も通常より 16℃ 高い。トルク正常だけでは安全側に継続判断できず、軸受損傷、芯ずれ、キャビテーション初期、センサー異常など複数仮説が残る。停止点検または即時の管理停止が妥当で、6h
+  継続運転の断定は不可。前処理流量・液圧を確認し、直近処理ロットを隔離、密着性確認を行う。
+
+  '
+evaluation_rubric:
+  must_have:
+  - 振動 7.2 mm/s が停止基準 7.1 mm/s を超過していると指摘している
+  - 温度上昇 16℃ とトルク正常の矛盾を複数仮説で扱っている
+  - 継続運転を断定せず停止点検または承認付き暫定運転を選んでいる
+  - 前処理流量確認・ロット隔離・密着性確認を示している
+  nice_to_have:
+  - センサー異常と実故障を切り分ける追加計測を示している
+  - 停止損失と不良流出コストを比較して説明している
+  critical_failures:
+  - トルク正常だけを根拠に 6h 継続運転を許可する
+  - 停止基準超過を無視する
+  - 塗装密着不良の品質封じ込めを行わない
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 停止基準 7.1 mm/s 超過に言及していない
+  max_score: 2
+  reason: 安全側判断に必要な閾値を無視
+- condition: トルク正常を理由に継続運転を確定している
+  max_score: 2
+  reason: 矛盾データの過剰単純化
+- condition: 品質封じ込めまたは QA 承認に言及していない
+  max_score: 3
+  reason: 前処理品質リスクの考慮不足
+numeric_checks:
+- name: vibration_excess_over_stop_limit
+  expected_value: 0.1
+  tolerance: ±0.05
+  unit: mm/s
+  required: true
+- name: bearing_temperature_rise
+  expected_value: 16
+  tolerance: ±1
+  unit: degC
+  required: true
+- name: vibration_ratio_to_alarm_limit
+  expected_value: 160
+  tolerance: ±5
+  unit: '%'
+  required: false
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - numeric_assessment
+  - risks
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- トルクが正常なので異常なしと断定する
+- 停止基準超過でも当日出荷完了まで運転継続すると回答する
+- 前処理済みロットを隔離せず通常出荷する

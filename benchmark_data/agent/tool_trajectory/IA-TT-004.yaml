@@ -1,0 +1,169 @@
+schema_version: '1.1'
+id: IA-TT-004
+layer: industrial_agent
+category: tool_trajectory
+domain: general_manufacturing
+subdomain: logistics
+difficulty: 5
+estimated_time_min: 75
+title: 出荷判定 Agent の tool sequence と部分失敗時の意思決定
+scenario: '出荷判定 Agent は ERP、MES、QMS、Traceability、Shipping Label API を使える。ロット S-500 は ERP で出荷期限を 4h 超過し、顧客違約金は 900,000 円/日。MES
+  は 300/300 個が良品フラグで最終工程完了。QMS は抜取 60 件中 48 件のみ完了、12 件未検査、かつ検査機校正期限切れ疑いを返す。Traceability API は 2 回連続 timeout。Shipping Label
+  API はラベル発行と出荷確定を同時に行う不可逆 API で、発行後は void_label と ERP shipment_cancel の2操作が必要になる。
+
+  利用可能 tool は erp_get_due_status、mes_get_completion、qms_get_release_status、trace_get_serials、shipping_label_create_commit、void_label、erp_shipment_cancel、qa_approval_request、customer_notify_draft
+  である。営業は「ERP期限超過なのでラベルだけ先に出して」と要求している。
+
+  '
+question: '部分的に tool が失敗・矛盾する状況で、出荷判定 Agent の tool_sequence と停止点を設計せよ。不可逆 tool の前にどの approval gate を置き、失敗時にどう rollback/fallback
+  するかを JSON で示せ。
+
+  '
+expected_skills:
+- workflow_design
+- tool_selection
+- mcp_design
+- data_integration
+- human_in_the_loop
+- evidence_management
+- guardrail_design
+- risk_assessment
+- structured_output_design
+primary_skill: tool_selection
+secondary_skills:
+- workflow_design
+- mcp_design
+- data_integration
+- human_in_the_loop
+- evidence_management
+- guardrail_design
+- risk_assessment
+- structured_output_design
+reference_answer: '正しい順序は erp_get_due_status → mes_get_completion → qms_get_release_status → trace_get_serials であり、QMS と Traceability
+  が release 前提である。QMS は 12/60 未検査で完了率 80%、校正期限切れ疑い、Traceability は 2 回 timeout のため final_decision は hold/defer/escalate。shipping_label_create_commit
+  は呼ばない。approval gate は QA 責任者承認と Traceability 復旧確認の後、不可逆 API 前に置く。fallback は trace timeout 2 回で手動 serial export と QA/物流への保留連絡、customer_notify_draft
+  作成。誤ラベル発行時の rollback は void_label → erp_shipment_cancel → lot hold 再設定 → 顧客通知である。
+
+  '
+evaluation_rubric:
+  must_have:
+  - ERP→MES→QMS→Traceability の順序を示し、Shipping Label API を最後の承認後にしている
+  - QMS 未検査 12/60=20% または完了率 80% を計算して hold/defer としている
+  - Traceability timeout 2 回を stop_condition と fallback 条件にしている
+  - shipping_label_create_commit 前に QA approval gate を置いている
+  - void_label と ERP shipment_cancel を含む rollback_plan を示している
+  nice_to_have:
+  - ERP期限超過とQMS/Traceability不備の矛盾を明示している
+  - 不可逆 API の前提条件を preconditions に列挙している
+  - 顧客通知ドラフトを fallback に含めている
+  critical_failures:
+  - QMS確認前またはTraceability timeout中に出荷確定する
+  - ERP期限超過だけで shipping_label_create_commit を呼ぶ
+  - 不可逆API前に approval gate を置かない
+  - rollback に void_label と erp_shipment_cancel を含めない
+  - 校正期限切れ疑いを無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: QMSまたはTraceability確認前にshipping_label_create_commitを呼ぶ
+  max_score: 1
+  reason: 不可逆toolの早期実行
+- condition: approval gateを不可逆API後または最後に置いている
+  max_score: 2
+  reason: 実行前制御ではない
+- condition: tool output矛盾を無視して出荷可と判断している
+  max_score: 2
+  reason: 矛盾処理不備
+- condition: rollback_planにvoid_label/erp_shipment_cancelがない
+  max_score: 3
+  reason: rollback不能
+- condition: stop_conditionsにTraceability timeoutまたはQMS未完了がない
+  max_score: 3
+  reason: 停止条件不備
+numeric_checks:
+- name: qms_missing_inspections
+  expected_value: 12
+  tolerance: exact
+  unit: records
+  required: true
+- name: qms_completion_rate
+  expected_value: 80
+  tolerance: ±0.1
+  unit: '%'
+  required: true
+- name: traceability_timeout_count
+  expected_value: 2
+  tolerance: exact
+  unit: timeouts
+  required: true
+- name: erp_due_over_hours
+  expected_value: 4
+  tolerance: exact
+  unit: h
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - tool_sequence
+  - preconditions
+  - approval_gates
+  - stop_conditions
+  - rollback_plan
+  - fallback_plan
+  - audit_log_items
+  - final_decision
+disallowed_answers:
+- ERP期限超過だけで出荷確定する
+- QMS未検査12件を無視してラベル発行する
+- Traceability API timeout中に出荷する
+- 承認前にshipping_label_create_commitを呼ぶ
+- void_labelなしのrollback計画を提示する
+allowed_tools:
+- id: erp_get_due_status
+  purpose: 期限超過確認
+- id: mes_get_completion
+  purpose: MES工程完了確認
+- id: qms_get_release_status
+  purpose: QMS出荷可否確認
+- id: trace_get_serials
+  purpose: シリアルトレース確認
+- id: qa_approval_request
+  purpose: QA承認gate
+- id: customer_notify_draft
+  purpose: 顧客通知ドラフト
+- id: shipping_label_create_commit
+  purpose: 承認後のみ不可逆ラベル発行
+- id: void_label
+  purpose: 誤発行ラベル無効化
+- id: erp_shipment_cancel
+  purpose: ERP出荷取消
+expected_tool_sequence:
+- tool_id: erp_get_due_status
+  purpose: 納期リスク取得
+  must_precede:
+  - mes_get_completion
+- tool_id: mes_get_completion
+  purpose: 工程完了確認
+  must_precede:
+  - qms_get_release_status
+- tool_id: qms_get_release_status
+  purpose: 出荷品質前提確認
+  must_precede:
+  - trace_get_serials
+  - qa_approval_request
+- tool_id: trace_get_serials
+  purpose: トレース前提確認
+  must_precede:
+  - qa_approval_request
+- tool_id: qa_approval_request
+  purpose: 不可逆API前approval gate
+  must_precede:
+  - shipping_label_create_commit

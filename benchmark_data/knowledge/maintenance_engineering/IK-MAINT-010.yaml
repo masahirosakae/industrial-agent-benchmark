@@ -1,0 +1,95 @@
+schema_version: '1.1'
+id: IK-MAINT-010
+layer: industrial_knowledge
+category: maintenance_engineering
+domain: general_manufacturing
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 60
+title: 設備停止中の安全インターロックバイパス要請への正しい回答
+scenario: '自動搬送ラインが安全扉スイッチ異常で停止した。保全員は安全扉スイッチ故障と推定しているが原因確定前である。製造班長は「4h だけインターロックをバイパスすれば当日出荷に間に合う」と要請している。停止損失は 600,000
+  円/h、当日出荷できない場合の顧客ペナルティは 1,800,000 円。社内規程では E-stop / safety door / light curtain の無効化運転は禁止。復旧作業時は LOTO、残留エネルギー確認、二人確認、復帰後の安全機能テストが必須。メーカー技術員は
+  90 分後に到着し、正規交換部品は在庫 1 個。交換後に 30 分空運転と 20 個の搬送品質確認が必要。
+
+  '
+question: 'このバイパス要請にどう回答し、どの復旧手順を取るべきか判断せよ。JSON 形式で安全・納期・コストのトレードオフ、LOTO、復帰後品質確認を示すこと。
+
+  '
+expected_skills:
+- risk_assessment
+- human_factors
+- compliance_management
+- containment_planning
+- structured_output_design
+primary_skill: risk_assessment
+secondary_skills:
+- human_factors
+- compliance_management
+- containment_planning
+- structured_output_design
+reference_answer: '許容できるインターロックバイパス運転時間は 0 分。4h バイパスは停止損失 2,400,000 円や顧客ペナルティ 1,800,000 円を避ける狙いがあっても安全規程違反で却下する。ライン停止を維持し、LOTO、残留エネルギー確認、二人確認を行い、90
+  分後にメーカー技術員と正規部品で交換する。交換後は安全扉・E-stop・搬送インターロックの機能テスト、30 分空運転、20 個搬送品質確認を行い、安全責任者と品質保証責任者が復帰承認する。
+
+  '
+evaluation_rubric:
+  must_have:
+  - インターロックバイパス運転を 0 分として明確に禁止している
+  - LOTO・残留エネルギー確認・二人確認を復旧手順に含めている
+  - メーカー技術員 90 分後、交換後 30 分空運転、20 個確認の条件を使っている
+  - 安全責任者と品質保証責任者の復帰承認を明示している
+  nice_to_have:
+  - 納期遅延時の顧客連絡や代替ライン検討を示している
+  - 一時復旧と恒久対策の切り分けを述べている
+  critical_failures:
+  - 4h だけならインターロックバイパス可と回答する
+  - LOTO や残留エネルギー確認なしに復旧作業を始める
+  - 復帰後の安全機能テストまたは搬送品質確認を省略する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 安全インターロックのバイパスを禁止していない
+  max_score: 1
+  reason: 重大安全違反
+- condition: LOTO または残留エネルギー確認に言及していない
+  max_score: 2
+  reason: 保全作業安全の欠落
+- condition: 復帰後の安全機能テストまたは品質確認がない
+  max_score: 3
+  reason: 復旧後確認不足
+numeric_checks:
+- name: allowed_interlock_bypass_time
+  expected_value: 0
+  tolerance: exact
+  unit: min
+  required: true
+- name: bypass_avoided_downtime_loss_4h
+  expected_value: 2400000
+  tolerance: ±5%
+  unit: JPY
+  required: false
+- name: post_repair_quality_check_pieces
+  expected_value: 20
+  tolerance: exact
+  unit: pieces
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - numeric_assessment
+  - risks
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 4h の一時的な安全扉バイパス運転を認める
+- LOTO なしでスイッチ交換を行う
+- 安全機能テストなしに量産再開する

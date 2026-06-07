@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """validate_dataset.py
 Industrial Agent Benchmark v1.0 dataset validator.
 
@@ -36,14 +36,14 @@ LAYER_DIR = {
 VALID_CATEGORIES = {
     "industrial_knowledge": {
         "order","production_planning","procurement","manufacturing_preparation",
-        "manufacturing_execution","quality","shipping","improvement",
+        "manufacturing_execution","quality","shipping","improvement","maintenance_engineering",
     },
     "industrial_reasoning": {
-        "fta","5why","fmea","capa","quality_improvement","abnormality_analysis",
+        "fta","5why","fmea","capa","quality_improvement","abnormality_analysis","risk_tradeoff","data_integrity",
     },
     "industrial_agent": {
         "workflow_design","agent_design","mcp","tool_selection",
-        "human_in_the_loop","multi_agent_coordination",
+        "human_in_the_loop","multi_agent_coordination","agent_safety","structured_decision","tool_trajectory","hil_boundary",
     },
 }
 VALID_DOMAINS = {
@@ -63,13 +63,163 @@ ID_PREFIX = {
 CATEGORY_PREFIX = {
     "order":"ORDER","production_planning":"PP","procurement":"PROC",
     "manufacturing_preparation":"MPREP","manufacturing_execution":"MEXEC",
-    "quality":"QUAL","shipping":"SHIP","improvement":"IMPR",
+    "quality":"QUAL","shipping":"SHIP","improvement":"IMPR","maintenance_engineering":"MAINT",
     "fta":"FTA","5why":"5WHY","fmea":"FMEA","capa":"CAPA",
-    "quality_improvement":"QI","abnormality_analysis":"AA",
+    "quality_improvement":"QI","abnormality_analysis":"AA","risk_tradeoff":"RT","data_integrity":"DI",
     "workflow_design":"WD","agent_design":"AD","mcp":"MCP",
     "tool_selection":"TS","human_in_the_loop":"HIL",
-    "multi_agent_coordination":"MAC",
+    "multi_agent_coordination":"MAC","agent_safety":"AS","structured_decision":"SD","tool_trajectory":"TT","hil_boundary":"HILB",
 }
+
+# --- v1.1 additive validation (Section 9 of benchmark_spec.md) ---
+VALID_SCHEMA_VERSIONS = {"1.0", "1.1"}
+
+V11_OPTIONAL_FIELDS = (
+    "schema_version",
+    "score_cap_rules",
+    "numeric_checks",
+    "generic_answer_penalty",
+    "structured_output_requirements",
+    "disallowed_answers",
+)
+
+VALID_OUTPUT_FORMATS = {"json", "yaml", "markdown_table", "none"}
+
+STANDARD_GENERIC_PENALTY_CONDITIONS = {
+    "scenario_specific_numbers_not_used",
+    "no_priority_order",
+    "no_tradeoff_analysis",
+    "generic_framework_only",
+    "no_named_stakeholder",
+}
+
+
+def _is_scalar_or_str(v):
+    return isinstance(v, (int, float, str)) and not isinstance(v, bool)
+
+
+def validate_v11_extensions(ctx, data, result):
+    """Validate v1.1 optional fields if present.
+
+    Triggers structural checks whenever a v1.1 field key is present in `data`,
+    independent of schema_version. This guarantees that any v1.1 field added to
+    a v1.0 problem is still structurally sound. Absence of all v1.1 fields is
+    treated as a pure v1.0 problem and produces no v1.1 errors/warnings.
+    """
+    # schema_version (optional, enum)
+    sv = data.get("schema_version")
+    if sv is not None:
+        if not isinstance(sv, str):
+            result.err(ctx, f"schema_version must be string, got {type(sv).__name__}")
+        elif sv not in VALID_SCHEMA_VERSIONS:
+            result.err(ctx, f"schema_version must be one of {sorted(VALID_SCHEMA_VERSIONS)}, got {sv!r}")
+
+    # score_cap_rules
+    if "score_cap_rules" in data:
+        rules = data["score_cap_rules"]
+        if not isinstance(rules, list):
+            result.err(ctx, "score_cap_rules must be list")
+        else:
+            for i, rule in enumerate(rules):
+                rctx = f"{ctx} score_cap_rules[{i}]"
+                if not isinstance(rule, dict):
+                    result.err(rctx, "must be mapping")
+                    continue
+                cond = rule.get("condition")
+                if not isinstance(cond, str) or not cond.strip():
+                    result.err(rctx, "condition must be non-empty string")
+                ms = rule.get("max_score")
+                if not isinstance(ms, int) or isinstance(ms, bool) or ms < 1 or ms > 5:
+                    result.err(rctx, f"max_score must be int 1..5, got {ms!r}")
+                if "reason" in rule:
+                    if not isinstance(rule["reason"], str):
+                        result.err(rctx, "reason must be string when present")
+
+    # numeric_checks
+    if "numeric_checks" in data:
+        checks = data["numeric_checks"]
+        if not isinstance(checks, list):
+            result.err(ctx, "numeric_checks must be list")
+        else:
+            for i, ch in enumerate(checks):
+                cctx = f"{ctx} numeric_checks[{i}]"
+                if not isinstance(ch, dict):
+                    result.err(cctx, "must be mapping")
+                    continue
+                name = ch.get("name")
+                if not isinstance(name, str) or not name.strip():
+                    result.err(cctx, "name must be non-empty string")
+                if "expected_value" not in ch:
+                    result.err(cctx, "expected_value is required")
+                else:
+                    if not _is_scalar_or_str(ch["expected_value"]):
+                        result.err(cctx, f"expected_value must be number or string, got {type(ch['expected_value']).__name__}")
+                tol = ch.get("tolerance")
+                if not isinstance(tol, str) or not tol.strip():
+                    result.err(cctx, "tolerance must be non-empty string")
+                unit = ch.get("unit")
+                if not isinstance(unit, str) or not unit.strip():
+                    result.err(cctx, "unit must be non-empty string")
+                if "required" in ch and not isinstance(ch["required"], bool):
+                    result.err(cctx, f"required must be bool when present, got {type(ch['required']).__name__}")
+
+    # structured_output_requirements
+    if "structured_output_requirements" in data:
+        sor = data["structured_output_requirements"]
+        if not isinstance(sor, dict):
+            result.err(ctx, "structured_output_requirements must be mapping")
+        else:
+            sctx = f"{ctx} structured_output_requirements"
+            req = sor.get("required")
+            if not isinstance(req, bool):
+                result.err(sctx, f"required must be bool, got {type(req).__name__}")
+            fmt = sor.get("format")
+            if not isinstance(fmt, str):
+                result.err(sctx, f"format must be string, got {type(fmt).__name__}")
+            elif fmt not in VALID_OUTPUT_FORMATS:
+                result.err(sctx, f"format must be one of {sorted(VALID_OUTPUT_FORMATS)}, got {fmt!r}")
+            rf = sor.get("required_fields")
+            if not isinstance(rf, list):
+                result.err(sctx, "required_fields must be list")
+            else:
+                if req is True and not rf:
+                    result.err(sctx, "required_fields must be non-empty when required=true")
+                for j, key in enumerate(rf):
+                    if not isinstance(key, str) or not key.strip():
+                        result.err(f"{sctx} required_fields[{j}]", "must be non-empty string")
+
+    # generic_answer_penalty
+    if "generic_answer_penalty" in data:
+        gap = data["generic_answer_penalty"]
+        if not isinstance(gap, dict):
+            result.err(ctx, "generic_answer_penalty must be mapping")
+        else:
+            gctx = f"{ctx} generic_answer_penalty"
+            en = gap.get("enabled")
+            if not isinstance(en, bool):
+                result.err(gctx, f"enabled must be bool, got {type(en).__name__}")
+            conds = gap.get("conditions")
+            if not isinstance(conds, list):
+                result.err(gctx, "conditions must be list")
+            else:
+                if en is True and not conds:
+                    result.err(gctx, "conditions must be non-empty when enabled=true")
+                for j, c in enumerate(conds):
+                    if not isinstance(c, str) or not c.strip():
+                        result.err(f"{gctx} conditions[{j}]", "must be non-empty string")
+                    elif c not in STANDARD_GENERIC_PENALTY_CONDITIONS:
+                        result.warn(f"{gctx} conditions[{j}]",
+                                    f"non-standard condition {c!r} (standard set: {sorted(STANDARD_GENERIC_PENALTY_CONDITIONS)})")
+
+    # disallowed_answers
+    if "disallowed_answers" in data:
+        das = data["disallowed_answers"]
+        if not isinstance(das, list):
+            result.err(ctx, "disallowed_answers must be list")
+        else:
+            for j, s in enumerate(das):
+                if not isinstance(s, str) or not s.strip():
+                    result.err(f"{ctx} disallowed_answers[{j}]", "must be non-empty string")
 
 class Result:
     def __init__(self):
@@ -185,6 +335,9 @@ def validate_problem(path: Path, data: dict, seen_ids: set, result: Result):
     if not isinstance(rt, bool):
         result.err(ctx, f"reasoning_trace_required must be bool, got {rt!r}")
 
+    # v1.1 additive validation (optional fields)
+    validate_v11_extensions(ctx, data, result)
+
 def validate_index(yaml_path: Path, csv_path: Path, on_disk_ids: set, result: Result):
     if not yaml_path.exists():
         result.err("index.yaml", "missing")
@@ -254,3 +407,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

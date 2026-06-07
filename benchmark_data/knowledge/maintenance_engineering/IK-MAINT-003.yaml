@@ -1,0 +1,94 @@
+schema_version: '1.1'
+id: IK-MAINT-003
+layer: industrial_knowledge
+category: maintenance_engineering
+domain: general_manufacturing
+subdomain: maintenance
+difficulty: 3
+estimated_time_min: 45
+title: 潤滑油劣化トレンドからの次回 OH 時期と判断保留条件
+scenario: '減速機の潤滑油粘度は新品時 46.0 cSt、交換限界 60.0 cSt。測定値は 0h:46.0、1000h:49.2、2000h:52.1、3000h:55.4 cSt。TAN (酸価) の直近サンプルはラベル不鮮明でロット紐付け不能、3000h
+  時点で油温は通常 72℃ から 83℃ に上昇した。生産計画上、次の週末停止枠は 1,200h 後、その次は 2,400h 後。減速機破損時は 18h 停止、損失 70,000 円/h、緊急部品 900,000 円が発生する。
+
+  '
+question: '粘度トレンドから限界到達予測を計算し、どの停止枠に OH/油交換を入れるべきか判断せよ。TAN 記録不備と温度上昇を踏まえ、判断保留や再採取条件も JSON で示すこと。
+
+  '
+expected_skills:
+- risk_assessment
+- simulation_reasoning
+- cost_benefit_analysis
+- evidence_management
+- structured_output_design
+primary_skill: risk_assessment
+secondary_skills:
+- simulation_reasoning
+- cost_benefit_analysis
+- evidence_management
+- structured_output_design
+reference_answer: '傾きは (55.4-46.0)/3000=0.00313 cSt/h。60.0 cSt まで残り 4.6 cSt なので限界到達は 4.6/0.00313=約 1,468h 後、累積約 4,468h。2,400h
+  後では限界超過の可能性があるため 1,200h 後の停止枠で油交換/OH を行う。TAN はロット紐付け不能のため 72h 以内に再採取し、油温 85℃ 以上継続や金属粉増加があれば前倒し停止する。
+
+  '
+evaluation_rubric:
+  must_have:
+  - 粘度限界到達を約 1,468h 後または累積約 4,468h と計算している
+  - 2,400h 後ではなく 1,200h 後の停止枠を選んでいる
+  - TAN 記録不備により再採取または判断保留条件を示している
+  - 温度上昇と破損時損失を考慮している
+  nice_to_have:
+  - 油中金属粉やフェログラフィなど追加確認項目を示している
+  - 前倒し停止条件を数値で示している
+  critical_failures:
+  - TAN 記録不備を無視して次々回停止まで延長する
+  - 粘度外挿を計算せず経験で判断する
+  - 温度上昇を安全・品質リスクとして扱わない
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 粘度限界到達時期を計算していない
+  max_score: 3
+  reason: トレンド問題で数値外挿が欠落
+- condition: TAN 記録不備を無視して確定判断している
+  max_score: 2
+  reason: データ完全性不備を無視
+- condition: 1,200h と 2,400h の停止枠比較をしていない
+  max_score: 3
+  reason: 生産計画制約を使っていない
+numeric_checks:
+- name: hours_until_viscosity_limit
+  expected_value: 1468
+  tolerance: ±5%
+  unit: h
+  required: true
+- name: predicted_cumulative_hours_at_limit
+  expected_value: 4468
+  tolerance: ±5%
+  unit: h
+  required: false
+- name: selected_maintenance_window
+  expected_value: 1200
+  tolerance: exact
+  unit: h_later
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - numeric_assessment
+  - risks
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- TAN サンプルのロット不明を問題なしとして扱う
+- 2,400h 後まで油交換不要と断定する
+- 温度上昇を無視して通常運転継続と回答する

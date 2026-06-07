@@ -1,0 +1,126 @@
+schema_version: '1.1'
+id: IR-RT-004
+layer: industrial_reasoning
+category: risk_tradeoff
+domain: automotive
+subdomain: process_engineering
+difficulty: 5
+estimated_time_min: 60
+title: '顧客要求 vs 工程能力: Cpk 1.67 要求での短納期量産開始判断'
+scenario: 顧客 A は安全関連ブラケットの量産を 10 日後に開始要求。顧客要求 Cpk は 1.67 以上だが、現状工程 Cpk は 1.21、追加治具で予測 Cpk 1.48、外注研削追加で予測 Cpk 1.70。ただし外注研削はリードタイム
+  14 日、費用 2,800,000 円。社内治具は 5 日で 900,000 円だが要求未達。顧客 SQE は Cpk 1.67 未満なら量産前承認が必要。営業は 10 日納期優先で社内治具案を主張。誤った近道は「社内治具で Cpk 1.48
+  なら十分として量産開始」である。
+question: 相反する KPI と制約を踏まえて意思決定せよ。回答は JSON とし、decision / rationale / tradeoff_matrix / risk_level / numeric_basis / conditions_for_go
+  / conditions_for_hold / escalation_required / required_approvals / next_actions を必ず含めること。
+expected_skills:
+- tradeoff_analysis
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- process_capability_analysis
+- customer_approval_management
+primary_skill: tradeoff_analysis
+secondary_skills:
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- process_capability_analysis
+- customer_approval_management
+reference_answer: decision は hold_mass_production_until_cpk_or_customer_deviation。顧客要求 Cpk 1.67 に対し社内治具案 1.48 は未達であり、安全関連部品を社内判断だけで量産開始できない。
+  tradeoff_matrix では 顧客要求 Cpk vs 短納期量産開始 を比較し、numeric_basis には 要求 Cpk 1.67、現状 1.21、治具後 1.48、外注後 1.70、納期 10 日、外注 14 日 を入れる。risk_level
+  は critical。conditions_for_go は Cpk 1.67 以上を実測で確認、または顧客 SQE の deviation 承認取得、量産初期流動管理承認。conditions_for_hold は Cpk 1.67 未満、顧客承認未取得、外注工程能力未検証。escalation_required
+  は true とし、required_approvals は 工程技術責任者、QA 責任者、顧客 SQE。next_actions は 外注研削の短縮可否確認、顧客へ deviation 申請、初期流動検査計画を作成する。誤った近道である「社内治具で
+  Cpk 1.48 なら十分として量産開始」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を hold_mass_production_until_cpk_or_customer_deviation または同等の条件付き判断としている
+  - numeric_basis に 要求 Cpk 1.67、現状 1.21、治具後 1.48、外注後 1.70、納期 10 日、外注 14 日 を含めている
+  - tradeoff_matrix で 顧客要求 Cpk vs 短納期量産開始 を比較している
+  - risk_level を critical または同等に分類し根拠を示している
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と required_approvals に 工程技術責任者、QA 責任者、顧客 SQE を含めている
+  - 誤った近道である「社内治具で Cpk 1.48 なら十分として量産開始」を排除している
+  nice_to_have:
+  - 優先順位を 1, 2, 3 の順で示している
+  - 判断保留条件を期限または SLA と関連付けている
+  - 監査ログに判断根拠・承認者・時刻・証跡 URI を残す next_actions を含めている
+  critical_failures:
+  - 社内治具で Cpk 1.48 なら十分として量産開始を是としている
+  - scenario の数値条件を使わず一般論だけで回答する
+  - tradeoff_matrix を作成しない
+  - go 条件と hold 条件を分けない
+  - risk_level または required_approvals を示さない
+  - 顧客 Cpk 1.67 要求と安全関連部品の顧客承認を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 社内治具で Cpk 1.48 なら十分として量産開始を採用している
+  max_score: 1
+  reason: 誤った近道を選択
+- condition: 要求 Cpk 1.67、現状 1.21、治具後 1.48、外注後 1.70、納期 10 日、外注 14 日を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: tradeoff_matrix がない、または単一 KPI のみで判断している
+  max_score: 3
+  reason: KPI 衝突の未評価
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 条件付き判断不足
+- condition: 工程技術責任者、QA 責任者、顧客 SQEを required_approvals に含めていない
+  max_score: 2
+  reason: 承認者特定不足
+- condition: 顧客 Cpk 1.67 要求と安全関連部品の顧客承認を無視して go と判断している
+  max_score: 1
+  reason: 制約条件違反
+numeric_checks:
+- name: cpk_gap_current
+  expected_value: 0.46
+  tolerance: ±0.01
+  unit: Cpk
+  required: true
+- name: cpk_gap_fixture
+  expected_value: 0.19
+  tolerance: ±0.01
+  unit: Cpk
+  required: true
+- name: outsourcing_lead_time_days
+  expected_value: 14
+  tolerance: exact
+  unit: days
+  required: true
+- name: customer_deadline_days
+  expected_value: 10
+  tolerance: exact
+  unit: days
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - tradeoff_matrix
+  - risk_level
+  - numeric_basis
+  - conditions_for_go
+  - conditions_for_hold
+  - escalation_required
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 社内治具で Cpk 1.48 なら十分として量産開始を選ぶ
+- 数値条件を使わず総合的に判断するとだけ書く
+- tradeoff_matrix を省略する
+- conditions_for_go と conditions_for_hold を区別しない
+- 工程技術責任者、QA 責任者、顧客 SQEを承認者に含めない

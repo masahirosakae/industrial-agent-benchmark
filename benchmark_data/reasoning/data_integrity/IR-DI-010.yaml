@@ -1,0 +1,139 @@
+schema_version: '1.1'
+id: IR-DI-010
+layer: industrial_reasoning
+category: data_integrity
+domain: automotive
+subdomain: quality_assurance
+difficulty: 5
+estimated_time_min: 60
+title: '統計判断サンプル不足: n=8 の検査結果で工程安定を断定できるか'
+scenario: 新規溶接条件の初期流動確認。工程技術は n=8 の引張強度結果 (平均 12.4 kN、標準偏差 0.35 kN、全点規格下限 11.5 kN 以上) を示し「工程安定」と判断したい。顧客 PPAP では初期能力確認に n>=30、Cpk
+  >=1.33 を要求。過去類似条件では n=8 で OK 後、n=30 で Cpk 1.05 となり再評価になった事例あり。検査機ログは 8 件のみ、MES は 120 個生産済み、ERP は初回出荷 48 時間後。営業は n=8 が全点規格内なので出荷したい。誤った近道は「n=8
+  が全点規格内なので工程安定と断定」。
+question: データソース間の矛盾・欠損・鮮度・単位・タイムスタンプを評価し、データ不整合下での判断可否を JSON で示せ。decision / data_quality_assessment / detected_issues / numeric_basis
+  / trust_level_by_source / conditions_for_go / conditions_for_hold / required_rechecks / escalation_required / next_actions
+  を必ず含めること。
+expected_skills:
+- data_integrity_assessment
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- statistical_reasoning
+- process_capability_analysis
+- customer_approval_management
+primary_skill: data_integrity_assessment
+secondary_skills:
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- statistical_reasoning
+- process_capability_analysis
+- customer_approval_management
+reference_answer: decision は hold_ppap_release_until_minimum_sample_and_cpk_confirmed。n=8 は顧客要求 n>=30 を満たさず、Cpk も未算出または信頼不足のため工程安定と断定できない。
+  detected_issues は サンプル不足 n=8、顧客要求 n>=30 未達、Cpk 未確定、MES 120 個生産済みと検査 8 件のギャップ。trust_level_by_source では 検査機ログ / MES 生産実績 /
+  顧客 PPAP 要求 / 過去類似条件履歴 をソース別に評価する。numeric_basis は サンプル n=8、要求 n=30、不足 22、MES 120 個、平均 12.4 kN、標準偏差 0.35 kN。conditions_for_go
+  は n>=30 の検査完了、Cpk 1.33 以上、QA/顧客 SQE 承認、初期流動管理完了。conditions_for_hold は n=8 のまま、Cpk 未算出、顧客 PPAP 要求未達、120 個の代表性未確認。required_rechecks
+  は 追加 22 件以上の検査、Cpk 算出、サンプル抽出方法確認、120 個の隔離または初期流動 hold。escalation_required は true とし、エスカレーション先は QA 責任者、工程技術責任者、顧客 SQE。next_actions
+  は 追加サンプルを取得し、Cpk を算出し、PPAP 記録を更新し、初回出荷を顧客 SQE 承認まで保留。誤った近道「n=8 が全点規格内なので工程安定と断定」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を hold_ppap_release_until_minimum_sample_and_cpk_confirmed または同等の保留・再取得・条件付き判断としている
+  - data_quality_assessment / detected_issues に サンプル不足 n=8、顧客要求 n>=30 未達、Cpk 未確定、MES 120 個生産済みと検査 8 件のギャップ を具体的に列挙している
+  - trust_level_by_source で 検査機ログ / MES 生産実績 / 顧客 PPAP 要求 / 過去類似条件履歴 の信頼性を分けている
+  - numeric_basis に サンプル n=8、要求 n=30、不足 22、MES 120 個、平均 12.4 kN、標準偏差 0.35 kN を含めている
+  - required_rechecks に 追加 22 件以上の検査、Cpk 算出、サンプル抽出方法確認、120 個の隔離または初期流動 hold を含めている
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と next_actions に QA 責任者、工程技術責任者、顧客 SQE を含めている
+  - 誤った近道「n=8 が全点規格内なので工程安定と断定」を排除している
+  nice_to_have:
+  - ALCOA+ 原則のうち違反箇所を具体的に指摘している
+  - データソースごとの優先順位と暫定信頼度を high/medium/low で示している
+  - 監査ログに evidence_uri / 取得時刻 / 担当者 / 装置 ID を残す next_actions を含めている
+  critical_failures:
+  - n=8 が全点規格内なので工程安定と断定を是としている
+  - 矛盾・欠損があるのに確定的に合格・出荷可・工程安定と判断する
+  - trust_level_by_source を出さない、またはソース区別なく単一値で扱う
+  - required_rechecks を定義しない
+  - conditions_for_go / conditions_for_hold を分けない
+  - サンプル不足のまま Cpk 安定と断定する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: n=8 が全点規格内なので工程安定と断定を採用している
+  max_score: 1
+  reason: 誤った近道を選択し Safe Deferral を破る
+- condition: サンプル n=8、要求 n=30、不足 22、MES 120 個、平均 12.4 kN、標準偏差 0.35 kNを numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: trust_level_by_source を出していない、またはソースごとに分けていない
+  max_score: 3
+  reason: データソース信頼性の未評価
+- condition: required_rechecks を定義していない
+  max_score: 3
+  reason: 再取得・再検査・照合計画欠落
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 判断保留条件不足
+- condition: 検査機ログ件数と MES 生産数と顧客 PPAP 要求の整合性を確認していない
+  max_score: 2
+  reason: データ不整合の見逃し
+- condition: QA 責任者、工程技術責任者、顧客 SQEを escalation_required または next_actions に含めていない
+  max_score: 2
+  reason: エスカレーション先未特定
+numeric_checks:
+- name: sample_size_current
+  expected_value: 8
+  tolerance: exact
+  unit: samples
+  required: true
+- name: sample_size_required
+  expected_value: 30
+  tolerance: exact
+  unit: samples
+  required: true
+- name: sample_shortfall
+  expected_value: 22
+  tolerance: exact
+  unit: samples
+  required: true
+- name: mes_produced_count
+  expected_value: 120
+  tolerance: exact
+  unit: units
+  required: true
+- name: required_cpk
+  expected_value: 1.33
+  tolerance: exact
+  unit: Cpk
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - data_quality_assessment
+  - detected_issues
+  - numeric_basis
+  - trust_level_by_source
+  - conditions_for_go
+  - conditions_for_hold
+  - required_rechecks
+  - escalation_required
+  - next_actions
+disallowed_answers:
+- n=8 が全点規格内なので工程安定と断定を選ぶ
+- 欠損や矛盾を無視して断定する
+- trust_level_by_source を省略する
+- required_rechecks を省略する
+- conditions_for_go と conditions_for_hold を区別しない

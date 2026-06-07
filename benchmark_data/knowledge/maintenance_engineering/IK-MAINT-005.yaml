@@ -1,0 +1,94 @@
+schema_version: '1.1'
+id: IK-MAINT-005
+layer: industrial_knowledge
+category: maintenance_engineering
+domain: general_manufacturing
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 60
+title: スペア在庫の臨界部品分類 (ABC) と発注 LT 設計
+scenario: '自動組立ラインのサーボアンプは故障すると 18h 停止し、停止損失 80,000 円/h、特急復旧費 250,000 円/回が発生する。故障確率は 4%/月、通常発注リードタイムは 35 日。予備品単価は 420,000
+  円、年間保有費率は 18%。現在在庫は 0 個で、購買は都度発注を主張している。月末 10 日間はフル稼働で停止が顧客納期に直結する。品質部門は交換後に原点復帰と 10 個の寸法確認を要求している。
+
+  '
+question: 'このサーボアンプを臨界予備品として 1 個在庫すべきか、期待ダウンタイム損失と保有費を比較して判断せよ。JSON 形式で交換後品質確認と補充ルールも示すこと。
+
+  '
+expected_skills:
+- inventory_planning
+- cost_benefit_analysis
+- risk_assessment
+- process_validation
+- structured_output_design
+primary_skill: inventory_planning
+secondary_skills:
+- cost_benefit_analysis
+- risk_assessment
+- process_validation
+- structured_output_design
+reference_answer: '1 回故障損失は 18×80,000+250,000=1,690,000 円。月次期待損失は 1,690,000×4%=67,600 円、年間 811,200 円。1 個在庫の年間保有費は 420,000×18%=75,600
+  円で、期待停止損失より小さい。したがって A/臨界部品として 1 個常備し、使用後は LT 35 日を考慮して即日再発注する。交換後は原点復帰、パラメータ照合、10 個寸法確認、QA 承認を行う。
+
+  '
+evaluation_rubric:
+  must_have:
+  - 1 回故障損失 1,690,000 円を計算している
+  - 年間期待損失 811,200 円と年間保有費 75,600 円を比較している
+  - 1 個在庫と使用後即日再発注を示している
+  - 交換後の原点復帰・寸法確認・QA 承認を明示している
+  nice_to_have:
+  - LT 35 日を踏まえた reorder point に言及している
+  - ABC 分類と設備重要度を分けて説明している
+  critical_failures:
+  - 単価 420,000 円だけを見て在庫不要と判断する
+  - 交換後の品質確認なしに量産復帰させる
+  - 故障確率や停止損失を計算せず都度発注を選ぶ
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 期待停止損失と保有費を比較していない
+  max_score: 3
+  reason: 予備品判断の数値根拠がない
+- condition: リードタイム 35 日を考慮していない
+  max_score: 3
+  reason: 補充制約を無視
+- condition: 交換後の品質確認に言及していない
+  max_score: 4
+  reason: 復旧後品質保証が不足
+numeric_checks:
+- name: single_failure_loss
+  expected_value: 1690000
+  tolerance: ±5%
+  unit: JPY/failure
+  required: true
+- name: annual_expected_downtime_loss
+  expected_value: 811200
+  tolerance: ±5%
+  unit: JPY/year
+  required: true
+- name: annual_holding_cost_one_spare
+  expected_value: 75600
+  tolerance: ±5%
+  unit: JPY/year
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - numeric_assessment
+  - risks
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 高額なので予備品を持たないとだけ回答する
+- 交換後の寸法確認を省略して即時出荷する
+- 故障確率 4%/月を使わず一般論で在庫方針を述べる

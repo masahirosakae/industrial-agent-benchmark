@@ -1,0 +1,126 @@
+schema_version: '1.1'
+id: IR-RT-005
+layer: industrial_reasoning
+category: risk_tradeoff
+domain: electronics
+subdomain: procurement
+difficulty: 4
+estimated_time_min: 60
+title: '在庫・調達 vs 品質保証: 代替部材採用の条件付き判断'
+scenario: 電源基板の EOL 部品 RT-CAP-A は残 4,800 個、日次需要 800 個で在庫切れまで 6 日。代替 RT-CAP-B は納期 4 日で欠品回避可能だが、PPAP 65%、信頼性評価 500/1000 時間、顧客承認未取得。代替品単価は
+  +9%。顧客指定部品で、変更には設計責任者・SQE・顧客 SQE 承認が必要。調達は即採用、QA は hold、設計は限定試作を提案。誤った近道は「欠品回避のため代替品を量産投入」である。
+question: 相反する KPI と制約を踏まえて意思決定せよ。回答は JSON とし、decision / rationale / tradeoff_matrix / risk_level / numeric_basis / conditions_for_go
+  / conditions_for_hold / escalation_required / required_approvals / next_actions を必ず含めること。
+expected_skills:
+- tradeoff_analysis
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- supplier_quality_management
+- inventory_planning
+- customer_approval_management
+primary_skill: tradeoff_analysis
+secondary_skills:
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- supplier_quality_management
+- inventory_planning
+- customer_approval_management
+reference_answer: decision は defer_mass_use_and_escalate_customer_approval。在庫 6 日で供給リスクは高いが、PPAP と信頼性評価と顧客承認が未完了で量産投入は不可。
+  tradeoff_matrix では 在庫欠品回避 vs 品質保証未完了 を比較し、numeric_basis には 在庫 4,800 個、需要 800 個/日、残 6 日、PPAP 65%、信頼性 50%、単価 +9% を入れる。risk_level
+  は high。conditions_for_go は PPAP 100%、信頼性評価完了、設計/SQE/顧客 SQE 承認、ロットトレーサビリティ確保。conditions_for_hold は PPAP 未完了、顧客承認未取得、信頼性評価
+  1000 時間未完了。escalation_required は true とし、required_approvals は 設計責任者、SQE 責任者、顧客 SQE。next_actions は 顧客承認申請、代替品の限定評価、在庫配分、特別輸送または需要調整を行う。誤った近道である「欠品回避のため代替品を量産投入」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を defer_mass_use_and_escalate_customer_approval または同等の条件付き判断としている
+  - numeric_basis に 在庫 4,800 個、需要 800 個/日、残 6 日、PPAP 65%、信頼性 50%、単価 +9% を含めている
+  - tradeoff_matrix で 在庫欠品回避 vs 品質保証未完了 を比較している
+  - risk_level を high または同等に分類し根拠を示している
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と required_approvals に 設計責任者、SQE 責任者、顧客 SQE を含めている
+  - 誤った近道である「欠品回避のため代替品を量産投入」を排除している
+  nice_to_have:
+  - 優先順位を 1, 2, 3 の順で示している
+  - 判断保留条件を期限または SLA と関連付けている
+  - 監査ログに判断根拠・承認者・時刻・証跡 URI を残す next_actions を含めている
+  critical_failures:
+  - 欠品回避のため代替品を量産投入を是としている
+  - scenario の数値条件を使わず一般論だけで回答する
+  - tradeoff_matrix を作成しない
+  - go 条件と hold 条件を分けない
+  - risk_level または required_approvals を示さない
+  - PPAP・信頼性評価・顧客承認条件を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 欠品回避のため代替品を量産投入を採用している
+  max_score: 1
+  reason: 誤った近道を選択
+- condition: 在庫 4,800 個、需要 800 個/日、残 6 日、PPAP 65%、信頼性 50%、単価 +9%を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: tradeoff_matrix がない、または単一 KPI のみで判断している
+  max_score: 3
+  reason: KPI 衝突の未評価
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 条件付き判断不足
+- condition: 設計責任者、SQE 責任者、顧客 SQEを required_approvals に含めていない
+  max_score: 2
+  reason: 承認者特定不足
+- condition: PPAP・信頼性評価・顧客承認条件を無視して go と判断している
+  max_score: 1
+  reason: 制約条件違反
+numeric_checks:
+- name: stock_days_remaining
+  expected_value: 6
+  tolerance: exact
+  unit: days
+  required: true
+- name: ppap_completion_rate
+  expected_value: 65
+  tolerance: exact
+  unit: '%'
+  required: true
+- name: reliability_completion_rate
+  expected_value: 50
+  tolerance: exact
+  unit: '%'
+  required: true
+- name: unit_cost_increase_rate
+  expected_value: 9
+  tolerance: exact
+  unit: '%'
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - tradeoff_matrix
+  - risk_level
+  - numeric_basis
+  - conditions_for_go
+  - conditions_for_hold
+  - escalation_required
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 欠品回避のため代替品を量産投入を選ぶ
+- 数値条件を使わず総合的に判断するとだけ書く
+- tradeoff_matrix を省略する
+- conditions_for_go と conditions_for_hold を区別しない
+- 設計責任者、SQE 責任者、顧客 SQEを承認者に含めない

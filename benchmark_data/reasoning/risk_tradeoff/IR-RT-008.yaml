@@ -1,0 +1,129 @@
+schema_version: '1.1'
+id: IR-RT-008
+layer: industrial_reasoning
+category: risk_tradeoff
+domain: heavy_machinery
+subdomain: maintenance
+difficulty: 4
+estimated_time_min: 60
+title: '保全停止 vs 突発停止リスク: 計画停止の期待損失判断'
+scenario: CNC ライン L8 の主軸ベアリングから異音。今夜 8 時間止めて交換すると 1,600,000 円の生産遅延。止めずに 5 日後の休日まで継続すると突発停止確率 35%、突発時は 48 時間停止と修理費 7,200,000
+  円、納期違約金 3,000,000 円。センサ振動は 7.6 mm/s、警戒値 7.0 mm/s、停止値 9.0 mm/s。生産管理は休日まで継続、保全は今夜停止を主張。誤った近道は「停止値 9.0 未満だから休日まで継続」である。
+question: 相反する KPI と制約を踏まえて意思決定せよ。回答は JSON とし、decision / rationale / tradeoff_matrix / risk_level / numeric_basis / conditions_for_go
+  / conditions_for_hold / escalation_required / required_approvals / next_actions を必ず含めること。
+expected_skills:
+- tradeoff_analysis
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- maintenance_planning
+- expected_value_analysis
+primary_skill: tradeoff_analysis
+secondary_skills:
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- maintenance_planning
+- expected_value_analysis
+reference_answer: decision は planned_maintenance_tonight。突発停止の期待損失が計画停止損失を上回り、振動も警戒値を超過しているため、今夜の計画保全が合理的。 tradeoff_matrix
+  では 計画停止による遅延 vs 突発停止の期待損失 を比較し、numeric_basis には 計画停止 1,600,000 円、突発確率 35%、突発修理 7,200,000 円、違約 3,000,000 円、期待損失 3,570,000
+  円 を含める。risk_level は high。conditions_for_go は 保全責任者承認、交換部品確保、8 時間停止枠確定、安全ロックアウト完了。conditions_for_hold は 部品未確保、安全手順未確定、代替ライン未調整。escalation_required
+  は true、required_approvals は 保全責任者と生産管理責任者。next_actions は 今夜の保全枠を確保し、部品を引当て、顧客納期調整と代替ライン計画を行う。誤った近道「停止値 9.0 未満だから休日まで継続」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を planned_maintenance_tonight または同等の条件付き判断としている
+  - numeric_basis に 計画停止 1,600,000 円、突発確率 35%、突発修理 7,200,000 円、違約 3,000,000 円、期待損失 3,570,000 円 を含めている
+  - tradeoff_matrix で 計画停止による遅延 vs 突発停止の期待損失 を比較している
+  - risk_level を high または同等に分類し根拠を示している
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と required_approvals に 保全責任者と生産管理責任者 を含めている
+  - 誤った近道である「停止値 9.0 未満だから休日まで継続」を排除している
+  nice_to_have:
+  - 優先順位を 1, 2, 3 の順で示している
+  - 判断保留条件を期限または SLA と関連付けている
+  - 監査ログに判断根拠・承認者・時刻・証跡 URI を残す next_actions を含めている
+  critical_failures:
+  - 停止値 9.0 未満だから休日まで継続を是としている
+  - scenario の数値条件を使わず一般論だけで回答する
+  - tradeoff_matrix を作成しない
+  - go 条件と hold 条件を分けない
+  - risk_level または required_approvals を示さない
+  - 設備保全基準と安全ロックアウト手順を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 停止値 9.0 未満だから休日まで継続を採用している
+  max_score: 1
+  reason: 誤った近道を選択
+- condition: 計画停止 1,600,000 円、突発確率 35%、突発修理 7,200,000 円、違約 3,000,000 円、期待損失 3,570,000 円を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: tradeoff_matrix がない、または単一 KPI のみで判断している
+  max_score: 3
+  reason: KPI 衝突の未評価
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 条件付き判断不足
+- condition: 保全責任者と生産管理責任者を required_approvals に含めていない
+  max_score: 2
+  reason: 承認者特定不足
+- condition: 設備保全基準と安全ロックアウト手順を無視して go と判断している
+  max_score: 1
+  reason: 制約条件違反
+numeric_checks:
+- name: planned_stop_loss_yen
+  expected_value: 1600000
+  tolerance: exact
+  unit: JPY
+  required: true
+- name: breakdown_probability_percent
+  expected_value: 35
+  tolerance: exact
+  unit: '%'
+  required: true
+- name: breakdown_total_loss_yen
+  expected_value: 10200000
+  tolerance: exact
+  unit: JPY
+  required: true
+- name: expected_breakdown_loss_yen
+  expected_value: 3570000
+  tolerance: ±10000
+  unit: JPY
+  required: true
+- name: vibration_warning_excess
+  expected_value: 0.6
+  tolerance: ±0.1
+  unit: mm/s
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - tradeoff_matrix
+  - risk_level
+  - numeric_basis
+  - conditions_for_go
+  - conditions_for_hold
+  - escalation_required
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 停止値 9.0 未満だから休日まで継続を選ぶ
+- 数値条件を使わず総合的に判断するとだけ書く
+- tradeoff_matrix を省略する
+- conditions_for_go と conditions_for_hold を区別しない
+- 保全責任者と生産管理責任者を承認者に含めない

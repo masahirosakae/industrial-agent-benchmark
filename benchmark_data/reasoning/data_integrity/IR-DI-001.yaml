@@ -1,0 +1,132 @@
+schema_version: '1.1'
+id: IR-DI-001
+layer: industrial_reasoning
+category: data_integrity
+domain: electronics
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 60
+title: '検査データ欠損: 100ロット中7ロット最終検査未実施での出荷可否判断'
+scenario: 電子モジュール 100 ロット (各 480 個、計 48,000 個) の出荷可否判定。QMS は 93 ロットの最終検査記録を保持するが、7 ロット (LOT-027/031/045/058/061/082/094) の最終検査データが欠損。MES
+  は工程完了 100/100、ERP は出荷指示 100/100、自動外観検査は 100/100 OK。顧客契約は最終検査記録欠損 0 件を要求。営業は外観 OK を根拠に全数出荷を求め、QA は 7 ロット hold を要求。誤った近道は「自動外観
+  OK なので欠損 7 ロットも出荷」。
+question: データソース間の矛盾・欠損・鮮度・単位・タイムスタンプを評価し、データ不整合下での判断可否を JSON で示せ。decision / data_quality_assessment / detected_issues / numeric_basis
+  / trust_level_by_source / conditions_for_go / conditions_for_hold / required_rechecks / escalation_required / next_actions
+  を必ず含めること。
+expected_skills:
+- data_integrity_assessment
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- shipment_control
+- customer_communication
+primary_skill: data_integrity_assessment
+secondary_skills:
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- shipment_control
+- customer_communication
+reference_answer: decision は partial_ship_93_lots_and_hold_7_lots_for_recheck。最終検査データ欠損率 7.0% は顧客要求 0 件を満たさず、外観 OK は最終検査記録の代替にならない。
+  detected_issues は 最終検査データ欠損 7 ロット、QMS と MES/ERP/外観検査の意味差、入力漏れか未実施か不明。trust_level_by_source では QMS / MES / ERP / 自動外観検査ログ
+  をソース別に評価する。numeric_basis は 欠損 7 ロット、欠損率 7.0%、保留対象 3,360 個、出荷可能候補 44,640 個。conditions_for_go は 93 ロットは QA 確認後出荷可、7 ロットは記録復元または再検査完了かつ
+  QA 承認後のみ出荷可。conditions_for_hold は 7 ロットの最終検査記録欠損、検査実施有無未特定、顧客特採承認なし。required_rechecks は 7 ロットの再検査、検査員ヒアリング、QMS 監査証跡確認、欠損原因の分類。escalation_required
+  は true とし、エスカレーション先は QA 責任者、必要時に顧客 SQE。next_actions は 93 ロット先行可否を QA 判断、7 ロット hold、再検査、QMS 補完、顧客へ納期影響連絡。誤った近道「自動外観 OK なので欠損
+  7 ロットも出荷」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を partial_ship_93_lots_and_hold_7_lots_for_recheck または同等の保留・再取得・条件付き判断としている
+  - data_quality_assessment / detected_issues に 最終検査データ欠損 7 ロット、QMS と MES/ERP/外観検査の意味差、入力漏れか未実施か不明 を具体的に列挙している
+  - trust_level_by_source で QMS / MES / ERP / 自動外観検査ログ の信頼性を分けている
+  - numeric_basis に 欠損 7 ロット、欠損率 7.0%、保留対象 3,360 個、出荷可能候補 44,640 個 を含めている
+  - required_rechecks に 7 ロットの再検査、検査員ヒアリング、QMS 監査証跡確認、欠損原因の分類 を含めている
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と next_actions に QA 責任者、必要時に顧客 SQE を含めている
+  - 誤った近道「自動外観 OK なので欠損 7 ロットも出荷」を排除している
+  nice_to_have:
+  - ALCOA+ 原則のうち違反箇所を具体的に指摘している
+  - データソースごとの優先順位と暫定信頼度を high/medium/low で示している
+  - 監査ログに evidence_uri / 取得時刻 / 担当者 / 装置 ID を残す next_actions を含めている
+  critical_failures:
+  - 自動外観 OK なので欠損 7 ロットも出荷を是としている
+  - 矛盾・欠損があるのに確定的に合格・出荷可・工程安定と判断する
+  - trust_level_by_source を出さない、またはソース区別なく単一値で扱う
+  - required_rechecks を定義しない
+  - conditions_for_go / conditions_for_hold を分けない
+  - 欠損データを外観検査 OK で補完したつもりになり最終検査済みと扱う
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 自動外観 OK なので欠損 7 ロットも出荷を採用している
+  max_score: 1
+  reason: 誤った近道を選択し Safe Deferral を破る
+- condition: 欠損 7 ロット、欠損率 7.0%、保留対象 3,360 個、出荷可能候補 44,640 個を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: trust_level_by_source を出していない、またはソースごとに分けていない
+  max_score: 3
+  reason: データソース信頼性の未評価
+- condition: required_rechecks を定義していない
+  max_score: 3
+  reason: 再取得・再検査・照合計画欠落
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 判断保留条件不足
+- condition: QMS と MES/ERP/自動外観検査ログの整合性を確認していない
+  max_score: 2
+  reason: データ不整合の見逃し
+- condition: QA 責任者、必要時に顧客 SQEを escalation_required または next_actions に含めていない
+  max_score: 2
+  reason: エスカレーション先未特定
+numeric_checks:
+- name: missing_lot_count
+  expected_value: 7
+  tolerance: exact
+  unit: lots
+  required: true
+- name: missing_lot_rate_percent
+  expected_value: 7.0
+  tolerance: ±0.1
+  unit: '%'
+  required: true
+- name: held_units
+  expected_value: 3360
+  tolerance: exact
+  unit: units
+  required: true
+- name: candidate_shippable_units
+  expected_value: 44640
+  tolerance: exact
+  unit: units
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - data_quality_assessment
+  - detected_issues
+  - numeric_basis
+  - trust_level_by_source
+  - conditions_for_go
+  - conditions_for_hold
+  - required_rechecks
+  - escalation_required
+  - next_actions
+disallowed_answers:
+- 自動外観 OK なので欠損 7 ロットも出荷を選ぶ
+- 欠損や矛盾を無視して断定する
+- trust_level_by_source を省略する
+- required_rechecks を省略する
+- conditions_for_go と conditions_for_hold を区別しない

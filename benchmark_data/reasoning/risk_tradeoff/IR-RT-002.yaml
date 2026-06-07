@@ -1,0 +1,125 @@
+schema_version: '1.1'
+id: IR-RT-002
+layer: industrial_reasoning
+category: risk_tradeoff
+domain: automotive
+subdomain: inspection
+difficulty: 4
+estimated_time_min: 60
+title: '品質 vs コスト: 全数検査継続か AQL 復帰かの判断'
+scenario: 車載ハーネス工程で 4M 変更後、30 日間 12,000 端子を全数検査し、不良率は 38 ppm、社内目標は 50 ppm。直近 Cpk は 1.41、顧客 PPAP 要求は Cpk 1.33 以上。全数検査は月 3,888,000
+  円、AQL 抜取なら月 720,000 円。顧客 SQE は 60 日後なら AQL 復帰可と回答済み。生産管理は即 AQL 復帰、QA は 90 日継続を要求する。誤った近道は「コスト削減のため即 AQL 復帰」である。
+question: 相反する KPI と制約を踏まえて意思決定せよ。回答は JSON とし、decision / rationale / tradeoff_matrix / risk_level / numeric_basis / conditions_for_go
+  / conditions_for_hold / escalation_required / required_approvals / next_actions を必ず含めること。
+expected_skills:
+- tradeoff_analysis
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- cost_analysis
+- customer_approval_management
+primary_skill: tradeoff_analysis
+secondary_skills:
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- cost_analysis
+- customer_approval_management
+reference_answer: decision は keep_full_inspection_until_customer_60day_gate。品質指標は良好だが顧客 SQE の 60 日条件があり、即時 AQL 復帰は顧客承認条件を満たさない。
+  tradeoff_matrix では 品質安定化期間 vs 検査コスト削減 を比較し、numeric_basis には 38 ppm、50 ppm、Cpk 1.41、要求 Cpk 1.33、月差額 3,168,000 円 を入れる。risk_level
+  は medium。conditions_for_go は 60 日経過、Cpk 1.33 以上維持、顧客 SQE 書面承認、AQL 移行監視計画承認。conditions_for_hold は 顧客承認未取得、Cpk 1.33 未満、不良率
+  50 ppm 超過。escalation_required は true とし、required_approvals は QA 責任者と顧客 SQE。next_actions は 60 日まで全数検査を継続し、SPC を監視し、AQL 復帰申請を準備する。誤った近道である「コスト削減を理由に顧客承認前に
+  AQL 復帰」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を keep_full_inspection_until_customer_60day_gate または同等の条件付き判断としている
+  - numeric_basis に 38 ppm、50 ppm、Cpk 1.41、要求 Cpk 1.33、月差額 3,168,000 円 を含めている
+  - tradeoff_matrix で 品質安定化期間 vs 検査コスト削減 を比較している
+  - risk_level を medium または同等に分類し根拠を示している
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と required_approvals に QA 責任者と顧客 SQE を含めている
+  - 誤った近道である「コスト削減を理由に顧客承認前に AQL 復帰」を排除している
+  nice_to_have:
+  - 優先順位を 1, 2, 3 の順で示している
+  - 判断保留条件を期限または SLA と関連付けている
+  - 監査ログに判断根拠・承認者・時刻・証跡 URI を残す next_actions を含めている
+  critical_failures:
+  - コスト削減を理由に顧客承認前に AQL 復帰を是としている
+  - scenario の数値条件を使わず一般論だけで回答する
+  - tradeoff_matrix を作成しない
+  - go 条件と hold 条件を分けない
+  - risk_level または required_approvals を示さない
+  - 顧客 PPAP 条件と顧客 SQE 承認条件を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: コスト削減を理由に顧客承認前に AQL 復帰を採用している
+  max_score: 1
+  reason: 誤った近道を選択
+- condition: 38 ppm、50 ppm、Cpk 1.41、要求 Cpk 1.33、月差額 3,168,000 円を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: tradeoff_matrix がない、または単一 KPI のみで判断している
+  max_score: 3
+  reason: KPI 衝突の未評価
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 条件付き判断不足
+- condition: QA 責任者と顧客 SQEを required_approvals に含めていない
+  max_score: 2
+  reason: 承認者特定不足
+- condition: 顧客 PPAP 条件と顧客 SQE 承認条件を無視して go と判断している
+  max_score: 1
+  reason: 制約条件違反
+numeric_checks:
+- name: current_ppm
+  expected_value: 38
+  tolerance: exact
+  unit: ppm
+  required: true
+- name: ppm_target
+  expected_value: 50
+  tolerance: exact
+  unit: ppm
+  required: true
+- name: current_cpk
+  expected_value: 1.41
+  tolerance: ±0.01
+  unit: Cpk
+  required: true
+- name: monthly_cost_difference_yen
+  expected_value: 3168000
+  tolerance: exact
+  unit: JPY/month
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - tradeoff_matrix
+  - risk_level
+  - numeric_basis
+  - conditions_for_go
+  - conditions_for_hold
+  - escalation_required
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- コスト削減を理由に顧客承認前に AQL 復帰を選ぶ
+- 数値条件を使わず総合的に判断するとだけ書く
+- tradeoff_matrix を省略する
+- conditions_for_go と conditions_for_hold を区別しない
+- QA 責任者と顧客 SQEを承認者に含めない

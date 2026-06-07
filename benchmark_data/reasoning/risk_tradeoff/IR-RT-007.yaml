@@ -1,0 +1,132 @@
+schema_version: '1.1'
+id: IR-RT-007
+layer: industrial_reasoning
+category: risk_tradeoff
+domain: electronics
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 60
+title: '環境規制 vs 生産継続: RoHS/REACH 証明書欠落時の判断'
+scenario: EU 向け電源ユニット 3,600 台が 48 時間後に出荷予定。新規はんだ材料 LOT-R7 の RoHS 証明書は有効だが、REACH SVHC 証明書が未着で、サプライヤは 72 時間後に提出可能と言う。生産を継続すれば納期遵守、停止すれば遅延ペナルティ
+  2,200,000 円/日。出荷後に非適合なら回収費 38,000,000 円、EU 顧客との是正報告が必要。品質保証は出荷保留、営業は「RoHS はあるので出荷」と主張。誤った近道は「RoHS 証明書があるから REACH 欠落を無視して出荷」である。
+question: 相反する KPI と制約を踏まえて意思決定せよ。回答は JSON とし、decision / rationale / tradeoff_matrix / risk_level / numeric_basis / conditions_for_go
+  / conditions_for_hold / escalation_required / required_approvals / next_actions を必ず含めること。
+expected_skills:
+- tradeoff_analysis
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- regulatory_compliance
+- environmental_compliance
+- shipment_control
+primary_skill: tradeoff_analysis
+secondary_skills:
+- risk_assessment
+- quality_assurance
+- production_planning
+- structured_output_design
+- escalation_design
+- regulatory_compliance
+- environmental_compliance
+- shipment_control
+reference_answer: decision は hold_eu_shipment_until_reach_certificate_or_customer_waiver。REACH 証明書欠落は EU 向け出荷の規制リスクであり、納期より規制適合を優先する。
+  tradeoff_matrix では 環境規制適合 vs 生産・出荷継続 を比較し、numeric_basis には 出荷 3,600 台、期限 48 時間、証明書入手 72 時間、遅延 2,200,000 円/日、回収費 38,000,000
+  円 を含める。risk_level は critical。conditions_for_go は REACH SVHC 証明書取得、QA/法務承認、または顧客の書面 waiver 取得。conditions_for_hold は REACH
+  証明書未着、顧客 waiver 未取得、材料ロット隔離未完了。escalation_required は true、required_approvals は QA 責任者、環境規制責任者、法務部長。next_actions は 該当ロットを隔離し、証明書を督促し、顧客へ
+  48 時間以内に遅延リスクを連絡する。誤った近道「RoHS 証明書があるから REACH 欠落を無視して出荷」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を hold_eu_shipment_until_reach_certificate_or_customer_waiver または同等の条件付き判断としている
+  - numeric_basis に 出荷 3,600 台、期限 48 時間、証明書入手 72 時間、遅延 2,200,000 円/日、回収費 38,000,000 円 を含めている
+  - tradeoff_matrix で 環境規制適合 vs 生産・出荷継続 を比較している
+  - risk_level を critical または同等に分類し根拠を示している
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と required_approvals に QA 責任者、環境規制責任者、法務部長 を含めている
+  - 誤った近道である「RoHS 証明書があるから REACH 欠落を無視して出荷」を排除している
+  nice_to_have:
+  - 優先順位を 1, 2, 3 の順で示している
+  - 判断保留条件を期限または SLA と関連付けている
+  - 監査ログに判断根拠・承認者・時刻・証跡 URI を残す next_actions を含めている
+  critical_failures:
+  - RoHS 証明書があるから REACH 欠落を無視して出荷を是としている
+  - scenario の数値条件を使わず一般論だけで回答する
+  - tradeoff_matrix を作成しない
+  - go 条件と hold 条件を分けない
+  - risk_level または required_approvals を示さない
+  - REACH SVHC 証明書と EU 環境規制適合を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: RoHS 証明書があるから REACH 欠落を無視して出荷を採用している
+  max_score: 1
+  reason: 誤った近道を選択
+- condition: 出荷 3,600 台、期限 48 時間、証明書入手 72 時間、遅延 2,200,000 円/日、回収費 38,000,000 円を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: tradeoff_matrix がない、または単一 KPI のみで判断している
+  max_score: 3
+  reason: KPI 衝突の未評価
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 条件付き判断不足
+- condition: QA 責任者、環境規制責任者、法務部長を required_approvals に含めていない
+  max_score: 2
+  reason: 承認者特定不足
+- condition: REACH SVHC 証明書と EU 環境規制適合を無視して go と判断している
+  max_score: 1
+  reason: 制約条件違反
+numeric_checks:
+- name: shipment_qty
+  expected_value: 3600
+  tolerance: exact
+  unit: units
+  required: true
+- name: deadline_hours
+  expected_value: 48
+  tolerance: exact
+  unit: hours
+  required: true
+- name: certificate_eta_hours
+  expected_value: 72
+  tolerance: exact
+  unit: hours
+  required: true
+- name: daily_delay_penalty_yen
+  expected_value: 2200000
+  tolerance: exact
+  unit: JPY/day
+  required: true
+- name: recall_cost_yen
+  expected_value: 38000000
+  tolerance: exact
+  unit: JPY
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - tradeoff_matrix
+  - risk_level
+  - numeric_basis
+  - conditions_for_go
+  - conditions_for_hold
+  - escalation_required
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- RoHS 証明書があるから REACH 欠落を無視して出荷を選ぶ
+- 数値条件を使わず総合的に判断するとだけ書く
+- tradeoff_matrix を省略する
+- conditions_for_go と conditions_for_hold を区別しない
+- QA 責任者、環境規制責任者、法務部長を承認者に含めない

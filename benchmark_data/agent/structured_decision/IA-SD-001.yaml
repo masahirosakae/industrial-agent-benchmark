@@ -1,0 +1,131 @@
+schema_version: '1.1'
+id: IA-SD-001
+layer: industrial_agent
+category: structured_decision
+domain: electronics
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 60
+title: 品質リスク・納期・顧客影響を統合する出荷可否 Structured Decision
+scenario: 電子部品ロット SD-SHIP-01 は 1,200 個で、ERP は顧客 A 向け出荷期限まで残り 5 時間、遅延ペナルティは 1 日 1,200,000 円と示している。MES は最終工程完了 1,200/1,200、良品フラグ
+  1,198/1,200 と返す。一方 QMS は抜取検査 125 件中 118 件のみ完了、7 件が未検査、2 件が外観 NG 疑いで再判定待ちである。顧客契約 Q-12 は「検査欠損 0 件、NG 再判定完了、QA 責任者承認前に出荷不可」と定める。営業部長は納期優先で
+  ship を求め、QA 責任者は hold を主張し、生産管理は部分出荷を提案している。Agent は最終判断を JSON で出し、判断保留条件と escalation を明示する必要がある。
+question: 品質リスク、納期、顧客影響を統合して、このロットの最終 decision を JSON で出せ。confidence、rationale、risk_level、tradeoff_analysis、required_approvals、alternatives_considered、expected_impact、next_actions
+  を必ず含めること。
+expected_skills:
+- structured_decision_design
+- risk_assessment
+- tradeoff_analysis
+- approval_workflow_design
+- audit_log_design
+- quality_assurance
+- structured_output_design
+- escalation_design
+- shipment_control
+- customer_communication
+- data_integrity_assessment
+primary_skill: structured_decision_design
+secondary_skills:
+- risk_assessment
+- tradeoff_analysis
+- approval_workflow_design
+- audit_log_design
+- quality_assurance
+- structured_output_design
+- escalation_design
+- shipment_control
+- customer_communication
+- data_integrity_assessment
+reference_answer: decision は hold_and_escalate、confidence は 0.82 程度。理由は検査未完了 7 件、欠損率 5.6%、NG 疑い 2 件が顧客契約の欠損 0 件と再判定完了条件に反するため。納期遅延
+  5 時間と日額 1,200,000 円の損失は重要だが、品質契約違反と顧客影響を上回らない。risk_level は high。required_approvals は QA 責任者、必要に応じて顧客品質窓口。alternatives_considered
+  は ship、partial_ship、hold_and_reinspect、customer_deviation_request の 4 案。expected_impact は出荷保留により遅延リスクがある一方、NG 流出と顧客クレームを防ぐ。next_actions
+  は 7 件追加検査、2 件再判定、QA 承認、顧客へ遅延可能性を 60 分以内に連絡。
+evaluation_rubric:
+  must_have:
+  - decision を hold_and_escalate または同等の保留・エスカレーション判断にしている
+  - confidence を数値または明確な水準で示している
+  - risk_level を high と分類し、品質契約違反と顧客影響を根拠として示している
+  - 未検査 7/125=5.6% と NG 疑い 2 件を根拠にしている
+  - 納期 5 時間・遅延ペナルティと品質契約違反の tradeoff_analysis を示している
+  - QA 責任者と必要時の顧客品質窓口を required_approvals に含めている
+  - ship / partial_ship / hold_and_reinspect など alternatives_considered を複数提示している
+  - expected_impact と next_actions を出荷・品質・顧客影響に分けて整理している
+  nice_to_have:
+  - 顧客への暫定連絡 SLA を 60 分などで示している
+  - 部分出荷案をなぜ却下または保留するか説明している
+  - 監査ログに検査欠損数と再判定結果を残すことを示している
+  critical_failures:
+  - 検査欠損を無視して ship と判断する
+  - confidence を出さない
+  - tradeoff_analysis を書かない
+  - alternatives_considered を示さない
+  - QA 責任者または顧客承認要否を特定しない
+  - 数値条件を使わず一般論で判断する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 検査欠損または NG 疑いを無視して ship と判断している
+  max_score: 1
+  reason: 品質契約違反の最終判断
+- condition: confidence フィールドまたは同等の確信度がない
+  max_score: 3
+  reason: Structured Decision の必須要素欠落
+- condition: tradeoff_analysis がなく納期と品質リスクの競合を扱っていない
+  max_score: 3
+  reason: KPI 競合の未評価
+- condition: 未検査 7 件、欠損率 5.6%、NG 疑い 2 件のいずれも使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: required_approvals に QA 責任者を含めていない
+  max_score: 2
+  reason: 承認者特定不足
+- condition: alternatives_considered が空または 1 案のみ
+  max_score: 3
+  reason: 代替案評価不足
+numeric_checks:
+- name: uninspected_count
+  expected_value: 7
+  tolerance: exact
+  unit: records
+  required: true
+- name: inspection_missing_rate
+  expected_value: 5.6
+  tolerance: ±0.1
+  unit: '%'
+  required: true
+- name: ng_suspect_count
+  expected_value: 2
+  tolerance: exact
+  unit: records
+  required: true
+- name: deadline_hours
+  expected_value: 5
+  tolerance: exact
+  unit: hours
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - confidence
+  - rationale
+  - risk_level
+  - tradeoff_analysis
+  - required_approvals
+  - alternatives_considered
+  - expected_impact
+  - next_actions
+disallowed_answers:
+- 未検査が残っていても納期優先で ship する
+- confidence を省略する
+- tradeoff_analysis なしで結論だけ出す
+- 代替案を示さない
+- QA 責任者を required_approvals に含めない

@@ -1,0 +1,94 @@
+schema_version: '1.1'
+id: IK-MAINT-008
+layer: industrial_knowledge
+category: maintenance_engineering
+domain: general_manufacturing
+subdomain: maintenance
+difficulty: 2
+estimated_time_min: 30
+title: 限られた月次保全工数 120h に対する PM タスク優先順位付け
+scenario: '今月の保全工数は欠員のため 120h が上限。PM 候補は A:プレスクラッチ点検 32h/リスク9/安全停止、B:ロボット給脂 18h/リスク6/チョコ停、C:コンプレッサ点検 26h/リスク8/工場エア停止、D:搬送チェーン調整
+  14h/リスク5、E:チラー洗浄 40h/リスク7/温度上昇で品質変動、F:塗装ブース清掃 24h/リスク4、G:予備センサー交換 12h/リスク3。全件実施は 166h 必要。生産管理は F 優先を希望するが、安全・工場停止・品質変動を優先するルールがある。
+
+  '
+question: '120h 内で今月実施する PM と延期する PM を、リスクと工数に基づき優先順位付きで決定せよ。JSON 形式で延期タスクの監視条件も示すこと。
+
+  '
+expected_skills:
+- capacity_planning
+- risk_assessment
+- production_planning
+- human_factors
+- structured_output_design
+primary_skill: capacity_planning
+secondary_skills:
+- risk_assessment
+- production_planning
+- human_factors
+- structured_output_design
+reference_answer: '安全・工場停止・品質変動の順に、A(32h)、C(26h)、E(40h)、B(18h) を今月実施するのが妥当で、合計 116h と 120h 上限内に収まる。残り 4h では D/F/G は完了できないため延期し、D
+  は日次目視と異音確認、F は外観不良率監視、G は故障時交換で管理する。F はリスク4であり、安全停止の A や工場エア停止の C より優先しない。
+
+  '
+evaluation_rubric:
+  must_have:
+  - 実施タスク合計 116h を計算し 120h 上限内に収めている
+  - A/C/E/B を優先し安全・工場停止・品質・チョコ停の順で説明している
+  - 延期タスク D/F/G と監視条件を示している
+  - 全件 166h は上限超過であることを認識している
+  nice_to_have:
+  - 残り 4h の扱いや翌月繰越を提案している
+  - 生産管理希望 F を優先しない理由を説明している
+  critical_failures:
+  - 120h 上限を超える PM 計画を提示する
+  - 安全リスク A を延期し低リスク F/G を優先する
+  - 延期タスクの監視条件を示さない
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 選択タスク合計が 120h を超過している
+  max_score: 2
+  reason: 工数制約違反
+- condition: 優先順位が明示されていない
+  max_score: 3
+  reason: PM 配分問題で順序が欠落
+- condition: 安全停止リスクの A を合理的理由なく延期している
+  max_score: 2
+  reason: 安全リスク優先原則違反
+numeric_checks:
+- name: selected_pm_total_hours
+  expected_value: 116
+  tolerance: exact
+  unit: h
+  required: true
+- name: monthly_pm_capacity
+  expected_value: 120
+  tolerance: exact
+  unit: h
+  required: true
+- name: all_tasks_total_hours
+  expected_value: 166
+  tolerance: exact
+  unit: h
+  required: false
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - numeric_assessment
+  - risks
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 166h 全件を今月実施すると回答する
+- 安全リスクの高い A を延期して F や G を優先する
+- 延期タスクの監視を不要とする

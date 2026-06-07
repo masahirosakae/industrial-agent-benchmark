@@ -1,0 +1,138 @@
+schema_version: '1.1'
+id: IA-SD-004
+layer: industrial_agent
+category: structured_decision
+domain: electronics
+subdomain: supply_chain_management
+difficulty: 4
+estimated_time_min: 60
+title: 在庫・納期・品質保証を統合する調達代替品採用 Structured Decision
+scenario: 制御基板の EOL 部品 REG-5V-A は残在庫 3,200 個、日次需要 400 個で在庫切れまで 8 日である。現行サプライヤの最終入荷は不可。代替候補 REG-5V-B は納期 6 日、単価 +12%、電気特性の社内評価は
+  92% 完了、寿命試験は 1,000 時間中 640 時間完了、PPAP は 80% 完了、顧客承認は未取得である。品質保証は寿命試験完了前の量産採用に反対、調達は在庫切れ回避のため採用を要求、設計は限定ロットでの条件付き使用を提案している。顧客契約は指定部品変更に顧客
+  SQE 承認を要求する。Agent は代替品採用可否を最終判断し、採用・保留・条件付き採用・緊急特採の代替案を比較する必要がある。
+question: 在庫、納期、品質保証を統合して REG-5V-B を採用するか Structured Decision JSON で判断せよ。decision、confidence、rationale、risk_level、tradeoff_analysis、required_approvals、alternatives_considered、expected_impact、next_actions
+  を含めること。
+expected_skills:
+- structured_decision_design
+- risk_assessment
+- tradeoff_analysis
+- approval_workflow_design
+- audit_log_design
+- quality_assurance
+- structured_output_design
+- escalation_design
+- procurement_control
+- supplier_quality_management
+- customer_approval_management
+- inventory_planning
+primary_skill: structured_decision_design
+secondary_skills:
+- risk_assessment
+- tradeoff_analysis
+- approval_workflow_design
+- audit_log_design
+- quality_assurance
+- structured_output_design
+- escalation_design
+- procurement_control
+- supplier_quality_management
+- customer_approval_management
+- inventory_planning
+reference_answer: decision は conditional_defer または customer_approval_and_testing_required。confidence は 0.78 程度。在庫は 3,200/400=8
+  日で、代替品納期 6 日のため供給リスクは高いが、寿命試験は 640/1,000=64%、PPAP 80%、顧客承認未取得のため即時量産採用は不可。risk_level は high。tradeoff は在庫切れ回避と品質保証未完了・顧客契約違反リスクの競合。required_approvals
+  は設計責任者、SQE/QA 責任者、顧客 SQE、調達部長。alternatives_considered は immediate_adopt、conditional_limited_use、defer_until_ppap_customer_approval、expedite_existing_stock/需要調整。expected_impact
+  は保留で在庫リスク、即時採用で市場不具合と顧客違反リスク。next_actions は寿命試験加速、PPAP 完了、顧客承認申請、在庫配分、代替調達先探索。
+evaluation_rubric:
+  must_have:
+  - decision を即時採用ではなく条件付き保留または承認・試験完了待ちにしている
+  - confidence を明示している
+  - risk_level を high と分類し、品質保証未完了と顧客承認未取得を根拠として示している
+  - 在庫 3,200 / 日次需要 400 = 8 日を計算している
+  - 寿命試験 640/1,000=64% と PPAP 80%、顧客承認未取得を判断根拠にしている
+  - 在庫切れ回避と品質保証未完了の tradeoff_analysis を示している
+  - 設計責任者・SQE/QA 責任者・顧客 SQE・調達部長を required_approvals に含めている
+  - 複数の alternatives_considered と next_actions を提示している
+  nice_to_have:
+  - 単価 +12% のコスト影響を expected_impact に含めている
+  - 限定ロット使用時のトレーサビリティや封じ込め条件を示している
+  - 在庫配分や顧客納入優先順位を next_actions に含めている
+  critical_failures:
+  - 顧客承認未取得で即時量産採用する
+  - 寿命試験 64% を完了扱いにする
+  - 在庫日数や納期を計算しない
+  - confidence または tradeoff_analysis を示さない
+  - 承認者を調達だけにする
+  - 代替案を示さない
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 顧客承認または品質保証完了なしに即時量産採用している
+  max_score: 1
+  reason: 品質保証・顧客承認違反
+- condition: 寿命試験 64% または PPAP 80% を完了扱いにしている
+  max_score: 2
+  reason: 不完全データの誤判断
+- condition: 在庫 8 日または納期 6 日を使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: tradeoff_analysis がない
+  max_score: 3
+  reason: 在庫と品質 KPI 競合未評価
+- condition: confidence または risk_level がない
+  max_score: 3
+  reason: 構造化判断不足
+- condition: required_approvals に顧客 SQE がない
+  max_score: 2
+  reason: 顧客承認者特定不足
+numeric_checks:
+- name: stock_days_remaining
+  expected_value: 8
+  tolerance: exact
+  unit: days
+  required: true
+- name: supplier_lead_time_days
+  expected_value: 6
+  tolerance: exact
+  unit: days
+  required: true
+- name: life_test_completion_rate
+  expected_value: 64.0
+  tolerance: ±0.1
+  unit: '%'
+  required: true
+- name: ppap_completion_rate
+  expected_value: 80
+  tolerance: exact
+  unit: '%'
+  required: true
+- name: unit_cost_increase_rate
+  expected_value: 12
+  tolerance: exact
+  unit: '%'
+  required: false
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - confidence
+  - rationale
+  - risk_level
+  - tradeoff_analysis
+  - required_approvals
+  - alternatives_considered
+  - expected_impact
+  - next_actions
+disallowed_answers:
+- PPAP 80% のまま即時量産採用する
+- 顧客 SQE 承認を不要とする
+- confidence を省略する
+- 在庫と品質保証の tradeoff を書かない
+- 代替案を提示しない

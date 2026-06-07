@@ -1,0 +1,132 @@
+schema_version: '1.1'
+id: IR-DI-005
+layer: industrial_reasoning
+category: data_integrity
+domain: medical_device
+subdomain: process_engineering
+difficulty: 4
+estimated_time_min: 60
+title: '単位不一致: 温度 °C/°F と圧力 MPa/kPa 混在時の工程判定'
+scenario: 医療機器の熱圧着工程で、MES レシピは温度 180°C、圧力 0.42 MPa を要求。設備ログ A は温度 356°F、圧力 420 kPa、検査記録 B は温度 180°C、圧力 0.42 MPa、作業者メモは「356°C
+  / 420 kPa」と記録。356°F は約 180°C、420 kPa は 0.42 MPa だが、356°C なら過熱不適合。対象 240 個のうち、このメモ区間で 60 個加工。作業者は「°F を °C と書いたかも」と説明。QA は単位確認まで
+  hold、製造は検査記録 B を根拠に OK と主張。誤った近道は「356 という数値だけを見て 356°C と断定して全数廃棄」または「検査記録 B だけで OK」。
+question: データソース間の矛盾・欠損・鮮度・単位・タイムスタンプを評価し、データ不整合下での判断可否を JSON で示せ。decision / data_quality_assessment / detected_issues / numeric_basis
+  / trust_level_by_source / conditions_for_go / conditions_for_hold / required_rechecks / escalation_required / next_actions
+  を必ず含めること。
+expected_skills:
+- data_integrity_assessment
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- unit_conversion
+- process_validation
+primary_skill: data_integrity_assessment
+secondary_skills:
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- unit_conversion
+- process_validation
+reference_answer: decision は hold_60_units_until_unit_conversion_and_source_reconciliation。356°F は 180°C 相当だが、手入力は 356°C と読めるため単位不一致を解消するまで
+  60 個の判定は保留。 detected_issues は 温度単位 °C/°F 混在、圧力 MPa/kPa 混在、作業者メモの単位誤記疑い、対象 60 個。trust_level_by_source では MES レシピ / 設備ログ A
+  / 検査記録 B / 作業者メモ をソース別に評価する。numeric_basis は 356°F=約180°C、420 kPa=0.42 MPa、対象 60/240=25.0%。conditions_for_go は 設備ログ原単位確認、356°F
+  と 420kPa の換算確認、検査記録 B と工程設定一致、QA 承認。conditions_for_hold は 作業者メモの単位未確定、設備ログ原単位未確認、対象 60 個の再確認未了。required_rechecks は 設備ログの単位メタデータ確認、単位換算、60
+  個の追加検査、作業者メモ訂正履歴記録。escalation_required は true とし、エスカレーション先は QA 責任者、工程技術責任者。next_actions は 60 個隔離、単位メタデータ取得、換算表を監査ログ化、追加検査後に判定。誤った近道「検査記録
+  B だけで OK または 356°C と断定して全数廃棄」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を hold_60_units_until_unit_conversion_and_source_reconciliation または同等の保留・再取得・条件付き判断としている
+  - data_quality_assessment / detected_issues に 温度単位 °C/°F 混在、圧力 MPa/kPa 混在、作業者メモの単位誤記疑い、対象 60 個 を具体的に列挙している
+  - trust_level_by_source で MES レシピ / 設備ログ A / 検査記録 B / 作業者メモ の信頼性を分けている
+  - numeric_basis に 356°F=約180°C、420 kPa=0.42 MPa、対象 60/240=25.0% を含めている
+  - required_rechecks に 設備ログの単位メタデータ確認、単位換算、60 個の追加検査、作業者メモ訂正履歴記録 を含めている
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と next_actions に QA 責任者、工程技術責任者 を含めている
+  - 誤った近道「検査記録 B だけで OK または 356°C と断定して全数廃棄」を排除している
+  nice_to_have:
+  - ALCOA+ 原則のうち違反箇所を具体的に指摘している
+  - データソースごとの優先順位と暫定信頼度を high/medium/low で示している
+  - 監査ログに evidence_uri / 取得時刻 / 担当者 / 装置 ID を残す next_actions を含めている
+  critical_failures:
+  - 検査記録 B だけで OK または 356°C と断定して全数廃棄を是としている
+  - 矛盾・欠損があるのに確定的に合格・出荷可・工程安定と判断する
+  - trust_level_by_source を出さない、またはソース区別なく単一値で扱う
+  - required_rechecks を定義しない
+  - conditions_for_go / conditions_for_hold を分けない
+  - 単位変換を誤って過熱判定または合格判定する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 検査記録 B だけで OK または 356°C と断定して全数廃棄を採用している
+  max_score: 1
+  reason: 誤った近道を選択し Safe Deferral を破る
+- condition: 356°F=約180°C、420 kPa=0.42 MPa、対象 60/240=25.0%を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: trust_level_by_source を出していない、またはソースごとに分けていない
+  max_score: 3
+  reason: データソース信頼性の未評価
+- condition: required_rechecks を定義していない
+  max_score: 3
+  reason: 再取得・再検査・照合計画欠落
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 判断保留条件不足
+- condition: 温度と圧力の単位メタデータと換算結果を確認していない
+  max_score: 2
+  reason: データ不整合の見逃し
+- condition: QA 責任者、工程技術責任者を escalation_required または next_actions に含めていない
+  max_score: 2
+  reason: エスカレーション先未特定
+numeric_checks:
+- name: fahrenheit_to_celsius
+  expected_value: 180.0
+  tolerance: ±0.5
+  unit: celsius
+  required: true
+- name: kpa_to_mpa
+  expected_value: 0.42
+  tolerance: ±0.01
+  unit: MPa
+  required: true
+- name: affected_units
+  expected_value: 60
+  tolerance: exact
+  unit: units
+  required: true
+- name: affected_rate_percent
+  expected_value: 25.0
+  tolerance: ±0.1
+  unit: '%'
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - data_quality_assessment
+  - detected_issues
+  - numeric_basis
+  - trust_level_by_source
+  - conditions_for_go
+  - conditions_for_hold
+  - required_rechecks
+  - escalation_required
+  - next_actions
+disallowed_answers:
+- 検査記録 B だけで OK または 356°C と断定して全数廃棄を選ぶ
+- 欠損や矛盾を無視して断定する
+- trust_level_by_source を省略する
+- required_rechecks を省略する
+- conditions_for_go と conditions_for_hold を区別しない

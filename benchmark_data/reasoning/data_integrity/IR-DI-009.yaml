@@ -1,0 +1,136 @@
+schema_version: '1.1'
+id: IR-DI-009
+layer: industrial_reasoning
+category: data_integrity
+domain: general_manufacturing
+subdomain: inspection
+difficulty: 4
+estimated_time_min: 60
+title: '手入力と自動収集データの矛盾: 再検査済み入力と検査機ログ未実施の扱い'
+scenario: 塗装部品ロット DI09 (800 個) で、作業者手入力 QMS は「再検査済み 800/800、NG 0」と記録。一方、自動検査機ログは再検査実施 620/800、未実施 180、NG 12。手入力は 17:58 に一括登録、検査機ログは
+  14:00〜17:40 に自動記録。作業者は「未実施分は翌朝実施予定だった」と説明。ERP は 800 個を出荷可に更新済み。QA は自動ログ優先、製造は手入力を信頼。誤った近道は「作業者が再検査済みと入力したので 800 個出荷可」。
+question: データソース間の矛盾・欠損・鮮度・単位・タイムスタンプを評価し、データ不整合下での判断可否を JSON で示せ。decision / data_quality_assessment / detected_issues / numeric_basis
+  / trust_level_by_source / conditions_for_go / conditions_for_hold / required_rechecks / escalation_required / next_actions
+  を必ず含めること。
+expected_skills:
+- data_integrity_assessment
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- manual_entry_validation
+- inspection_control
+primary_skill: data_integrity_assessment
+secondary_skills:
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- manual_entry_validation
+- inspection_control
+reference_answer: decision は hold_unverified_180_and_reverse_erp_release_until_machine_log_reconciled。手入力と自動検査ログが矛盾し、自動ログでは
+  180 個未実施・12 個 NG のため全数出荷可ではない。 detected_issues は 手入力 800/800 OK と自動ログ 620/800 実施・12 NG の矛盾、一括後入力、ERP 出荷可の先行更新。trust_level_by_source
+  では QMS 手入力 / 自動検査機ログ / ERP 出荷可ステータス / 作業者ヒアリング をソース別に評価する。numeric_basis は 手入力 800、検査機実施 620、未実施 180、NG 12、未実施率 22.5%。conditions_for_go
+  は 180 個再検査完了、12 NG 隔離または再判定、ERP release 取消後 QA 承認で再 release。conditions_for_hold は 180 個未実施、12 NG 未処置、手入力と自動ログ矛盾未解消。required_rechecks
+  は 180 個再検査、12 NG 再判定、手入力一括登録監査、ERP release 取消/再発行。escalation_required は true とし、エスカレーション先は QA 責任者、検査 supervisor、ERP 管理者。next_actions
+  は ERP 出荷可を取り消し、未実施 180 個 hold、再検査、作業者教育と入力権限制御。誤った近道「作業者が再検査済みと入力したので 800 個出荷可」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を hold_unverified_180_and_reverse_erp_release_until_machine_log_reconciled または同等の保留・再取得・条件付き判断としている
+  - data_quality_assessment / detected_issues に 手入力 800/800 OK と自動ログ 620/800 実施・12 NG の矛盾、一括後入力、ERP 出荷可の先行更新 を具体的に列挙している
+  - trust_level_by_source で QMS 手入力 / 自動検査機ログ / ERP 出荷可ステータス / 作業者ヒアリング の信頼性を分けている
+  - numeric_basis に 手入力 800、検査機実施 620、未実施 180、NG 12、未実施率 22.5% を含めている
+  - required_rechecks に 180 個再検査、12 NG 再判定、手入力一括登録監査、ERP release 取消/再発行 を含めている
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と next_actions に QA 責任者、検査 supervisor、ERP 管理者 を含めている
+  - 誤った近道「作業者が再検査済みと入力したので 800 個出荷可」を排除している
+  nice_to_have:
+  - ALCOA+ 原則のうち違反箇所を具体的に指摘している
+  - データソースごとの優先順位と暫定信頼度を high/medium/low で示している
+  - 監査ログに evidence_uri / 取得時刻 / 担当者 / 装置 ID を残す next_actions を含めている
+  critical_failures:
+  - 作業者が再検査済みと入力したので 800 個出荷可を是としている
+  - 矛盾・欠損があるのに確定的に合格・出荷可・工程安定と判断する
+  - trust_level_by_source を出さない、またはソース区別なく単一値で扱う
+  - required_rechecks を定義しない
+  - conditions_for_go / conditions_for_hold を分けない
+  - 自動収集データより手入力を無条件に優先する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 作業者が再検査済みと入力したので 800 個出荷可を採用している
+  max_score: 1
+  reason: 誤った近道を選択し Safe Deferral を破る
+- condition: 手入力 800、検査機実施 620、未実施 180、NG 12、未実施率 22.5%を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: trust_level_by_source を出していない、またはソースごとに分けていない
+  max_score: 3
+  reason: データソース信頼性の未評価
+- condition: required_rechecks を定義していない
+  max_score: 3
+  reason: 再取得・再検査・照合計画欠落
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 判断保留条件不足
+- condition: QMS 手入力と自動検査機ログと ERP release の整合性を確認していない
+  max_score: 2
+  reason: データ不整合の見逃し
+- condition: QA 責任者、検査 supervisor、ERP 管理者を escalation_required または next_actions に含めていない
+  max_score: 2
+  reason: エスカレーション先未特定
+numeric_checks:
+- name: manual_rechecked_count
+  expected_value: 800
+  tolerance: exact
+  unit: units
+  required: true
+- name: machine_rechecked_count
+  expected_value: 620
+  tolerance: exact
+  unit: units
+  required: true
+- name: unverified_count
+  expected_value: 180
+  tolerance: exact
+  unit: units
+  required: true
+- name: ng_count_machine
+  expected_value: 12
+  tolerance: exact
+  unit: units
+  required: true
+- name: unverified_rate_percent
+  expected_value: 22.5
+  tolerance: ±0.1
+  unit: '%'
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - data_quality_assessment
+  - detected_issues
+  - numeric_basis
+  - trust_level_by_source
+  - conditions_for_go
+  - conditions_for_hold
+  - required_rechecks
+  - escalation_required
+  - next_actions
+disallowed_answers:
+- 作業者が再検査済みと入力したので 800 個出荷可を選ぶ
+- 欠損や矛盾を無視して断定する
+- trust_level_by_source を省略する
+- required_rechecks を省略する
+- conditions_for_go と conditions_for_hold を区別しない

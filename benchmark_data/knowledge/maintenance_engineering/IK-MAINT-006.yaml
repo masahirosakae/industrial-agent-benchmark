@@ -1,0 +1,94 @@
+schema_version: '1.1'
+id: IK-MAINT-006
+layer: industrial_knowledge
+category: maintenance_engineering
+domain: heavy_machinery
+subdomain: maintenance
+difficulty: 3
+estimated_time_min: 45
+title: 突発故障 vs 計画停止の機会損失と部品費の期待値比較
+scenario: 'CNC 主軸に異常音があり、温度は通常 58℃ から 76℃ に上昇している。振動は警報値未満だが、過去には同様兆候後 10 日以内に 35% の確率で主軸焼付きが発生した。焼付き時は 16h 突発停止、停止損失 120,000
+  円/h、緊急主軸手配 480,000 円、仕掛品廃棄 300,000 円が発生する。今週末に 6h の計画停止を入れる場合、機会損失は 45,000 円/h、計画交換部品費は 620,000 円。品質保証は温度上昇による加工寸法ドリフトを懸念している。
+
+  '
+question: '10 日間継続運転する場合の期待損失と、今週末に計画停止する場合の費用を比較し、どちらを選ぶべきか判断せよ。JSON 形式で品質確認と恒久対策も示すこと。
+
+  '
+expected_skills:
+- cost_benefit_analysis
+- risk_assessment
+- abnormality_analysis
+- process_validation
+- structured_output_design
+primary_skill: cost_benefit_analysis
+secondary_skills:
+- risk_assessment
+- abnormality_analysis
+- process_validation
+- structured_output_design
+reference_answer: '突発故障 1 回の損失は 16×120,000+480,000+300,000=2,700,000 円。35% を掛けると期待損失は 945,000 円。計画停止費用は 6×45,000+620,000=890,000
+  円。差は 55,000 円と小さいが計画停止の方が安く、品質ドリフトと納期リスクも抑えられるため今週末に計画停止する。復旧後は芯出し、初品・終品寸法確認、温度/振動ベースライン再取得を行い、冷却・給脂・負荷条件の恒久対策を登録する。
+
+  '
+evaluation_rubric:
+  must_have:
+  - 突発故障時損失 2,700,000 円と期待損失 945,000 円を計算している
+  - 計画停止費用 890,000 円を計算して比較している
+  - 計画停止を選ぶ理由に品質・納期リスクを含めている
+  - 復旧後の寸法確認と恒久対策を示している
+  nice_to_have:
+  - 異常音・温度上昇・振動の監視継続条件を具体化している
+  - 一時復旧と恒久対策の切り分けを述べている
+  critical_failures:
+  - 期待損失を計算せずケースバイケースと回答する
+  - 温度上昇による品質リスクを無視して継続運転を指示する
+  - 仕掛品廃棄や緊急手配費を無視する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 期待損失と計画停止費用の両方を計算していない
+  max_score: 3
+  reason: 定量比較が欠落
+- condition: 品質ドリフトまたは寸法確認に言及していない
+  max_score: 4
+  reason: 品質リスク考慮不足
+- condition: 継続運転を選びながら追加監視・停止条件を示していない
+  max_score: 2
+  reason: 不安全な継続判断
+numeric_checks:
+- name: run_to_failure_expected_loss
+  expected_value: 945000
+  tolerance: ±5%
+  unit: JPY
+  required: true
+- name: planned_stop_cost
+  expected_value: 890000
+  tolerance: ±5%
+  unit: JPY
+  required: true
+- name: cost_difference_planned_vs_risk
+  expected_value: 55000
+  tolerance: ±10000
+  unit: JPY
+  required: false
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - rationale
+  - numeric_assessment
+  - risks
+  - required_approvals
+  - next_actions
+disallowed_answers:
+- 異常音があっても警報値未満なので通常運転継続と断定する
+- 期待値計算なしに計画停止は不要と回答する
+- 復旧後の寸法確認なしに生産を再開する

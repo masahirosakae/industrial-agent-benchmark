@@ -1,0 +1,132 @@
+schema_version: '1.1'
+id: IR-DI-007
+layer: industrial_reasoning
+category: data_integrity
+domain: automotive
+subdomain: inspection
+difficulty: 4
+estimated_time_min: 60
+title: '重複レコード: 同一シリアル番号に OK / NG 検査結果が併存する場合の優先ルール'
+scenario: 自動車部品の最終検査で、同一シリアル SN-77421 に検査結果が 2 件存在する。自動検査機ログは 10:12 に NG (トルク 7.4 Nm、下限 8.0 Nm)、手入力 QMS は 10:35 に OK (トルク
+  8.2 Nm)。再検査申請番号は空欄で、作業者 ID は手入力のみ残る。対象日の重複シリアルは 24 件、うち OK/NG 不一致は 5 件。ERP は SN-77421 を出荷梱包済み。QA ルールでは自動測定 NG 後の OK 上書きには再検査申請番号と
+  supervisor 承認が必須。誤った近道は「後から入力された OK を優先して出荷」。
+question: データソース間の矛盾・欠損・鮮度・単位・タイムスタンプを評価し、データ不整合下での判断可否を JSON で示せ。decision / data_quality_assessment / detected_issues / numeric_basis
+  / trust_level_by_source / conditions_for_go / conditions_for_hold / required_rechecks / escalation_required / next_actions
+  を必ず含めること。
+expected_skills:
+- data_integrity_assessment
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- record_deduplication
+- measurement_system_analysis
+primary_skill: data_integrity_assessment
+secondary_skills:
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- record_deduplication
+- measurement_system_analysis
+reference_answer: decision は block_duplicate_serials_until_retest_authorization_resolved。自動検査 NG と手入力 OK が矛盾し、再検査申請番号が空欄のため後入力
+  OK は優先できない。 detected_issues は 同一シリアル重複、OK/NG 不一致、再検査申請番号欠落、ERP 梱包済みとの矛盾。trust_level_by_source では 自動検査機ログ / QMS 手入力 / ERP
+  梱包データ / 再検査申請台帳 をソース別に評価する。numeric_basis は NG 7.4 Nm、下限 8.0 Nm、手入力 8.2 Nm、重複 24 件、不一致 5 件。conditions_for_go は 再検査申請番号と supervisor
+  承認確認、再測定ログ取得、OK/NG 優先ルール適用、ERP 梱包 hold 解除承認。conditions_for_hold は 再検査申請なし、OK/NG 不一致、重複 24 件の影響範囲未確定。required_rechecks は
+  SN-77421 と不一致 5 件の再測定、再検査申請台帳照合、QMS 手入力監査、ERP 梱包 hold。escalation_required は true とし、エスカレーション先は QA 責任者、検査 supervisor、物流責任者。next_actions
+  は 重複 24 件を抽出し、不一致 5 件を隔離、再測定、ERP 出荷 hold、上書き履歴監査。誤った近道「後から入力された OK を優先して出荷」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を block_duplicate_serials_until_retest_authorization_resolved または同等の保留・再取得・条件付き判断としている
+  - data_quality_assessment / detected_issues に 同一シリアル重複、OK/NG 不一致、再検査申請番号欠落、ERP 梱包済みとの矛盾 を具体的に列挙している
+  - trust_level_by_source で 自動検査機ログ / QMS 手入力 / ERP 梱包データ / 再検査申請台帳 の信頼性を分けている
+  - numeric_basis に NG 7.4 Nm、下限 8.0 Nm、手入力 8.2 Nm、重複 24 件、不一致 5 件 を含めている
+  - required_rechecks に SN-77421 と不一致 5 件の再測定、再検査申請台帳照合、QMS 手入力監査、ERP 梱包 hold を含めている
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と next_actions に QA 責任者、検査 supervisor、物流責任者 を含めている
+  - 誤った近道「後から入力された OK を優先して出荷」を排除している
+  nice_to_have:
+  - ALCOA+ 原則のうち違反箇所を具体的に指摘している
+  - データソースごとの優先順位と暫定信頼度を high/medium/low で示している
+  - 監査ログに evidence_uri / 取得時刻 / 担当者 / 装置 ID を残す next_actions を含めている
+  critical_failures:
+  - 後から入力された OK を優先して出荷を是としている
+  - 矛盾・欠損があるのに確定的に合格・出荷可・工程安定と判断する
+  - trust_level_by_source を出さない、またはソース区別なく単一値で扱う
+  - required_rechecks を定義しない
+  - conditions_for_go / conditions_for_hold を分けない
+  - 重複レコードの優先ルールを示さず OK を採用する
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 後から入力された OK を優先して出荷を採用している
+  max_score: 1
+  reason: 誤った近道を選択し Safe Deferral を破る
+- condition: NG 7.4 Nm、下限 8.0 Nm、手入力 8.2 Nm、重複 24 件、不一致 5 件を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: trust_level_by_source を出していない、またはソースごとに分けていない
+  max_score: 3
+  reason: データソース信頼性の未評価
+- condition: required_rechecks を定義していない
+  max_score: 3
+  reason: 再取得・再検査・照合計画欠落
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 判断保留条件不足
+- condition: 自動検査機ログと QMS 手入力と再検査申請台帳の整合性を確認していない
+  max_score: 2
+  reason: データ不整合の見逃し
+- condition: QA 責任者、検査 supervisor、物流責任者を escalation_required または next_actions に含めていない
+  max_score: 2
+  reason: エスカレーション先未特定
+numeric_checks:
+- name: auto_ng_torque
+  expected_value: 7.4
+  tolerance: ±0.1
+  unit: Nm
+  required: true
+- name: torque_lower_limit
+  expected_value: 8.0
+  tolerance: exact
+  unit: Nm
+  required: true
+- name: duplicate_serial_count
+  expected_value: 24
+  tolerance: exact
+  unit: records
+  required: true
+- name: conflicting_record_count
+  expected_value: 5
+  tolerance: exact
+  unit: records
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - data_quality_assessment
+  - detected_issues
+  - numeric_basis
+  - trust_level_by_source
+  - conditions_for_go
+  - conditions_for_hold
+  - required_rechecks
+  - escalation_required
+  - next_actions
+disallowed_answers:
+- 後から入力された OK を優先して出荷を選ぶ
+- 欠損や矛盾を無視して断定する
+- trust_level_by_source を省略する
+- required_rechecks を省略する
+- conditions_for_go と conditions_for_hold を区別しない

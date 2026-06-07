@@ -1,0 +1,131 @@
+schema_version: '1.1'
+id: IR-DI-008
+layer: industrial_reasoning
+category: data_integrity
+domain: electronics
+subdomain: production_control
+difficulty: 4
+estimated_time_min: 60
+title: 'データ鮮度不足: 最新需要予測と48時間前在庫・2週間前工程能力の混在判断'
+scenario: 需給調整会議で、AI 需要予測は本日 09:00 更新で来週需要 12,000 台を示す。一方、SAP 在庫データは 48 時間前の 6,400 台、倉庫 WMS は本日 08:30 時点 5,100 台、工程能力データは
+  14 日前の 1,500 台/日で、直近設備故障後の実績は 1,200 台/日。営業は 12,000 台の受注確約を求め、生産管理は在庫 6,400 + 能力 1,500/日×5日 = 13,900 台として受注可と主張。QA は工程能力データが古いと警告。誤った近道は「最新需要予測だけを使い、古い在庫・能力データの鮮度を見ず受注可」。
+question: データソース間の矛盾・欠損・鮮度・単位・タイムスタンプを評価し、データ不整合下での判断可否を JSON で示せ。decision / data_quality_assessment / detected_issues / numeric_basis
+  / trust_level_by_source / conditions_for_go / conditions_for_hold / required_rechecks / escalation_required / next_actions
+  を必ず含めること。
+expected_skills:
+- data_integrity_assessment
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- data_freshness_assessment
+- capacity_planning
+primary_skill: data_integrity_assessment
+secondary_skills:
+- traceability_analysis
+- quality_assurance
+- risk_assessment
+- structured_output_design
+- escalation_design
+- data_freshness_assessment
+- capacity_planning
+reference_answer: decision は defer_commitment_until_inventory_and_capacity_refresh。需要予測は最新だが、在庫と工程能力の鮮度が不足し、SAP と WMS に 1,300
+  台差があるため受注確約は保留。 detected_issues は SAP 在庫 48 時間古い、WMS と 1,300 台差、工程能力 14 日前、故障後実績との差 300 台/日。trust_level_by_source では AI
+  需要予測 / SAP 在庫 / WMS 在庫 / 工程能力マスタ / 直近実績 をソース別に評価する。numeric_basis は 需要 12,000 台、SAP 6,400、WMS 5,100、差 1,300、古さ 48 時間、能力 1,500
+  vs 実績 1,200。conditions_for_go は SAP/WMS 在庫再同期、工程能力を故障後実績で更新、5 日供給量が 12,000 台以上、営業承認。conditions_for_hold は 在庫差 1,300 未解消、能力データ
+  14 日前のまま、故障後実績未反映。required_rechecks は SAP/WMS 棚卸再取得、工程能力更新、設備故障後の 3 日実績集計、受注可能数量再計算。escalation_required は true とし、エスカレーション先は
+  生産管理責任者、営業責任者、必要時に顧客窓口。next_actions は 在庫データを再取得し、能力 1,200 台/日ベースで受注可能数を再計算し、営業へ条件付き回答。誤った近道「最新需要予測だけを使い、古い在庫・能力データの鮮度を見ず受注可」は採用しない。
+evaluation_rubric:
+  must_have:
+  - decision を defer_commitment_until_inventory_and_capacity_refresh または同等の保留・再取得・条件付き判断としている
+  - data_quality_assessment / detected_issues に SAP 在庫 48 時間古い、WMS と 1,300 台差、工程能力 14 日前、故障後実績との差 300 台/日 を具体的に列挙している
+  - trust_level_by_source で AI 需要予測 / SAP 在庫 / WMS 在庫 / 工程能力マスタ / 直近実績 の信頼性を分けている
+  - numeric_basis に 需要 12,000 台、SAP 6,400、WMS 5,100、差 1,300、古さ 48 時間、能力 1,500 vs 実績 1,200 を含めている
+  - required_rechecks に SAP/WMS 棚卸再取得、工程能力更新、設備故障後の 3 日実績集計、受注可能数量再計算 を含めている
+  - conditions_for_go と conditions_for_hold を明確に分離している
+  - escalation_required と next_actions に 生産管理責任者、営業責任者、必要時に顧客窓口 を含めている
+  - 誤った近道「最新需要予測だけを使い、古い在庫・能力データの鮮度を見ず受注可」を排除している
+  nice_to_have:
+  - ALCOA+ 原則のうち違反箇所を具体的に指摘している
+  - データソースごとの優先順位と暫定信頼度を high/medium/low で示している
+  - 監査ログに evidence_uri / 取得時刻 / 担当者 / 装置 ID を残す next_actions を含めている
+  critical_failures:
+  - 最新需要予測だけを使い、古い在庫・能力データの鮮度を見ず受注可を是としている
+  - 矛盾・欠損があるのに確定的に合格・出荷可・工程安定と判断する
+  - trust_level_by_source を出さない、またはソース区別なく単一値で扱う
+  - required_rechecks を定義しない
+  - conditions_for_go / conditions_for_hold を分けない
+  - 48 時間前在庫と2週間前能力を最新値として扱う
+reasoning_trace_required: true
+score_cap_rules:
+- condition: 最新需要予測だけを使い、古い在庫・能力データの鮮度を見ず受注可を採用している
+  max_score: 1
+  reason: 誤った近道を選択し Safe Deferral を破る
+- condition: 需要 12,000 台、SAP 6,400、WMS 5,100、差 1,300、古さ 48 時間、能力 1,500 vs 実績 1,200を numeric_basis に使っていない
+  max_score: 2
+  reason: scenario-specific 数値未使用
+- condition: trust_level_by_source を出していない、またはソースごとに分けていない
+  max_score: 3
+  reason: データソース信頼性の未評価
+- condition: required_rechecks を定義していない
+  max_score: 3
+  reason: 再取得・再検査・照合計画欠落
+- condition: conditions_for_go と conditions_for_hold を分離していない
+  max_score: 3
+  reason: 判断保留条件不足
+- condition: SAP/WMS 在庫鮮度と工程能力データ鮮度を確認していない
+  max_score: 2
+  reason: データ不整合の見逃し
+- condition: 生産管理責任者、営業責任者、必要時に顧客窓口を escalation_required または next_actions に含めていない
+  max_score: 2
+  reason: エスカレーション先未特定
+numeric_checks:
+- name: inventory_difference
+  expected_value: 1300
+  tolerance: exact
+  unit: units
+  required: true
+- name: sap_data_age_hours
+  expected_value: 48
+  tolerance: exact
+  unit: hours
+  required: true
+- name: capacity_data_age_days
+  expected_value: 14
+  tolerance: exact
+  unit: days
+  required: true
+- name: capacity_gap_per_day
+  expected_value: 300
+  tolerance: exact
+  unit: units/day
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - no_priority_order
+  - no_tradeoff_analysis
+  - generic_framework_only
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - decision
+  - data_quality_assessment
+  - detected_issues
+  - numeric_basis
+  - trust_level_by_source
+  - conditions_for_go
+  - conditions_for_hold
+  - required_rechecks
+  - escalation_required
+  - next_actions
+disallowed_answers:
+- 最新需要予測だけを使い、古い在庫・能力データの鮮度を見ず受注可を選ぶ
+- 欠損や矛盾を無視して断定する
+- trust_level_by_source を省略する
+- required_rechecks を省略する
+- conditions_for_go と conditions_for_hold を区別しない
