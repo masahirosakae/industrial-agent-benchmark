@@ -173,7 +173,27 @@ python examples/load_dataset_v2.py
 
 Hugging Face hosted loading is planned, but it is not required until the dataset is published. For now, the local JSONL export is the supported v2.0.0 prototype workflow.
 
-## 6. v2.0.0 Planning Documents
+## 6. Simple Evaluation v2
+
+Simple Evaluation v2 prepares standardized prediction files from pre-written JSONL answers. It does not score automatically and does not call external APIs.
+
+```bash
+python eval/run_simple_eval.py \
+  --dataset data/v2/test.jsonl \
+  --answers examples/simple_eval_answers.jsonl \
+  --model-id sample_model \
+  --output-dir results/simple_eval/sample_model
+```
+
+```bash
+python eval/summarize_simple_eval.py \
+  --predictions results/simple_eval/sample_model/predictions.jsonl \
+  --output results/simple_eval/sample_model/summary.json
+```
+
+Generated outputs under `results/` are local artifacts and are not committed.
+
+## 7. v2.0.0 Planning Documents
 
 | Document | Purpose |
 |---|---|
@@ -182,6 +202,7 @@ Hugging Face hosted loading is planned, but it is not required until the dataset
 | `docs/huggingface_dataset_plan.md` | Plans Hugging Face dataset packaging and loading. |
 | `docs/dataset_schema_v2.md` | Defines the stable v2.0.0 dataset schema. |
 | `docs/dataset_export_v2.md` | Documents the local v2.0.0 JSONL export workflow. |
+| `docs/simple_evaluation_v2.md` | Documents the minimal simple evaluation workflow. |
 | `docs/simple_evaluation_plan.md` | Defines the first simple public evaluation workflow. |
 | `docs/leaderboard_policy.md` | Defines future leaderboard governance. |
 | `docs/versioning_policy.md` | Defines versioning and compatibility policy. |
@@ -197,7 +218,7 @@ Additional public documentation:
 | `docs/v1.1_release_notes.md` | v1.1.0 pre-release notes. |
 | `docs/public_repository_audit.md` | Public repository audit and release checklist. |
 
-## 7. Public Artifact Policy
+## 8. Public Artifact Policy
 
 The repository is intended to be usable from a fresh public clone. Public users should be able to validate the dataset and inspect benchmark problems without any private answer or result directories.
 
@@ -214,6 +235,6 @@ Do not commit:
 - provider/model-name mappings
 - API keys or secrets
 
-## 8. License
+## 9. License
 
 Apache License 2.0. See `LICENSE`.
