@@ -1,14 +1,39 @@
+# Evaluation outputs
 results/
+results_v2/
 judgements/
 leaderboard.csv
+datasets/results/
+evaluation_reports/
+
+# Private reports
 benchmark_report.md
 benchmark_audit_report.md
-**/__pycache__/
-**pycache**/
-*.pyc
+docs/evaluation_v2_private_notes.md
+docs/evaluation_v2_execution_prep_report.md
+docs/evaluation_v2_model_a_trial_judgement_report.md
+docs/evaluation_v2_model_b_generation_report.md
+docs/evaluation_v2_model_c_generation_report.md
+docs/evaluation_v2_model_d_generation_report.md
+docs/evaluation_v2_public_summary.md
+docs/evaluation_v2_results_report.md
+docs/public_evaluation_summary.md
+docs/v1.1_github_release_draft.md
+docs/v1.1_README_update_proposal.md
+docs/evaluation_pipeline_v1_1.md
+
+# Private helper scripts
 scripts/build_prompts.py
 scripts/prepare_fugu_judge_inputs.py
 scripts/write_fugu_answers.py
-results_v2/
 
-docs/evaluation_v2_private_notes.md
+# Secrets and local credentials
+.env
+.env.*
+*.key
+*.pem
+
+# Python
+__pycache__/
+**/__pycache__/
+*.pyc

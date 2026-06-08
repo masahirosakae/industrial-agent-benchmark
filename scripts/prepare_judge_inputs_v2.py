@@ -90,7 +90,7 @@ def build_judge_input(question_id: str, problem: dict[str, Any], model_answer: s
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Prepare Judge v2 input markdown files for one model.")
-    parser.add_argument("model_id", help="Neutral model directory id, e.g. model_a")
+    parser.add_argument("model_id", help="Local model answer directory id, e.g. my_model")
     parser.add_argument("--results-root", default=str(DEFAULT_RESULTS_ROOT), help="Path to results_v2 root")
     parser.add_argument("--evaluation-set", default=str(EVAL_SET_PATH), help="Path to evaluation_set_v2.yaml")
     parser.add_argument("--judge-template", default=str(JUDGE_TEMPLATE_PATH), help="Path to judge_template_v2.md")
@@ -103,6 +103,13 @@ def main() -> int:
     judge_inputs_dir = model_dir / "judge_inputs"
     if not answers_dir.exists():
         print(f"ERROR: answers directory not found: {answers_dir}", file=sys.stderr)
+        print("", file=sys.stderr)
+        print("This command requires model answer files and is not expected to work on a fresh clone.", file=sys.stderr)
+        print("Create answer files at:", file=sys.stderr)
+        print(f"  {results_root}/<model_id>/answers/<question_id>.txt", file=sys.stderr)
+        print("", file=sys.stderr)
+        print("For public Quick Start, run:", file=sys.stderr)
+        print("  python scripts/validate_dataset.py", file=sys.stderr)
         return 2
     judge_inputs_dir.mkdir(parents=True, exist_ok=True)
 
