@@ -106,7 +106,7 @@ judge_inputs_v2/{model_id}/{question_id}.json
 ```json
 {
   "question_id": "IR-DI-001",
-  "model_id": "model_a",
+  "model_id": "my_model",
   "metadata": {
     "layer": "industrial_reasoning",
     "category": "data_integrity",
