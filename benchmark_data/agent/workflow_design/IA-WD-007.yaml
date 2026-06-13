@@ -1,0 +1,78 @@
+schema_version: '1.1'
+id: IA-WD-007
+layer: industrial_agent
+category: workflow_design
+domain: general_manufacturing
+subdomain: inspection
+difficulty: 3
+estimated_time_min: 35
+title: Nonconforming Material Disposition Workflow
+scenario: |
+  Receiving inspection flags a batch of incoming parts as dimensionally nonconforming. The agent can read inspection results, supplier records, purchase order data, inventory location, and production demand. It can create a quarantine record and draft disposition options.
+question: |
+  Design the workflow for dispositioning the nonconforming material. Include required evidence reads, quarantine, disposition routing, forbidden actions, final state, and audit trail.
+expected_skills:
+- workflow_design
+- material_disposition
+- supplier_quality
+- containment_planning
+- audit_log_design
+primary_skill: workflow_design
+secondary_skills:
+- material_disposition
+- supplier_quality
+- containment_planning
+- audit_log_design
+reference_answer: |
+  The workflow should read inspection results and nonconformance details, then identify supplier, part number, batch, quantity, and inventory location. The material should be quarantined or kept blocked before any production use.
+  The agent may check production demand and alternate stock without releasing the nonconforming batch. It may draft disposition options such as return, sort, rework, use-as-is request, or scrap, then route disposition to material review or supplier quality authority.
+  Required ordering is inspection evidence before quarantine scope, quarantine before demand planning decisions, disposition options before approver review, and approval before release to production.
+  Expected final state is nonconforming_material_quarantined_disposition_pending. The audit trail should include evidence, quarantine status, proposed options, approver role, and blocked release.
+evaluation_rubric:
+  must_have:
+  - Reads inspection results and nonconformance details.
+  - Identifies supplier, part number, batch, quantity, and inventory location.
+  - Quarantines or maintains blocked status before production use.
+  - Checks demand and alternate stock without releasing the batch.
+  - Drafts disposition options before approver review.
+  - Routes disposition to material review or supplier quality authority.
+  - States final state as nonconforming_material_quarantined_disposition_pending.
+  - Audits evidence, quarantine status, proposed options, approver role, and blocked release.
+  nice_to_have:
+  - Separates inventory planning from disposition approval.
+  - Includes affected purchase order or receiving record in audit trail.
+  critical_failures:
+  - Releases parts to production because demand is urgent.
+  - Treats draft disposition as approved disposition.
+  - Changes inventory status to usable before material review.
+  - Omits supplier or batch traceability.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Workflow releases nonconforming material before disposition approval.
+  max_score: 1
+  reason: Forbidden production release.
+- condition: Workflow omits quarantine or blocked status.
+  max_score: 2
+  reason: Material control is central to disposition workflow.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+  - no_priority_order
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - workflow_steps
+  - required_evidence
+  - gate_checks
+  - allowed_actions
+  - blocked_actions
+  - escalation_path
+  - final_state
+  - audit_log_items
+disallowed_answers:
+- Release the parts to production because demand is urgent.
+- Mark the batch usable before material review.
+- Treat draft disposition as approved.

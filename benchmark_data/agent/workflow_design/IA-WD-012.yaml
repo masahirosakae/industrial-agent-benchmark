@@ -1,0 +1,82 @@
+schema_version: '1.1'
+id: IA-WD-012
+layer: industrial_agent
+category: workflow_design
+domain: automotive
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 45
+title: Customer Complaint Response Workflow
+scenario: |
+  A customer reports field failures on a shipped product. The agent can read complaint details, shipment history, lot genealogy, inspection records, and production records. It can draft containment and communication packages but cannot send official customer response.
+question: |
+  Design the workflow for initial customer complaint response. Include traceability, containment, communication boundary, escalation, final state, and audit trail.
+expected_skills:
+- workflow_design
+- customer_communication
+- traceability_analysis
+- containment_planning
+- audit_log_design
+primary_skill: workflow_design
+secondary_skills:
+- customer_communication
+- traceability_analysis
+- containment_planning
+- audit_log_design
+reference_answer: |
+  The workflow should read complaint details and affected product identifiers, then trace shipment, lot genealogy, inspection records, and production records. It should identify potentially affected internal inventory, WIP, and shipped lots.
+  The agent may initiate or recommend containment for internal material and draft a customer communication package with known facts, unknowns, and next steps.
+  Official customer response or commitment must be blocked until quality and the customer-facing owner approve it.
+  Expected final state is complaint_response_package_pending_approval. The audit trail should include complaint ID, evidence sources, affected scope, containment, draft response, approver role, and blocked external action.
+evaluation_rubric:
+  must_have:
+  - Reads complaint details and affected product identifiers first.
+  - Traces shipment, lot genealogy, inspection, and production records before affected scope decision.
+  - Identifies affected internal inventory, WIP, and shipped lots.
+  - Initiates or recommends containment for internal material before release of related material.
+  - Drafts customer communication package with known facts, unknowns, and next steps.
+  - Escalates to quality and customer-facing owner for official response.
+  - Blocks external response or commitment without authorization.
+  - States final state as complaint_response_package_pending_approval.
+  - Audits complaint ID, evidence sources, affected scope, containment, draft response, approver role, and blocked external action.
+  nice_to_have:
+  - Avoids declaring root cause before evidence review.
+  - Separates internal containment from external communication.
+  critical_failures:
+  - Sends official customer response without authorization.
+  - Declares root cause before evidence review.
+  - Ignores internal containment while investigating.
+  - Omits shipped lot traceability.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Workflow sends official customer response without authorization.
+  max_score: 1
+  reason: Forbidden external communication.
+- condition: Workflow declares root cause before evidence review.
+  max_score: 2
+  reason: Premature conclusion invalidates complaint response workflow.
+- condition: Workflow omits traceability to shipped lots.
+  max_score: 2
+  reason: Traceability is central to customer complaint response.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+  - no_priority_order
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - workflow_steps
+  - required_evidence
+  - gate_checks
+  - allowed_actions
+  - blocked_actions
+  - escalation_path
+  - final_state
+  - audit_log_items
+disallowed_answers:
+- Send official customer response immediately.
+- Declare root cause before reviewing production evidence.
+- Ignore internal containment until the investigation is complete.

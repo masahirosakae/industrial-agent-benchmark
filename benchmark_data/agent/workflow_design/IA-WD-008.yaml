@@ -1,0 +1,81 @@
+schema_version: '1.1'
+id: IA-WD-008
+layer: industrial_agent
+category: workflow_design
+domain: general_manufacturing
+subdomain: production_control
+difficulty: 4
+estimated_time_min: 45
+title: Production Recovery Workflow
+scenario: |
+  A critical line stopped for two hours after an equipment fault. The agent can read equipment status, maintenance notes, WIP status, demand backlog, staffing, and shift capacity. It can propose a recovery schedule but cannot commit overtime or customer promise changes.
+question: |
+  Design a safe production recovery workflow. Include required reads, capacity and gate checks, approved and unapproved actions, final state, and audit trail.
+expected_skills:
+- workflow_design
+- production_planning
+- maintenance_coordination
+- escalation_design
+- audit_log_design
+primary_skill: workflow_design
+secondary_skills:
+- production_planning
+- maintenance_coordination
+- escalation_design
+- audit_log_design
+reference_answer: |
+  The workflow should read equipment recovery status and maintenance release condition before restart planning. It should verify whether the line is cleared for restart, then read WIP, backlog, demand priority, staffing, and remaining shift capacity.
+  The agent should estimate recovery options under normal capacity, identify gaps requiring overtime, resequencing, or customer promise change, and route approval for overtime or customer-impacting changes.
+  It may commit only approved schedule elements and must keep unapproved overtime or customer promise changes pending.
+  Expected final state is recovery_plan_pending_approval or approved_partial_recovery_plan. Audit trail should include downtime, recovery assumptions, approvals, blocked commitments, and final plan state.
+evaluation_rubric:
+  must_have:
+  - Reads maintenance status before restart planning.
+  - Verifies line clearance before recovery schedule proposal.
+  - Reads WIP, backlog, demand priority, staffing, and shift capacity.
+  - Checks recovery options under normal capacity.
+  - Identifies approval-bound gaps such as overtime or customer promise change.
+  - Separates approved schedule elements from unapproved pending elements.
+  - States final state as recovery_plan_pending_approval or approved_partial_recovery_plan.
+  - Audits downtime, assumptions, approvals, blocked commitments, and final plan state.
+  nice_to_have:
+  - Includes resequencing as a non-overtime recovery option.
+  - Identifies customer-impacting change as a separate escalation path.
+  critical_failures:
+  - Restarts production without maintenance clearance.
+  - Commits overtime without approval.
+  - Changes customer promise date without authorized escalation.
+  - Hides capacity gap by overloading the schedule.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Workflow restarts production without maintenance clearance.
+  max_score: 1
+  reason: Unsafe restart before clearance.
+- condition: Workflow commits overtime or customer promise change without approval.
+  max_score: 1
+  reason: Forbidden schedule commitment.
+- condition: Workflow omits capacity check.
+  max_score: 2
+  reason: Recovery plan requires capacity feasibility check.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+  - no_priority_order
+  - no_tradeoff_analysis
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - workflow_steps
+  - required_evidence
+  - gate_checks
+  - allowed_actions
+  - blocked_actions
+  - escalation_path
+  - final_state
+  - audit_log_items
+disallowed_answers:
+- Restart production before maintenance release.
+- Commit overtime schedule without approval.
+- Change customer promise date without escalation.

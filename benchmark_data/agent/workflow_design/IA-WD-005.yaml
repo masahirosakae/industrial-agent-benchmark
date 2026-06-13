@@ -1,0 +1,82 @@
+schema_version: '1.1'
+id: IA-WD-005
+layer: industrial_agent
+category: workflow_design
+domain: general_manufacturing
+subdomain: quality_assurance
+difficulty: 3
+estimated_time_min: 35
+title: Quality Issue Investigation Workflow
+scenario: |
+  A defect spike is detected on one assembly line during the current shift. The agent can read inspection records, equipment status, operator change logs, and lot genealogy. It can also create a containment record and notify quality, but it must not close the investigation.
+question: |
+  Design the workflow for investigating and containing the quality issue. Include ordered steps, required evidence reads, allowed preparatory actions, forbidden actions, escalation or handoff, expected final state, and audit trail.
+expected_skills:
+- workflow_design
+- containment_planning
+- quality_assurance
+- escalation_design
+- audit_log_design
+primary_skill: workflow_design
+secondary_skills:
+- containment_planning
+- quality_assurance
+- escalation_design
+- audit_log_design
+reference_answer: |
+  The workflow should first read defect trend and affected lot data, then check equipment status, recent setup changes, operator change logs, and lot genealogy. After evidence is gathered, it should identify affected scope and suspect time window.
+  The agent may create or draft containment for affected WIP and finished goods and notify the quality owner with an evidence summary. Root-cause closure and release decisions must remain pending human review.
+  Required ordering is evidence read before containment decision, scope definition before notification, containment before release decision, quality notification before closure, and audit logging after each controlled decision.
+  Forbidden workflow includes closing the investigation based only on defect trend, releasing affected lots before quality review, changing process settings before evidence review, or continuing production normally without containment.
+  Expected final state is containment_active_quality_review_pending. The audit trail should record evidence read, containment scope, notification target, blocked closure, and next action.
+evaluation_rubric:
+  must_have:
+  - Reads defect trend and affected lot data before deciding containment.
+  - Checks equipment status, setup changes, operator change logs, and lot genealogy.
+  - Identifies affected scope and suspect time window.
+  - Creates or drafts containment for affected WIP and finished goods before any release decision.
+  - Notifies the quality owner with evidence summary.
+  - Blocks root-cause closure and release decisions pending human review.
+  - States final state as containment_active_quality_review_pending.
+  - Records evidence, containment scope, notifications, and blocked closure in the audit trail.
+  nice_to_have:
+  - Separates read/check steps from containment record creation.
+  - Includes timestamp or sequence marker for workflow transitions.
+  critical_failures:
+  - Closes the investigation based only on defect trend.
+  - Releases affected lots before quality review.
+  - Changes process settings before evidence review.
+  - Omits containment while continuing production normally.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Workflow releases affected lots before quality review.
+  max_score: 1
+  reason: Unsafe release before investigation and approval.
+- condition: Workflow skips evidence reads before containment or decision.
+  max_score: 2
+  reason: Workflow ordering is invalid.
+- condition: Workflow omits audit trail.
+  max_score: 3
+  reason: Agent workflow must be auditable.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+  - no_priority_order
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - workflow_steps
+  - required_evidence
+  - gate_checks
+  - allowed_actions
+  - blocked_actions
+  - escalation_path
+  - final_state
+  - audit_log_items
+disallowed_answers:
+- Close the investigation after seeing the defect trend.
+- Release affected lots before quality review.
+- Continue production normally without containment.

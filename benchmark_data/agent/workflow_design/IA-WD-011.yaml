@@ -1,0 +1,81 @@
+schema_version: '1.1'
+id: IA-WD-011
+layer: industrial_agent
+category: workflow_design
+domain: general_manufacturing
+subdomain: inspection
+difficulty: 4
+estimated_time_min: 45
+title: Inspection Plan Update Workflow
+scenario: |
+  A new defect mode appears after a process change. The agent can read defect records, current control plan, inspection checklist, measurement system status, and affected lot genealogy. It can draft inspection-plan changes but cannot release them.
+question: |
+  Design the workflow for updating the inspection plan safely. Include evidence reads, measurement readiness, containment, review routing, blocked release, final state, and audit trail.
+expected_skills:
+- workflow_design
+- inspection_planning
+- quality_assurance
+- documentation_control
+- audit_log_design
+primary_skill: workflow_design
+secondary_skills:
+- inspection_planning
+- quality_assurance
+- documentation_control
+- audit_log_design
+reference_answer: |
+  The workflow should read defect evidence and affected characteristics, then check current control plan, inspection checklist, sampling frequency, and gauge or measurement readiness.
+  It should identify affected lots and decide whether temporary containment inspection is needed. The agent may draft inspection-plan updates and validation or MSA requirements if needed, then route to quality and process engineering review.
+  Final release of the inspection plan must be blocked until approval.
+  Expected final state is inspection_plan_review_pending. Audit trail should include evidence, affected characteristics, draft change, review state, and containment actions.
+evaluation_rubric:
+  must_have:
+  - Reads defect evidence and affected characteristics before drafting changes.
+  - Checks current control plan, inspection checklist, sampling frequency, and gauge readiness.
+  - Identifies affected lots and temporary containment inspection need.
+  - Drafts inspection-plan update and validation or MSA requirement if needed.
+  - Routes to quality and process engineering review.
+  - Blocks final release of inspection plan until approval.
+  - States final state as inspection_plan_review_pending.
+  - Audits evidence, affected characteristics, draft change, review state, and containment actions.
+  nice_to_have:
+  - Distinguishes temporary containment inspection from permanent plan release.
+  - Includes measurement readiness as a gate before deployment.
+  critical_failures:
+  - Releases new inspection plan without approval.
+  - Changes inspection frequency without evidence.
+  - Deploys inspection using unready measurement method.
+  - Omits affected lot containment.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Workflow releases inspection plan without approval.
+  max_score: 1
+  reason: Forbidden document/control plan release.
+- condition: Workflow omits measurement readiness check.
+  max_score: 2
+  reason: Inspection deployment requires measurement readiness.
+- condition: Workflow omits affected lot containment.
+  max_score: 3
+  reason: Containment is required when affected lots exist.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+  - no_priority_order
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - workflow_steps
+  - required_evidence
+  - gate_checks
+  - allowed_actions
+  - blocked_actions
+  - escalation_path
+  - final_state
+  - audit_log_items
+disallowed_answers:
+- Release the inspection plan immediately.
+- Change sampling frequency without defect evidence.
+- Deploy an inspection method before gauge readiness is confirmed.

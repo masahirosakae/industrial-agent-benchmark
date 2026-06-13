@@ -1,0 +1,80 @@
+schema_version: '1.1'
+id: IA-WD-014
+layer: industrial_agent
+category: workflow_design
+domain: general_manufacturing
+subdomain: quality_assurance
+difficulty: 5
+estimated_time_min: 60
+title: Audit-ready Workflow Documentation
+scenario: |
+  A cross-functional workflow handled a process abnormality, containment, engineering review, temporary inspection, and final release. The agent must prepare an audit-ready workflow record from available state transitions and evidence references.
+question: |
+  Design the workflow documentation structure needed to make the case audit-ready. Include state transitions, evidence linkage, missing-record checks, final state, and audit trail.
+expected_skills:
+- workflow_design
+- audit_log_design
+- evidence_management
+- structured_output_design
+- traceability_analysis
+primary_skill: workflow_design
+secondary_skills:
+- audit_log_design
+- evidence_management
+- structured_output_design
+- traceability_analysis
+reference_answer: |
+  The workflow should collect the event timeline and state transitions before writing an audit summary. Each decision should be linked to evidence sources and responsible role.
+  The record should identify controlled actions, blocked actions, approvals, and final states. It should verify that containment, review, inspection, release, and communication steps have records.
+  The agent must flag missing evidence or missing approval before declaring the case audit-ready. It should produce a structured workflow record with IDs, timestamps or sequence markers, owners, evidence references, decisions, actions, and residual open items.
+  Expected final state is audit_ready_record_complete when all required records exist, or audit_record_incomplete_missing_evidence when evidence or approvals are missing.
+evaluation_rubric:
+  must_have:
+  - Collects event timeline and state transitions before audit summary.
+  - Links each decision to evidence sources and responsible role.
+  - Identifies controlled actions, blocked actions, approvals, and final states.
+  - Verifies containment, review, inspection, release, and communication records.
+  - Flags missing evidence or missing approval before declaring audit-ready.
+  - Produces structured record with IDs, timestamps or sequence markers, owners, evidence references, decisions, actions, and residual open items.
+  - States final state as audit_ready_record_complete or audit_record_incomplete_missing_evidence.
+  nice_to_have:
+  - Uses a machine-checkable structure for state transitions.
+  - Separates open items from completed evidence.
+  critical_failures:
+  - Declares audit-ready with missing approvals or evidence.
+  - Fabricates evidence references.
+  - Summarizes only final outcome without state transitions.
+  - Omits blocked actions or escalation history.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Workflow declares audit-ready with missing approvals or evidence.
+  max_score: 1
+  reason: Audit-ready final state is invalid.
+- condition: Workflow fabricates evidence references.
+  max_score: 1
+  reason: Fabricated evidence is a critical audit failure.
+- condition: Workflow omits state transitions.
+  max_score: 2
+  reason: Workflow documentation requires state transition traceability.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+  - no_priority_order
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - workflow_steps
+  - required_evidence
+  - gate_checks
+  - allowed_actions
+  - blocked_actions
+  - escalation_path
+  - final_state
+  - audit_log_items
+disallowed_answers:
+- Declare audit-ready despite missing approval records.
+- Invent evidence references to complete the audit trail.
+- Provide only the final outcome without workflow state transitions.

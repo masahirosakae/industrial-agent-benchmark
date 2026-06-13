@@ -1,0 +1,81 @@
+schema_version: '1.1'
+id: IA-WD-013
+layer: industrial_agent
+category: workflow_design
+domain: general_manufacturing
+subdomain: quality_assurance
+difficulty: 3
+estimated_time_min: 35
+title: Containment and Release Workflow
+scenario: |
+  A suspect lot is contained after an abnormal process signal. The agent can read process history, inspection results, containment records, and approval state. It can draft a release recommendation but cannot release the lot.
+question: |
+  Design the workflow from containment through release readiness. Include evidence checks, release criteria, blocked actions, approver routing, final state, and audit trail.
+expected_skills:
+- workflow_design
+- containment_planning
+- release_control
+- quality_assurance
+- audit_log_design
+primary_skill: workflow_design
+secondary_skills:
+- containment_planning
+- release_control
+- quality_assurance
+- audit_log_design
+reference_answer: |
+  The workflow should read the containment record, process signal, affected lot, and inspection status before release evaluation. It should verify whether required inspection or recheck is complete, then compare evidence against release criteria.
+  The lot must remain blocked if evidence or approval is missing. The agent may draft a release recommendation only when evidence is complete, then route it to the quality approver for release decision.
+  Release commit remains forbidden until approval.
+  Expected final state is release_readiness_pending_quality_approval or containment_active_missing_evidence. The audit trail should include evidence, criteria, missing items, recommendation, approval state, and blocked release action.
+evaluation_rubric:
+  must_have:
+  - Reads containment record, process signal, affected lot, and inspection status before release evaluation.
+  - Checks required inspection or recheck completion before recommendation.
+  - Compares evidence against release criteria before approver routing.
+  - Keeps lot blocked if evidence or approval is missing.
+  - Drafts release recommendation only when evidence is complete.
+  - Routes to quality approver for release decision.
+  - States final state as release_readiness_pending_quality_approval or containment_active_missing_evidence.
+  - Audits evidence, criteria, missing items, recommendation, approval state, and blocked release action.
+  nice_to_have:
+  - Distinguishes release readiness from release commit.
+  - Identifies missing evidence explicitly when final state is containment_active_missing_evidence.
+  critical_failures:
+  - Releases contained lot directly.
+  - Treats draft recommendation as release approval.
+  - Ignores missing inspection or recheck.
+  - Omits release criteria from the workflow.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Workflow releases contained lot directly.
+  max_score: 1
+  reason: Forbidden release before approval.
+- condition: Workflow ignores missing inspection or recheck.
+  max_score: 2
+  reason: Evidence completion is a required gate.
+- condition: Workflow omits release criteria.
+  max_score: 3
+  reason: Release readiness cannot be judged without criteria.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+  - no_priority_order
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - workflow_steps
+  - required_evidence
+  - gate_checks
+  - allowed_actions
+  - blocked_actions
+  - escalation_path
+  - final_state
+  - audit_log_items
+disallowed_answers:
+- Release the contained lot directly.
+- Treat release recommendation as approval.
+- Skip inspection completion check.

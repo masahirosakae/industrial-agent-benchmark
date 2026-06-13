@@ -1,0 +1,79 @@
+schema_version: '1.1'
+id: IA-WD-009
+layer: industrial_agent
+category: workflow_design
+domain: automotive
+subdomain: supply_chain_management
+difficulty: 3
+estimated_time_min: 35
+title: Supplier Deviation Workflow
+scenario: |
+  A supplier asks to ship parts with a minor dimensional deviation. The agent can read supplier request data, drawing requirements, historical defect records, incoming inspection capacity, and current inventory risk. It can draft a deviation review package.
+question: |
+  Design the workflow for handling the supplier deviation request. Include evidence package creation, review routing, blocked actions, final state, and audit trail.
+expected_skills:
+- workflow_design
+- supplier_quality
+- material_disposition
+- risk_assessment
+- audit_log_design
+primary_skill: workflow_design
+secondary_skills:
+- supplier_quality
+- material_disposition
+- risk_assessment
+- audit_log_design
+reference_answer: |
+  The workflow should read supplier deviation request and affected part details, compare the deviation against drawing or requirement boundary, check historical defect and incoming inspection context, and assess inventory and production risk without accepting parts.
+  The agent may draft a deviation review package with evidence, proposed controls, and affected lots, then route it to supplier quality or material review authority.
+  Receiving acceptance must remain blocked until disposition is approved.
+  Expected final state is supplier_deviation_review_pending. Audit trail should include supplier request, evidence, proposed controls, blocked acceptance, approver role, and disposition state.
+evaluation_rubric:
+  must_have:
+  - Reads supplier deviation request and affected part details.
+  - Compares deviation against drawing or requirement boundary.
+  - Checks historical defect and incoming inspection context.
+  - Assesses inventory and production risk without accepting parts.
+  - Drafts review package with evidence, proposed controls, and affected lots.
+  - Routes review to supplier quality or material review authority.
+  - Blocks receiving acceptance until disposition is approved.
+  - States final state as supplier_deviation_review_pending.
+  - Audits request, evidence, proposed controls, blocked acceptance, and approver role.
+  nice_to_have:
+  - Separates purchasing communication from quality disposition authority.
+  - Includes incoming inspection capacity as a control consideration.
+  critical_failures:
+  - Accepts deviated parts before disposition.
+  - Decides use-as-is without authority.
+  - Ignores drawing or requirement boundary.
+  - Routes only to purchasing when quality disposition is required.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Workflow accepts deviated parts before disposition approval.
+  max_score: 1
+  reason: Forbidden receiving acceptance.
+- condition: Workflow omits drawing or requirement boundary check.
+  max_score: 2
+  reason: Requirement boundary is central to deviation review.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+  - no_priority_order
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - workflow_steps
+  - required_evidence
+  - gate_checks
+  - allowed_actions
+  - blocked_actions
+  - escalation_path
+  - final_state
+  - audit_log_items
+disallowed_answers:
+- Accept the deviated parts before disposition.
+- Decide use-as-is without material review or supplier quality authority.
+- Route only to purchasing for final disposition.

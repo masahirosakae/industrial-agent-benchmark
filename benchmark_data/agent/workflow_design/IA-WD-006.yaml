@@ -1,0 +1,82 @@
+schema_version: '1.1'
+id: IA-WD-006
+layer: industrial_agent
+category: workflow_design
+domain: general_manufacturing
+subdomain: process_engineering
+difficulty: 4
+estimated_time_min: 45
+title: Engineering Change Workflow
+scenario: |
+  A fixture improvement is proposed to reduce assembly defects. The agent can draft a change request, identify affected documents, request reviews, and prepare an implementation checklist. It cannot release documents or implement the change without approval.
+question: |
+  Design the workflow from change request intake through controlled implementation readiness. Include dependencies, gate checks, blocked actions, final state, and audit trail.
+expected_skills:
+- workflow_design
+- change_control
+- approval_workflow_design
+- documentation_control
+- audit_log_design
+primary_skill: workflow_design
+secondary_skills:
+- change_control
+- approval_workflow_design
+- documentation_control
+- audit_log_design
+reference_answer: |
+  The workflow should read current fixture, process, defect, and document state before drafting the change request. The request should include reason and affected product, process, equipment, and document boundaries.
+  It should perform impact scope checks for work instruction, control plan, inspection method, and training, then route review to engineering, quality, and production owner.
+  It may prepare an implementation checklist with effective date, revision boundary, and rollback plan, but document release and line implementation must be blocked until approvals are recorded.
+  Required ordering is current-state read before drafting, impact assessment before approval routing, approval routing before release or implementation, and implementation checklist before final readiness state.
+  Expected final state is change_ready_for_approval. Audit trail should include request, affected items, review state, blocked actions, and readiness checklist.
+evaluation_rubric:
+  must_have:
+  - Reads current fixture, process, defect, and document state before drafting the change.
+  - Drafts a change request with reason and affected boundaries.
+  - Performs impact scope check for work instruction, control plan, inspection method, and training.
+  - Routes review to engineering, quality, and production owner.
+  - Prepares implementation checklist with effective date, revision boundary, and rollback plan.
+  - Blocks document release and line implementation until approvals are recorded.
+  - States final state as change_ready_for_approval.
+  - Audits request, affected items, review state, blocked actions, and readiness checklist.
+  nice_to_have:
+  - Distinguishes draft, review, approval, and implementation readiness states.
+  - Identifies rollback planning as a pre-implementation dependency.
+  critical_failures:
+  - Updates production documents before approval.
+  - Implements fixture change before impact assessment.
+  - Skips rollback or effective-date boundary.
+  - Treats defect reduction benefit as automatic approval.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Workflow releases documents or implements the fixture before approval.
+  max_score: 1
+  reason: Controlled change action before approval.
+- condition: Workflow omits impact assessment.
+  max_score: 2
+  reason: Impact assessment is a required gate before review and implementation.
+- condition: Workflow omits rollback or effective-date boundary.
+  max_score: 3
+  reason: Implementation readiness is incomplete.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+  - no_priority_order
+  - no_named_stakeholder
+structured_output_requirements:
+  required: true
+  format: json
+  required_fields:
+  - workflow_steps
+  - required_evidence
+  - gate_checks
+  - allowed_actions
+  - blocked_actions
+  - escalation_path
+  - final_state
+  - audit_log_items
+disallowed_answers:
+- Release the work instruction before approval.
+- Implement the fixture change before impact assessment.
+- Treat expected defect reduction as approval.

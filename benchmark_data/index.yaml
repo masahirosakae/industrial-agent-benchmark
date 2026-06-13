@@ -1,7 +1,7 @@
 version: '1.1'
-total_count: 170
+total_count: 180
 by_layer:
-  industrial_agent: 50
+  industrial_agent: 60
   industrial_knowledge: 60
   industrial_reasoning: 60
 items:
@@ -1535,3 +1535,93 @@ items:
   estimated_time_min: 60
   primary_skill: human_in_the_loop
   file_path: benchmark_data/agent/human_in_the_loop/IA-HIL-013.yaml
+- id: IA-WD-005
+  layer: industrial_agent
+  category: workflow_design
+  domain: general_manufacturing
+  subdomain: quality_assurance
+  difficulty: 3
+  estimated_time_min: 35
+  primary_skill: workflow_design
+  file_path: benchmark_data/agent/workflow_design/IA-WD-005.yaml
+- id: IA-WD-006
+  layer: industrial_agent
+  category: workflow_design
+  domain: general_manufacturing
+  subdomain: process_engineering
+  difficulty: 4
+  estimated_time_min: 45
+  primary_skill: workflow_design
+  file_path: benchmark_data/agent/workflow_design/IA-WD-006.yaml
+- id: IA-WD-007
+  layer: industrial_agent
+  category: workflow_design
+  domain: general_manufacturing
+  subdomain: inspection
+  difficulty: 3
+  estimated_time_min: 35
+  primary_skill: workflow_design
+  file_path: benchmark_data/agent/workflow_design/IA-WD-007.yaml
+- id: IA-WD-008
+  layer: industrial_agent
+  category: workflow_design
+  domain: general_manufacturing
+  subdomain: production_control
+  difficulty: 4
+  estimated_time_min: 45
+  primary_skill: workflow_design
+  file_path: benchmark_data/agent/workflow_design/IA-WD-008.yaml
+- id: IA-WD-009
+  layer: industrial_agent
+  category: workflow_design
+  domain: automotive
+  subdomain: supply_chain_management
+  difficulty: 3
+  estimated_time_min: 35
+  primary_skill: workflow_design
+  file_path: benchmark_data/agent/workflow_design/IA-WD-009.yaml
+- id: IA-WD-010
+  layer: industrial_agent
+  category: workflow_design
+  domain: general_manufacturing
+  subdomain: maintenance
+  difficulty: 3
+  estimated_time_min: 35
+  primary_skill: workflow_design
+  file_path: benchmark_data/agent/workflow_design/IA-WD-010.yaml
+- id: IA-WD-011
+  layer: industrial_agent
+  category: workflow_design
+  domain: general_manufacturing
+  subdomain: inspection
+  difficulty: 4
+  estimated_time_min: 45
+  primary_skill: workflow_design
+  file_path: benchmark_data/agent/workflow_design/IA-WD-011.yaml
+- id: IA-WD-012
+  layer: industrial_agent
+  category: workflow_design
+  domain: automotive
+  subdomain: quality_assurance
+  difficulty: 4
+  estimated_time_min: 45
+  primary_skill: workflow_design
+  file_path: benchmark_data/agent/workflow_design/IA-WD-012.yaml
+- id: IA-WD-013
+  layer: industrial_agent
+  category: workflow_design
+  domain: general_manufacturing
+  subdomain: quality_assurance
+  difficulty: 3
+  estimated_time_min: 35
+  primary_skill: workflow_design
+  file_path: benchmark_data/agent/workflow_design/IA-WD-013.yaml
+- id: IA-WD-014
+  layer: industrial_agent
+  category: workflow_design
+  domain: general_manufacturing
+  subdomain: quality_assurance
+  difficulty: 5
+  estimated_time_min: 60
+  primary_skill: workflow_design
+  file_path: benchmark_data/agent/workflow_design/IA-WD-014.yaml

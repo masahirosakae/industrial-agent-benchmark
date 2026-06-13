@@ -169,3 +169,13 @@ IA-HIL-010,industrial_agent,human_in_the_loop,automotive,supply_chain_management
 IA-HIL-011,industrial_agent,human_in_the_loop,general_manufacturing,process_engineering,4,45,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-011.yaml
 IA-HIL-012,industrial_agent,human_in_the_loop,general_manufacturing,quality_assurance,4,45,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-012.yaml
 IA-HIL-013,industrial_agent,human_in_the_loop,medical_device,quality_assurance,5,60,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-013.yaml
+IA-WD-005,industrial_agent,workflow_design,general_manufacturing,quality_assurance,3,35,workflow_design,benchmark_data/agent/workflow_design/IA-WD-005.yaml
+IA-WD-006,industrial_agent,workflow_design,general_manufacturing,process_engineering,4,45,workflow_design,benchmark_data/agent/workflow_design/IA-WD-006.yaml
+IA-WD-007,industrial_agent,workflow_design,general_manufacturing,inspection,3,35,workflow_design,benchmark_data/agent/workflow_design/IA-WD-007.yaml
+IA-WD-008,industrial_agent,workflow_design,general_manufacturing,production_control,4,45,workflow_design,benchmark_data/agent/workflow_design/IA-WD-008.yaml
+IA-WD-009,industrial_agent,workflow_design,automotive,supply_chain_management,3,35,workflow_design,benchmark_data/agent/workflow_design/IA-WD-009.yaml
+IA-WD-010,industrial_agent,workflow_design,general_manufacturing,maintenance,3,35,workflow_design,benchmark_data/agent/workflow_design/IA-WD-010.yaml
+IA-WD-011,industrial_agent,workflow_design,general_manufacturing,inspection,4,45,workflow_design,benchmark_data/agent/workflow_design/IA-WD-011.yaml
+IA-WD-012,industrial_agent,workflow_design,automotive,quality_assurance,4,45,workflow_design,benchmark_data/agent/workflow_design/IA-WD-012.yaml
+IA-WD-013,industrial_agent,workflow_design,general_manufacturing,quality_assurance,3,35,workflow_design,benchmark_data/agent/workflow_design/IA-WD-013.yaml
+IA-WD-014,industrial_agent,workflow_design,general_manufacturing,quality_assurance,5,60,workflow_design,benchmark_data/agent/workflow_design/IA-WD-014.yaml
