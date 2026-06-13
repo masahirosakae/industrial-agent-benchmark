@@ -37,3 +37,5 @@ scripts/write_fugu_answers.py
 __pycache__/
 **/__pycache__/
 *.pyc
+
+*.pid
