@@ -21,7 +21,7 @@ size_categories:
 
 ## Overview
 
-Industrial Agent Benchmark is a public benchmark dataset for evaluating industrial and manufacturing agent capabilities. Version 2.0.0 packages the public benchmark questions as Hugging Face-compatible JSONL while keeping evaluation scripts and generated outputs outside the dataset artifact.
+Industrial Agent Benchmark is a public benchmark dataset for evaluating industrial and manufacturing agent capabilities. Version 2.0.0 packages 180 public benchmark questions as Hugging Face-compatible JSONL while keeping evaluation scripts and generated outputs outside the dataset artifact.
 
 The dataset is intended to be loaded as:
 
@@ -61,6 +61,36 @@ docs/dataset_schema_v2.md
 docs/dataset_export_v2.md
 ```
 
+## Dataset Summary
+
+The v2.0.0 release candidate contains 180 public synthetic benchmark questions.
+
+| Layer | Count | Focus |
+|---|---:|---|
+| Knowledge | 60 | Manufacturing facts, procedures, constraints, governance, and reference-answer correctness. |
+| Reasoning | 60 | Root-cause analysis, risk tradeoffs, data integrity, CAPA, and numeric capacity planning. |
+| Agent | 60 | Workflow design, tool use, human approval boundaries, safety, structured decisions, and auditability. |
+| Total | 180 | Balanced public benchmark split. |
+
+Category distribution:
+
+| Layer | Category | Count |
+|---|---|---:|
+| Knowledge | `change_control` | 10 |
+| Knowledge | `maintenance_engineering` | 10 |
+| Knowledge | `improvement`, `manufacturing_execution`, `manufacturing_preparation`, `order`, `procurement`, `production_planning`, `quality`, `shipping` | 5 each |
+| Reasoning | `data_integrity`, `numeric_capacity_planning`, `risk_tradeoff` | 10 each |
+| Reasoning | `5why`, `abnormality_analysis`, `capa`, `fmea`, `fta`, `quality_improvement` | 5 each |
+| Agent | `human_in_the_loop` | 13 |
+| Agent | `workflow_design` | 14 |
+| Agent | `agent_safety`, `hil_boundary`, `structured_decision`, `tool_trajectory` | 5 each |
+| Agent | `agent_design` | 4 |
+| Agent | `mcp`, `multi_agent_coordination`, `tool_selection` | 3 each |
+
+## Task Format
+
+Items are prompt-style benchmark records. A model or agent receives `context` and `question`, then produces a text or structured answer. Public `answer` and `rubric` fields are included for evaluation development and reproducibility.
+
 ## Splits
 
 | Split | Status | Description |
@@ -69,7 +99,7 @@ docs/dataset_export_v2.md
 | `dev` | Planned | Small public examples for tool and evaluation debugging. |
 | `private` | Reserved | Reserved name only; not published in GitHub. |
 
-The v2.0.0 prototype currently exports the public `test` split.
+The v2.0.0 release candidate exports the public `test` split with 180 records.
 
 ## Schema
 
@@ -131,6 +161,13 @@ Optional but schema-stable fields:
 - `notes`
 
 The `answer` field is a public reference answer, not a model output.
+
+## Intended Use
+
+- Evaluate industrial and manufacturing agent capabilities.
+- Develop public evaluation harnesses and judge workflows.
+- Test handling of manufacturing constraints, approval boundaries, evidence traceability, and structured reasoning.
+- Support local, reproducible benchmark experimentation without committing generated answers or run artifacts.
 
 ## Limitations
 

@@ -22,6 +22,7 @@ The target composition should keep the three layers balanced enough that a high 
 
 Current public categories:
 
+- `change_control`
 - `order`
 - `production_planning`
 - `procurement`
@@ -34,7 +35,6 @@ Current public categories:
 
 Priority candidate categories:
 
-- `change_control`
 - `compliance`
 - `factory_management`
 
@@ -50,9 +50,6 @@ Current public categories:
 - `abnormality_analysis`
 - `risk_tradeoff`
 - `data_integrity`
-
-Priority candidate category:
-
 - `numeric_capacity_planning`
 
 ### Agent Categories
@@ -104,23 +101,24 @@ Recommended per-category targets:
 | Reasoning | Numeric reasoning categories | 10 |
 | Agent | Official agent capability categories | 10 |
 
-For v2.0.0 alpha, the current 140-question public set is acceptable as a frozen baseline while schema, loading, and evaluation workflows stabilize.
+The v2.0.0 release candidate has reached this 180-question stable target.
 
 ## 4. Current Coverage
 
-Current public YAML coverage is 140 questions.
+Current public YAML coverage is 180 questions.
 
 | Layer | Current count |
 |---|---:|
-| Knowledge | 50 |
-| Reasoning | 50 |
-| Agent | 40 |
-| Total | 140 |
+| Knowledge | 60 |
+| Reasoning | 60 |
+| Agent | 60 |
+| Total | 180 |
 
 ### Current Knowledge Coverage
 
 | Category | Count |
 |---|---:|
+| `change_control` | 10 |
 | `improvement` | 5 |
 | `maintenance_engineering` | 10 |
 | `manufacturing_execution` | 5 |
@@ -141,6 +139,7 @@ Current public YAML coverage is 140 questions.
 | `data_integrity` | 10 |
 | `fmea` | 5 |
 | `fta` | 5 |
+| `numeric_capacity_planning` | 10 |
 | `quality_improvement` | 5 |
 | `risk_tradeoff` | 10 |
 
@@ -151,42 +150,39 @@ Current public YAML coverage is 140 questions.
 | `agent_design` | 4 |
 | `agent_safety` | 5 |
 | `hil_boundary` | 5 |
-| `human_in_the_loop` | 3 |
+| `human_in_the_loop` | 13 |
 | `mcp` | 3 |
 | `multi_agent_coordination` | 3 |
 | `structured_decision` | 5 |
 | `tool_selection` | 3 |
 | `tool_trajectory` | 5 |
-| `workflow_design` | 4 |
+| `workflow_design` | 14 |
 
 ## 5. Gap Analysis
 
 ### Layer Balance
 
-The current dataset is close to balanced between Knowledge and Reasoning but underweights Agent coverage.
+The v2.0.0 release candidate reaches the stable 60/60/60 layer balance.
 
 | Layer | Current | Stable target | Gap |
 |---|---:|---:|---:|
-| Knowledge | 50 | 60 | 10 |
-| Reasoning | 50 | 60 | 10 |
-| Agent | 40 | 60 | 20 |
-| Total | 140 | 180 | 40 |
+| Knowledge | 60 | 60 | 0 |
+| Reasoning | 60 | 60 | 0 |
+| Agent | 60 | 60 | 0 |
+| Total | 180 | 180 | 0 |
 
 ### Knowledge Gaps
 
-The strongest gap is industrial governance knowledge:
+The v2.0.0 release candidate adds `change_control` as the first industrial governance knowledge expansion. Remaining governance expansion candidates are:
 
-- change control
 - compliance
-- customer approval boundaries
-- revision and effective-date control
-- audit-ready release criteria
+- factory management
 
-These areas are important because they connect factual knowledge with agent safety and human approval requirements.
+These areas remain useful v2.1.0 candidates but are not required for the v2.0.0 release candidate.
 
 ### Reasoning Gaps
 
-The strongest reasoning gap is objective numeric reasoning:
+The v2.0.0 release candidate adds `numeric_capacity_planning` to cover objective numeric reasoning:
 
 - takt time
 - capacity constraints
@@ -195,15 +191,14 @@ The strongest reasoning gap is objective numeric reasoning:
 - staffing and equipment count reasoning
 - schedule feasibility under constraints
 
-Current reasoning coverage is strong for quality methods and risk/data integrity, but less complete for quantitative planning.
+Current reasoning coverage now includes quality methods, risk/data integrity, and quantitative planning.
 
 ### Agent Gaps
 
-Agent coverage should be normalized around the official capability categories.
+Agent coverage has been expanded with `human_in_the_loop` and `workflow_design` items. Agent categories still include legacy or adjacent categories, but the release candidate reaches the 60-item Agent target.
 
-Main gaps:
+Remaining future cleanup candidates:
 
-- `tool_selection`, `human_in_the_loop`, and `workflow_design` have fewer than five current items.
 - `hil_boundary` overlaps with `human_in_the_loop` and should be clarified.
 - `agent_design`, `mcp`, and `multi_agent_coordination` may be useful, but they are less aligned with the official executable judge categories.
 - Executable state-machine scenarios are not yet represented as first-class dataset fixtures.
@@ -229,15 +224,14 @@ Lower-priority but valuable v2.1.0 categories:
 - richer maintenance work-order execution scenarios
 - supplier quality escalation scenarios
 
-## 7. v2.0.0 Alpha Scope
+## 7. v2.0.0 Release Candidate Scope
 
-The v2.0.0 alpha scope should prioritize public usability and evaluation architecture over dataset expansion.
+The v2.0.0 release candidate scope prioritizes a stable public dataset artifact and local validation/export workflow.
 
-Recommended alpha scope:
+Included in the release candidate:
 
-- publish the current public YAML-derived dataset as HF-compatible JSONL
-- keep the current 140 public questions as the alpha coverage baseline
-- document the target 180-question stable composition
+- publish the current 180-question public YAML-derived dataset as HF-compatible JSONL
+- document the achieved 60/60/60 layer composition
 - validate dataset schema and loading
 - provide simple evaluation with pre-written answer JSONL
 - provide placeholder deterministic judge plumbing
@@ -245,13 +239,14 @@ Recommended alpha scope:
 - avoid leaderboard implementation until result compatibility rules are stable
 - avoid committing generated evaluation outputs
 
-Optional alpha additions, only if validated public items are available:
+Included content expansions:
 
-- a small `reasoning/numeric_capacity_planning` pilot
-- a small `knowledge/change_control` pilot
-- normalization of overlapping HIL categories in documentation
+- `reasoning/numeric_capacity_planning`
+- `knowledge/change_control`
+- `agent/human_in_the_loop`
+- `agent/workflow_design`
 
-Alpha non-goals:
+Release candidate non-goals:
 
 - no private evaluation publication
 - no leaderboard
@@ -265,9 +260,7 @@ v2.1.0 should expand benchmark coverage after the v2.0.0 dataset and evaluation 
 
 Recommended v2.1.0 expansion:
 
-- grow toward the 180-question balanced target, or revise the target based on alpha usage
-- add full `numeric_capacity_planning` coverage
-- add validated `change_control` coverage
+- revise the 180-question target based on release-candidate usage
 - add conservative `compliance` coverage
 - decide whether `factory_management` belongs in core scope or an expansion track
 - consolidate or rename overlapping agent categories

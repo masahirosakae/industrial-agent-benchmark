@@ -8,11 +8,11 @@ Industrial Agent Benchmark is a public benchmark project for evaluating industri
 |---|---|---|
 | v1.0 | Public baseline | Initial 90-problem benchmark and judge methodology. |
 | v1.1.0 | Frozen pre-release snapshot | 140 public problem files, `evaluation_set_v2`, and Judge v2 materials. No further evaluation-result cleanup is planned on this line. |
-| v2.0.0 | Active development | New architecture line targeting an HLE-style public workflow. |
+| v2.0.0 | Release candidate | 180-question public dataset with HF-compatible JSONL export and public validation workflow. |
 
-v1.1.0 is frozen as a pre-release benchmark snapshot. The v1.1.0 dataset and evaluation materials remain available for inspection and compatibility work, but active development has moved to v2.0.0.
+v1.1.0 is frozen as a pre-release benchmark snapshot. The v1.1.0 dataset and evaluation materials remain available for inspection and compatibility work, but the public release candidate line is v2.0.0.
 
-v2.0.0 aims to follow an HLE-style workflow:
+v2.0.0 follows an HLE-style public workflow:
 
 - dataset loaded through Hugging Face Datasets
 - GitHub repository provides evaluation scripts and documentation
@@ -21,6 +21,17 @@ v2.0.0 aims to follow an HLE-style workflow:
 - no private model evaluation artifacts committed
 
 The public repository does not include raw model answers, model-specific evaluation outputs, private reports, API keys, provider credentials, or unpublished model-evaluation artifacts.
+
+## v2.0.0 Dataset Composition
+
+The v2.0.0 release candidate contains 180 public benchmark questions:
+
+| Layer | Count |
+|---|---:|
+| Industrial Knowledge | 60 |
+| Industrial Reasoning | 60 |
+| Industrial Agent | 60 |
+| Total | 180 |
 
 ## 1. Benchmark Scope
 
@@ -111,7 +122,7 @@ python scripts/validate_dataset.py
 Expected output:
 
 ```text
-Checked: 140 problem files
+Checked: 180 problem files
 Errors: 0
 Warnings:0
 ```
@@ -171,7 +182,7 @@ Load the local JSONL dataset with Hugging Face Datasets:
 python examples/load_dataset_v2.py
 ```
 
-Hugging Face hosted loading is planned, but it is not required until the dataset is published. For now, the local JSONL export is the supported v2.0.0 prototype workflow.
+Hugging Face hosted loading is planned for publication. The local JSONL export is the supported v2.0.0 release-candidate workflow and should produce 180 records.
 
 ## 6. Simple Evaluation v2
 

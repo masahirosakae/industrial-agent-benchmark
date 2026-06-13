@@ -1,6 +1,19 @@
 # Industrial Agent Benchmark
 
-This is the English public README for Industrial Agent Benchmark. v1.1.0 is frozen as a pre-release benchmark snapshot, and v2.0.0 is the active development line.
+This is the English public README for Industrial Agent Benchmark. v1.1.0 is frozen as a pre-release benchmark snapshot, and v2.0.0 is the current public release-candidate line.
+
+## v2.0.0 Dataset Composition
+
+The v2.0.0 release candidate contains 180 public benchmark questions:
+
+| Layer | Count |
+|---|---:|
+| Industrial Knowledge | 60 |
+| Industrial Reasoning | 60 |
+| Industrial Agent | 60 |
+| Total | 180 |
+
+The dataset is exported as Hugging Face-compatible JSONL at `data/v2/test.jsonl`.
 
 ## Quick Start
 
@@ -22,7 +35,7 @@ python scripts/validate_dataset.py
 Expected output:
 
 ```text
-Checked: 140 problem files
+Checked: 180 problem files
 Errors: 0
 Warnings:0
 ```
@@ -82,7 +95,7 @@ Load the local JSONL dataset with Hugging Face Datasets:
 python examples/load_dataset_v2.py
 ```
 
-Hugging Face hosted loading is planned, but it is not required until the dataset is published. For now, the local JSONL export is the supported v2.0.0 prototype workflow.
+Hugging Face hosted loading is planned for publication. The local JSONL export is the supported v2.0.0 release-candidate workflow and should produce 180 records.
 
 ## Public Artifact Policy
 

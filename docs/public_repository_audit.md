@@ -1,10 +1,12 @@
-# Public Repository Audit
+# Public Repository Audit v2.0.0 Release Candidate
 
 Repository: `industrial-agent-benchmark`
 
-Date: 2026-06-08
+Date: 2026-06-14
 
-Scope: public-clone readiness for Industrial Agent Benchmark v1.1.0-pre. This audit focuses on whether a fresh public clone can validate and inspect the benchmark without unpublished answer/result artifacts.
+Scope: public-clone readiness for Industrial Agent Benchmark v2.0.0 release candidate. This audit focuses on whether a fresh public clone can validate, export, and inspect the 180-question benchmark without unpublished answer/result artifacts.
+
+This document supersedes the earlier v1.1.0-pre public repository audit notes.
 
 ## Fresh Clone Validation
 
@@ -17,18 +19,23 @@ Expected public-clone behavior:
    pip install pyyaml
    ```
 
-3. Validate dataset:
+3. Validate dataset and exported HF-compatible JSONL:
 
    ```bash
    python scripts/validate_dataset.py
+   python scripts/export_hf_dataset_v2.py
+   python scripts/validate_hf_dataset_v2.py data/v2/test.jsonl
    ```
 
 Expected result:
 
 ```text
-Checked: 140 problem files
+Checked: 180 problem files
 Errors: 0
-Warnings:0
+Warnings: 0
+Exported 180 records to data/v2/test.jsonl
+Checked: 180 records
+Errors: 0
 ```
 
 Fresh clones are not expected to contain:
@@ -49,8 +56,10 @@ The README Quick Start has been changed to a public-safe flow:
 
 1. Install `pyyaml`.
 2. Run `python scripts/validate_dataset.py`.
-3. Inspect public YAML question files.
-4. Treat Judge v2 input generation as an advanced workflow that requires locally generated answer files.
+3. Run `python scripts/export_hf_dataset_v2.py`.
+4. Run `python scripts/validate_hf_dataset_v2.py data/v2/test.jsonl`.
+5. Inspect public YAML question files or the HF-compatible JSONL export.
+6. Treat Judge v2 input generation as an advanced workflow that requires locally generated answer files.
 
 Judge v2 input generation is now documented with its prerequisite:
 
@@ -65,12 +74,17 @@ results_v2/<model_id>/answers/<question_id>.txt
 Public-safe artifacts:
 
 - `benchmark_data/`
+- `data/v2/test.jsonl`
+- `dataset_card.md`
+- `LICENSE_DATASET.md`
 - `evaluation_set_v1.yaml`
 - `evaluation_set_v2.yaml`
 - `judge_template.md`
 - `judge_template_v2.md`
 - `scripts/generate_dataset.py`
 - `scripts/validate_dataset.py`
+- `scripts/export_hf_dataset_v2.py`
+- `scripts/validate_hf_dataset_v2.py`
 - `scripts/prepare_judge_inputs_v2.py`
 - public benchmark documentation under `docs/`
 
@@ -100,9 +114,14 @@ industrial-agent-benchmark/
     reasoning/
     agent/
   docs/
+  data/
+    v2/
+      test.jsonl
   scripts/
     generate_dataset.py
     validate_dataset.py
+    export_hf_dataset_v2.py
+    validate_hf_dataset_v2.py
     prepare_judge_inputs_v2.py
   evaluation_set_v1.yaml
   evaluation_set_v2.yaml
@@ -232,9 +251,24 @@ python scripts/validate_dataset.py
 Expected:
 
 ```text
-Checked: 140 problem files
+Checked: 180 problem files
 Errors: 0
-Warnings:0
+Warnings: 0
+```
+
+### HF-Compatible JSONL Export
+
+```bash
+python scripts/export_hf_dataset_v2.py
+python scripts/validate_hf_dataset_v2.py data/v2/test.jsonl
+```
+
+Expected:
+
+```text
+Exported 180 records to data/v2/test.jsonl
+Checked: 180 records
+Errors: 0
 ```
 
 ### README Quick Start Failure Before Fix
@@ -274,7 +308,7 @@ python scripts/validate_dataset.py
 3. Add hand-written toy sample answers only if end-to-end Judge v2 sample generation is desired.
 4. Remove or privatize tracked historical model-evaluation execution reports before public release.
 5. Keep `.gitignore` explicit about generated outputs, private reports, Python caches, and secret files.
-6. Run the final validation commands immediately before tagging or publishing v1.1.0-pre.
+6. Run the final validation commands immediately before tagging or publishing v2.0.0.
 
 ## Final Validation Commands
 
@@ -282,22 +316,24 @@ Run or document the following before public release:
 
 ```bash
 python scripts/validate_dataset.py
-python scripts/generate_dataset.py
-python scripts/validate_dataset.py
-python scripts/prepare_judge_inputs_v2.py model_a
+python scripts/export_hf_dataset_v2.py
+python scripts/validate_hf_dataset_v2.py data/v2/test.jsonl
 ```
 
 Expected result:
 
-- `validate_dataset.py` passes.
-- `generate_dataset.py` regenerates index files without unexpected diffs.
-- `prepare_judge_inputs_v2.py model_a` fails with a clear expected message unless answers exist.
+- `validate_dataset.py` checks 180 problem files with zero errors and warnings.
+- `export_hf_dataset_v2.py` exports 180 records to `data/v2/test.jsonl`.
+- `validate_hf_dataset_v2.py data/v2/test.jsonl` checks 180 records with zero errors.
 
-## v1.1.0-pre Public Release Checklist
+## v2.0.0 Release Candidate Checklist
 
 - [ ] Fresh clone completes.
 - [ ] README Quick Start has no missing-artifact commands.
-- [ ] Dataset validation passes.
+- [ ] README, README_EN, dataset card, and docs describe v2.0.0 as 180 questions.
+- [ ] Layer distribution is documented as Knowledge 60, Reasoning 60, Agent 60.
+- [ ] Dataset validation passes for 180 problem files.
+- [ ] HF-compatible JSONL export contains 180 records.
 - [ ] `evaluation_set_v2.yaml` references existing question IDs.
 - [ ] Judge v2 workflow clearly states answer-file prerequisite.
 - [ ] `results_v2/` is absent from git and ignored.
@@ -307,4 +343,4 @@ Expected result:
 - [ ] No private reports are committed.
 - [ ] No API keys, `.env`, tokens, or provider secrets are committed.
 - [ ] No unreleased model names or model-ID mapping are exposed.
-- [ ] README and docs consistently describe v1.1.0-pre public scope.
+- [ ] README and docs consistently describe v2.0.0 release-candidate public scope.

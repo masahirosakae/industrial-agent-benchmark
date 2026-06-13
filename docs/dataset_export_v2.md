@@ -1,6 +1,6 @@
 # Dataset Export v2.0.0
 
-This document describes the v2.0.0 prototype export from public benchmark YAML to Hugging Face-compatible JSONL.
+This document describes the v2.0.0 release-candidate export from public benchmark YAML to Hugging Face-compatible JSONL.
 
 ## Source
 
@@ -21,6 +21,15 @@ data/v2/test.jsonl
 ```
 
 The `test` split contains public benchmark questions.
+
+For v2.0.0, `data/v2/test.jsonl` contains 180 records:
+
+| Layer | Count |
+|---|---:|
+| Knowledge | 60 |
+| Reasoning | 60 |
+| Agent | 60 |
+| Total | 180 |
 
 ## Schema
 
