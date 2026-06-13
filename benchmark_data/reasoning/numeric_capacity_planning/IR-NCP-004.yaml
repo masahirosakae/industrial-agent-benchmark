@@ -1,0 +1,77 @@
+schema_version: '1.1'
+id: IR-NCP-004
+layer: industrial_reasoning
+category: numeric_capacity_planning
+domain: heavy_machinery
+subdomain: welding
+difficulty: 3
+estimated_time_min: 30
+title: Multi-process Bottleneck Capacity
+scenario: |
+  A product passes through cutting, welding, and inspection in sequence.
+  Per-shift capacities are cutting 520 units, welding 460 units, and inspection 500 units.
+  Customer demand is 480 units per shift.
+question: |
+  Identify the bottleneck process, determine whether the line can meet demand, and calculate the shortfall or margin.
+expected_skills:
+- bottleneck_reasoning
+- capacity_calculation
+- feasibility_judgement
+- evidence_traceability
+primary_skill: bottleneck_reasoning
+secondary_skills:
+- capacity_calculation
+- feasibility_judgement
+- evidence_traceability
+reference_answer: |
+  In a serial process, line capacity is limited by the lowest process capacity.
+  Cutting can make 520 units per shift, welding can make 460 units per shift, and inspection can process 500 units per shift.
+  Welding is the bottleneck at 460 units per shift.
+  Demand is 480 units per shift, so the line is short by 480 - 460 = 20 units per shift and cannot meet demand as currently constrained.
+evaluation_rubric:
+  must_have:
+  - Compares all three process capacities.
+  - Identifies welding as the bottleneck.
+  - Uses 460 units per shift as the line capacity.
+  - Concludes the line is infeasible for 480 units per shift.
+  - Calculates a 20-unit per shift shortfall.
+  nice_to_have:
+  - Explains why serial capacity is limited by the minimum process capacity.
+  - Avoids averaging capacities.
+  critical_failures:
+  - Averages process capacities to decide feasibility.
+  - Selects cutting or inspection as the bottleneck.
+  - Treats 480 units per shift as feasible without addressing the 460-unit welding limit.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Bottleneck is not identified as welding.
+  max_score: 2
+  reason: Bottleneck identification is central to the item.
+- condition: Uses average capacity as line capacity.
+  max_score: 1
+  reason: Averaging serial process capacities is invalid.
+numeric_checks:
+- name: bottleneck_capacity
+  expected_value: 460
+  tolerance: exact
+  unit: units_per_shift
+  required: true
+- name: shortfall
+  expected_value: 20
+  tolerance: exact
+  unit: units_per_shift
+  required: true
+- name: feasibility
+  expected_value: infeasible
+  tolerance: exact
+  unit: decision
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - generic_framework_only
+disallowed_answers:
+- The line is feasible because average capacity exceeds demand.
+- Cutting is the bottleneck.
+- Inspection is the bottleneck.

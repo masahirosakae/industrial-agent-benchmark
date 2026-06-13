@@ -40,6 +40,7 @@ VALID_CATEGORIES = {
     },
     "industrial_reasoning": {
         "fta","5why","fmea","capa","quality_improvement","abnormality_analysis","risk_tradeoff","data_integrity",
+        "numeric_capacity_planning",
     },
     "industrial_agent": {
         "workflow_design","agent_design","mcp","tool_selection",
@@ -66,6 +67,7 @@ CATEGORY_PREFIX = {
     "quality":"QUAL","shipping":"SHIP","improvement":"IMPR","maintenance_engineering":"MAINT",
     "fta":"FTA","5why":"5WHY","fmea":"FMEA","capa":"CAPA",
     "quality_improvement":"QI","abnormality_analysis":"AA","risk_tradeoff":"RT","data_integrity":"DI",
+    "numeric_capacity_planning":"NCP",
     "workflow_design":"WD","agent_design":"AD","mcp":"MCP",
     "tool_selection":"TS","human_in_the_loop":"HIL",
     "multi_agent_coordination":"MAC","agent_safety":"AS","structured_decision":"SD","tool_trajectory":"TT","hil_boundary":"HILB",
@@ -407,4 +409,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

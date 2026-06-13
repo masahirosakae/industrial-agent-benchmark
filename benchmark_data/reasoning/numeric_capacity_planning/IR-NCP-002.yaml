@@ -1,0 +1,80 @@
+schema_version: '1.1'
+id: IR-NCP-002
+layer: industrial_reasoning
+category: numeric_capacity_planning
+domain: electronics
+subdomain: inspection
+difficulty: 3
+estimated_time_min: 25
+title: Availability Adjusted Test Capacity
+scenario: |
+  A test machine runs 7.5 net hours per shift. Its nominal rate is 80 units per hour.
+  Planned availability is 85% after setup losses and minor stoppages. Daily demand is 500 tested units.
+question: |
+  Calculate the effective tested-unit capacity per shift and decide whether one machine can meet the daily demand.
+  Explain the margin or shortfall.
+expected_skills:
+- capacity_calculation
+- constraint_handling
+- feasibility_judgement
+- numeric_result_explanation
+primary_skill: capacity_calculation
+secondary_skills:
+- constraint_handling
+- feasibility_judgement
+- numeric_result_explanation
+reference_answer: |
+  Nominal shift capacity is 7.5 hours * 80 units/hour = 600 units per shift.
+  Applying planned availability gives 600 * 0.85 = 510 tested units per shift.
+  Demand is 500 tested units, so one machine is feasible with a margin of 10 units per shift.
+  The margin is small, so the plan should be monitored for additional downtime or demand variation.
+evaluation_rubric:
+  must_have:
+  - Calculates nominal capacity as 600 units per shift.
+  - Applies 85% availability to calculate 510 effective units per shift.
+  - Compares 510 effective units with 500 units of demand.
+  - Concludes one machine is feasible.
+  nice_to_have:
+  - Notes the 10-unit margin is small.
+  - Mentions monitoring downtime or demand changes.
+  critical_failures:
+  - Ignores availability and reports 600 units as the effective capacity.
+  - Treats the plan as infeasible despite 510 units exceeding 500 units.
+  - Uses availability in the wrong direction and changes the decision.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Effective capacity ignores planned availability.
+  max_score: 2
+  reason: Availability is a central constraint.
+- condition: Final feasibility decision is wrong.
+  max_score: 2
+  reason: The item requires a numeric feasibility decision.
+numeric_checks:
+- name: nominal_capacity
+  expected_value: 600
+  tolerance: exact
+  unit: units_per_shift
+  required: true
+- name: effective_capacity
+  expected_value: 510
+  tolerance: +/-1
+  unit: units_per_shift
+  required: true
+- name: margin
+  expected_value: 10
+  tolerance: +/-1
+  unit: units_per_shift
+  required: true
+- name: feasibility
+  expected_value: feasible
+  tolerance: exact
+  unit: decision
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - generic_framework_only
+disallowed_answers:
+- Effective capacity is 600 units per shift.
+- One machine cannot meet 500 units because availability is 85%.

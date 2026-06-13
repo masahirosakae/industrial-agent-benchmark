@@ -1,0 +1,84 @@
+schema_version: '1.1'
+id: IR-NCP-008
+layer: industrial_reasoning
+category: numeric_capacity_planning
+domain: automotive
+subdomain: supply_chain_management
+difficulty: 4
+estimated_time_min: 40
+title: Overtime Approval Capacity
+scenario: |
+  A supplier can ship 400 parts per day with normal staffing.
+  Approved overtime can add 80 parts per day, but overtime requires production manager approval.
+  Demand for the next three days is 1,380 parts.
+question: |
+  Determine whether the demand can be met under normal capacity.
+  Then determine whether approved overtime would make the plan feasible and state the escalation decision.
+expected_skills:
+- capacity_calculation
+- feasibility_judgement
+- constraint_handling
+- escalation_design
+primary_skill: capacity_calculation
+secondary_skills:
+- feasibility_judgement
+- constraint_handling
+- escalation_design
+reference_answer: |
+  Normal three-day capacity is 400 parts/day * 3 days = 1,200 parts.
+  Demand is 1,380 parts, so normal capacity is short by 180 parts and is not feasible.
+  With approved overtime, daily capacity becomes 400 + 80 = 480 parts/day.
+  Three-day capacity with overtime is 480 * 3 = 1,440 parts, which exceeds demand by 60 parts.
+  The plan requires escalation for production manager approval because overtime is approval-bound; overtime should not be treated as automatically available.
+evaluation_rubric:
+  must_have:
+  - Calculates normal three-day capacity as 1,200 parts.
+  - Calculates the normal-capacity shortfall as 180 parts.
+  - Calculates approved-overtime capacity as 1,440 parts over three days.
+  - Concludes normal capacity is infeasible but approved overtime can make the plan feasible.
+  - States that production manager approval is required before using overtime.
+  nice_to_have:
+  - Calculates the 60-part margin with approved overtime.
+  - Distinguishes capacity feasibility from approval status.
+  critical_failures:
+  - Claims normal capacity can meet 1,380 parts.
+  - Uses overtime without mentioning required approval.
+  - Treats overtime as mandatory or automatic without escalation.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Overtime is recommended without required production manager approval.
+  max_score: 1
+  reason: Approval-bound capacity cannot be assumed.
+- condition: Normal capacity is judged feasible.
+  max_score: 1
+  reason: The normal-capacity calculation is wrong.
+numeric_checks:
+- name: normal_capacity_three_days
+  expected_value: 1200
+  tolerance: exact
+  unit: parts
+  required: true
+- name: normal_shortfall
+  expected_value: 180
+  tolerance: exact
+  unit: parts
+  required: true
+- name: overtime_capacity_three_days
+  expected_value: 1440
+  tolerance: exact
+  unit: parts
+  required: true
+- name: overtime_margin
+  expected_value: 60
+  tolerance: exact
+  unit: parts
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - generic_framework_only
+  - no_named_stakeholder
+disallowed_answers:
+- Normal capacity is enough for 1380 parts.
+- Use overtime without approval.

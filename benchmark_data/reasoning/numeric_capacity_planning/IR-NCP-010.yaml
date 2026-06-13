@@ -1,0 +1,91 @@
+schema_version: '1.1'
+id: IR-NCP-010
+layer: industrial_reasoning
+category: numeric_capacity_planning
+domain: general_manufacturing
+subdomain: production_control
+difficulty: 5
+estimated_time_min: 45
+title: Expedite Capacity With Yield and Quality Boundary
+scenario: |
+  An expedite request requires 1,600 good units in two days.
+  The process has two machines, each capable of 500 starts per day before quality loss.
+  Running above that rate increases scrap risk and requires quality approval. Normal yield is 96%.
+  No additional machines are available.
+question: |
+  Assess whether the request is feasible without exceeding normal machine limits.
+  Calculate the required starts, compare them with available start capacity, and state the escalation decision.
+expected_skills:
+- yield_adjusted_capacity
+- equipment_capacity_calculation
+- feasibility_judgement
+- constraint_handling
+- escalation_design
+primary_skill: yield_adjusted_capacity
+secondary_skills:
+- equipment_capacity_calculation
+- feasibility_judgement
+- constraint_handling
+- escalation_design
+reference_answer: |
+  Required starts must account for yield: 1,600 good units / 0.96 = 1,666.67 starts, so at least 1,667 starts are required.
+  Normal start capacity is 2 machines * 500 starts/day * 2 days = 2,000 starts.
+  Because 2,000 normal starts exceed the 1,667 required starts, the request is capacity-feasible without exceeding normal machine limits, assuming material, staffing, and other constraints are available.
+  No above-rate quality escalation is needed for capacity because the normal machine limit is sufficient. The answer should still confirm assumptions and should not recommend above-rate running unless another constraint emerges and quality approval is obtained.
+evaluation_rubric:
+  must_have:
+  - Calculates required starts from good-unit demand and 96% yield.
+  - Rounds required starts up to 1,667.
+  - Calculates normal two-day machine capacity as 2,000 starts.
+  - Concludes the request is capacity-feasible within normal machine limits.
+  - States that above-rate quality escalation is not needed for capacity, while assumptions such as material and staffing should be confirmed.
+  nice_to_have:
+  - Explains why comparing good units directly to start capacity is incomplete.
+  - Identifies residual assumptions and avoids unnecessary overtime or quality risk.
+  critical_failures:
+  - Compares 1,600 good units directly to start capacity without considering yield.
+  - Recommends above-rate production even though normal capacity is sufficient.
+  - Fails to round required starts up.
+  - Claims the request is infeasible because it ignores the two-machine, two-day capacity.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Required starts are not adjusted for yield.
+  max_score: 2
+  reason: Yield-adjusted starts are central to the decision.
+- condition: Recommends above-rate production without need or quality approval.
+  max_score: 1
+  reason: This creates unnecessary quality risk.
+- condition: Required starts are rounded down.
+  max_score: 1
+  reason: Integer rounding is required for starts.
+numeric_checks:
+- name: required_starts_unrounded
+  expected_value: 1666.67
+  tolerance: +/-0.1
+  unit: starts
+  required: true
+- name: required_starts_rounded
+  expected_value: 1667
+  tolerance: exact
+  unit: starts
+  required: true
+- name: normal_start_capacity
+  expected_value: 2000
+  tolerance: exact
+  unit: starts
+  required: true
+- name: feasibility
+  expected_value: feasible
+  tolerance: exact
+  unit: decision
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - generic_framework_only
+  - no_tradeoff_analysis
+disallowed_answers:
+- Run above normal machine limits without quality approval.
+- The request is infeasible because only 1000 starts are available.
+- Required starts are 1600 because demand is 1600 good units.

@@ -1,0 +1,82 @@
+schema_version: '1.1'
+id: IR-NCP-007
+layer: industrial_reasoning
+category: numeric_capacity_planning
+domain: general_manufacturing
+subdomain: logistics
+difficulty: 4
+estimated_time_min: 35
+title: Shift Run Time Capacity
+scenario: |
+  A packaging line can process 300 units per hour when running.
+  The paid shift is 8 hours, but the plan includes 30 minutes of changeover and 45 minutes of planned cleaning.
+  Demand for the shift is 2,100 units.
+question: |
+  Calculate available run time, shift capacity, and whether the shift plan is feasible.
+  Explain any shortfall or margin.
+expected_skills:
+- shift_capacity_calculation
+- unit_conversion
+- constraint_handling
+- feasibility_judgement
+primary_skill: shift_capacity_calculation
+secondary_skills:
+- unit_conversion
+- constraint_handling
+- feasibility_judgement
+reference_answer: |
+  Non-running time is 30 minutes + 45 minutes = 75 minutes, or 1.25 hours.
+  Available run time is 8 - 1.25 = 6.75 hours.
+  Capacity is 6.75 hours * 300 units/hour = 2,025 units.
+  Demand is 2,100 units, so the plan is short by 75 units and is infeasible without reducing non-running time, adding approved time/capacity, or rescheduling demand.
+evaluation_rubric:
+  must_have:
+  - Subtracts changeover and cleaning time from the paid shift.
+  - Calculates available run time as 6.75 hours or 405 minutes.
+  - Calculates capacity as 2,025 units.
+  - Compares 2,025 units with 2,100 units of demand.
+  - Concludes the plan is infeasible with a 75-unit shortfall.
+  nice_to_have:
+  - Shows conversion of 75 minutes to 1.25 hours.
+  - Suggests constraint-respecting options such as reducing downtime, adding approved time, or rescheduling.
+  critical_failures:
+  - Uses the full 8 paid hours as productive run time.
+  - Claims the plan is feasible without addressing planned non-running time.
+  - Ignores changeover or cleaning in the capacity calculation.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Uses 8 hours as available run time.
+  max_score: 2
+  reason: Planned non-running time is a central constraint.
+- condition: Final answer says the shift is feasible under the current plan.
+  max_score: 1
+  reason: Wrong feasibility decision.
+numeric_checks:
+- name: available_run_time_hours
+  expected_value: 6.75
+  tolerance: +/-0.01
+  unit: hours
+  required: true
+- name: shift_capacity
+  expected_value: 2025
+  tolerance: exact
+  unit: units
+  required: true
+- name: shortfall
+  expected_value: 75
+  tolerance: exact
+  unit: units
+  required: true
+- name: feasibility
+  expected_value: infeasible
+  tolerance: exact
+  unit: decision
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - generic_framework_only
+disallowed_answers:
+- Capacity is 2400 units because the paid shift is 8 hours.
+- The plan is feasible with the current shift.

@@ -1,0 +1,71 @@
+schema_version: '1.1'
+id: IR-NCP-003
+layer: industrial_reasoning
+category: numeric_capacity_planning
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 25
+title: Yield Adjusted Start Quantity
+scenario: |
+  Final assembly must deliver 960 good units per day. First-pass yield is expected to be 92%.
+  Units that fail are scrapped and cannot be reworked.
+question: |
+  How many assemblies must be started to expect 960 good units?
+  Explain the rounding rule and why it is required.
+expected_skills:
+- yield_adjusted_capacity
+- integer_rounding
+- unit_conversion
+- numeric_result_explanation
+primary_skill: yield_adjusted_capacity
+secondary_skills:
+- integer_rounding
+- unit_conversion
+- numeric_result_explanation
+reference_answer: |
+  Required starts must account for yield because only 92% are expected to become good units.
+  Required starts = 960 good units / 0.92 = 1043.48 starts.
+  Because partial assemblies cannot be started, the result must be rounded up to 1044 assemblies.
+  Rounding down to 1043 would not provide the expected 960 good units.
+evaluation_rubric:
+  must_have:
+  - Divides 960 by 0.92 rather than multiplying by 0.92.
+  - Calculates approximately 1043.48 required starts.
+  - Rounds up to 1044 assemblies.
+  - Explains that fractional assemblies are impossible and yield drives the start quantity.
+  nice_to_have:
+  - States that this is an expected-value plan, not a guarantee.
+  - Mentions that yield risk may require monitoring or contingency.
+  critical_failures:
+  - Multiplies 960 by 0.92 to reduce the required starts.
+  - Rounds down to 1043 assemblies.
+  - Ignores scrap/yield and says 960 starts are enough.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Required starts are rounded down.
+  max_score: 1
+  reason: Rounding down creates insufficient expected starts.
+- condition: Yield is applied in the wrong direction.
+  max_score: 1
+  reason: The central calculation is inverted.
+numeric_checks:
+- name: required_starts_unrounded
+  expected_value: 1043.48
+  tolerance: +/-0.1
+  unit: assemblies
+  required: true
+- name: required_starts_rounded
+  expected_value: 1044
+  tolerance: exact
+  unit: assemblies
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - generic_framework_only
+disallowed_answers:
+- Start 1043 assemblies.
+- Start 960 assemblies because the requirement is 960 good units.
+- Required starts are 883 or 884 assemblies.

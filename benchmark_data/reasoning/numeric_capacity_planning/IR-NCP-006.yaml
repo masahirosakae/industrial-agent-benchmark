@@ -1,0 +1,78 @@
+schema_version: '1.1'
+id: IR-NCP-006
+layer: industrial_reasoning
+category: numeric_capacity_planning
+domain: general_manufacturing
+subdomain: machining
+difficulty: 4
+estimated_time_min: 35
+title: Required Machine Count
+scenario: |
+  A machining center has a cycle time of 45 seconds per unit.
+  It runs 2 shifts per day, and each shift has 7 net production hours.
+  Daily demand is 1,200 units.
+question: |
+  Calculate the daily capacity of one machine and determine how many identical machines are required.
+  Explain the rounding rule.
+expected_skills:
+- equipment_capacity_calculation
+- unit_conversion
+- integer_rounding
+- feasibility_judgement
+primary_skill: equipment_capacity_calculation
+secondary_skills:
+- unit_conversion
+- integer_rounding
+- feasibility_judgement
+reference_answer: |
+  One machine has 2 * 7 = 14 net production hours per day.
+  In seconds, that is 14 * 3600 = 50,400 seconds per day.
+  Capacity per machine = 50,400 / 45 = 1,120 units per day.
+  Required machines = 1,200 / 1,120 = 1.071 machines.
+  Because partial machines are not available, this must be rounded up to 2 machines.
+evaluation_rubric:
+  must_have:
+  - Converts 14 net hours to 50,400 seconds.
+  - Calculates one-machine capacity as 1,120 units per day.
+  - Divides 1,200 demand by 1,120 capacity.
+  - Rounds up from 1.071 to 2 machines.
+  - Explains that partial machines cannot satisfy the requirement.
+  nice_to_have:
+  - Notes that one machine is short by 80 units per day.
+  - States that the second machine may not be fully utilized but is required under the given constraints.
+  critical_failures:
+  - Reports 1.071 machines as the executable plan.
+  - Rounds down to 1 machine.
+  - Fails to convert hours to seconds before using the 45-second cycle time.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Required machine count is rounded down to 1.
+  max_score: 1
+  reason: Equipment count must be rounded up.
+- condition: Does not convert hours to seconds for a seconds-per-unit cycle time.
+  max_score: 3
+  reason: Unit conversion is required.
+numeric_checks:
+- name: one_machine_capacity
+  expected_value: 1120
+  tolerance: exact
+  unit: units_per_day
+  required: true
+- name: required_machines_unrounded
+  expected_value: 1.071
+  tolerance: +/-0.01
+  unit: machines
+  required: true
+- name: required_machines_rounded
+  expected_value: 2
+  tolerance: exact
+  unit: machines
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - generic_framework_only
+disallowed_answers:
+- One machine is sufficient.
+- 1.071 machines are required as the final executable answer.

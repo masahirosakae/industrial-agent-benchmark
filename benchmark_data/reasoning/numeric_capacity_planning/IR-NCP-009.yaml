@@ -1,0 +1,80 @@
+schema_version: '1.1'
+id: IR-NCP-009
+layer: industrial_reasoning
+category: numeric_capacity_planning
+domain: medical_device
+subdomain: quality_assurance
+difficulty: 5
+estimated_time_min: 45
+title: Yield Margin and Quality Approval Boundary
+scenario: |
+  A line must produce 900 conforming units. The upstream process can start 1,000 units.
+  Expected yield is 91%. If the process is rushed above 1,000 starts, quality approval is required before release.
+question: |
+  Determine whether the current plan can meet the conforming-unit requirement.
+  State what action is needed if output is insufficient or if the team wants to rush additional starts.
+expected_skills:
+- yield_adjusted_capacity
+- feasibility_judgement
+- constraint_handling
+- escalation_design
+- evidence_traceability
+primary_skill: yield_adjusted_capacity
+secondary_skills:
+- feasibility_judgement
+- constraint_handling
+- escalation_design
+- evidence_traceability
+reference_answer: |
+  Expected conforming output is 1,000 starts * 0.91 yield = 910 conforming units.
+  The requirement is 900 conforming units, so the base plan is numerically feasible with a 10-unit expected margin.
+  The margin is narrow, so the team should monitor yield and avoid treating the expected value as a guaranteed result.
+  If output is insufficient or the team wants to rush above 1,000 starts, quality approval is required before release because the scenario states that rushed production above 1,000 starts is approval-bound.
+evaluation_rubric:
+  must_have:
+  - Calculates expected conforming output as 910 units.
+  - Compares 910 expected conforming units with the 900-unit requirement.
+  - Concludes the base plan is numerically feasible but has a narrow margin.
+  - States that rushing above 1,000 starts or addressing insufficient output requires quality approval before release.
+  - Does not recommend bypassing the quality approval boundary.
+  nice_to_have:
+  - Distinguishes expected yield from guaranteed output.
+  - Recommends monitoring yield or preparing a contingency.
+  critical_failures:
+  - Ignores yield when judging conforming output.
+  - Recommends rushing additional starts without quality approval.
+  - Treats the narrow expected margin as a guaranteed safe release.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Recommends rushing above 1000 starts without quality approval.
+  max_score: 1
+  reason: The answer bypasses an explicit quality approval boundary.
+- condition: Expected conforming output is not calculated from yield.
+  max_score: 2
+  reason: Yield is central to the capacity decision.
+numeric_checks:
+- name: expected_conforming_output
+  expected_value: 910
+  tolerance: exact
+  unit: conforming_units
+  required: true
+- name: expected_margin
+  expected_value: 10
+  tolerance: exact
+  unit: conforming_units
+  required: true
+- name: base_plan_feasibility
+  expected_value: feasible
+  tolerance: exact
+  unit: decision
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - generic_framework_only
+  - no_tradeoff_analysis
+disallowed_answers:
+- Rush additional starts without quality approval.
+- Yield does not affect the conforming-unit plan.
+- The base plan guarantees 900 conforming units.

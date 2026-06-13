@@ -1,9 +1,9 @@
 version: '1.1'
-total_count: 140
+total_count: 150
 by_layer:
   industrial_agent: 40
   industrial_knowledge: 50
-  industrial_reasoning: 50
+  industrial_reasoning: 60
 items:
 - id: IA-AD-001
   layer: industrial_agent
@@ -1265,3 +1265,93 @@ items:
   estimated_time_min: 60
   primary_skill: tradeoff_analysis
   file_path: benchmark_data/reasoning/risk_tradeoff/IR-RT-010.yaml
+- id: IR-NCP-001
+  layer: industrial_reasoning
+  category: numeric_capacity_planning
+  domain: general_manufacturing
+  subdomain: production_control
+  difficulty: 2
+  estimated_time_min: 20
+  primary_skill: capacity_calculation
+  file_path: benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-001.yaml
+- id: IR-NCP-002
+  layer: industrial_reasoning
+  category: numeric_capacity_planning
+  domain: electronics
+  subdomain: inspection
+  difficulty: 3
+  estimated_time_min: 25
+  primary_skill: capacity_calculation
+  file_path: benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-002.yaml
+- id: IR-NCP-003
+  layer: industrial_reasoning
+  category: numeric_capacity_planning
+  domain: general_manufacturing
+  subdomain: assembly
+  difficulty: 3
+  estimated_time_min: 25
+  primary_skill: yield_adjusted_capacity
+  file_path: benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-003.yaml
+- id: IR-NCP-004
+  layer: industrial_reasoning
+  category: numeric_capacity_planning
+  domain: heavy_machinery
+  subdomain: welding
+  difficulty: 3
+  estimated_time_min: 30
+  primary_skill: bottleneck_reasoning
+  file_path: benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-004.yaml
+- id: IR-NCP-005
+  layer: industrial_reasoning
+  category: numeric_capacity_planning
+  domain: automotive
+  subdomain: assembly
+  difficulty: 4
+  estimated_time_min: 35
+  primary_skill: staffing_constraint_analysis
+  file_path: benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-005.yaml
+- id: IR-NCP-006
+  layer: industrial_reasoning
+  category: numeric_capacity_planning
+  domain: general_manufacturing
+  subdomain: machining
+  difficulty: 4
+  estimated_time_min: 35
+  primary_skill: equipment_capacity_calculation
+  file_path: benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-006.yaml
+- id: IR-NCP-007
+  layer: industrial_reasoning
+  category: numeric_capacity_planning
+  domain: general_manufacturing
+  subdomain: logistics
+  difficulty: 4
+  estimated_time_min: 35
+  primary_skill: shift_capacity_calculation
+  file_path: benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-007.yaml
+- id: IR-NCP-008
+  layer: industrial_reasoning
+  category: numeric_capacity_planning
+  domain: automotive
+  subdomain: supply_chain_management
+  difficulty: 4
+  estimated_time_min: 40
+  primary_skill: capacity_calculation
+  file_path: benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-008.yaml
+- id: IR-NCP-009
+  layer: industrial_reasoning
+  category: numeric_capacity_planning
+  domain: medical_device
+  subdomain: quality_assurance
+  difficulty: 5
+  estimated_time_min: 45
+  primary_skill: yield_adjusted_capacity
+  file_path: benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-009.yaml
+- id: IR-NCP-010
+  layer: industrial_reasoning
+  category: numeric_capacity_planning
+  domain: general_manufacturing
+  subdomain: production_control
+  difficulty: 5
+  estimated_time_min: 45
+  primary_skill: yield_adjusted_capacity
+  file_path: benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-010.yaml

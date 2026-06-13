@@ -139,3 +139,13 @@ IR-RT-007,industrial_reasoning,risk_tradeoff,electronics,quality_assurance,4,60,
 IR-RT-008,industrial_reasoning,risk_tradeoff,heavy_machinery,maintenance,4,60,tradeoff_analysis,benchmark_data/reasoning/risk_tradeoff/IR-RT-008.yaml
 IR-RT-009,industrial_reasoning,risk_tradeoff,general_manufacturing,quality_assurance,3,60,tradeoff_analysis,benchmark_data/reasoning/risk_tradeoff/IR-RT-009.yaml
 IR-RT-010,industrial_reasoning,risk_tradeoff,general_manufacturing,production_control,4,60,tradeoff_analysis,benchmark_data/reasoning/risk_tradeoff/IR-RT-010.yaml
+IR-NCP-001,industrial_reasoning,numeric_capacity_planning,general_manufacturing,production_control,2,20,capacity_calculation,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-001.yaml
+IR-NCP-002,industrial_reasoning,numeric_capacity_planning,electronics,inspection,3,25,capacity_calculation,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-002.yaml
+IR-NCP-003,industrial_reasoning,numeric_capacity_planning,general_manufacturing,assembly,3,25,yield_adjusted_capacity,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-003.yaml
+IR-NCP-004,industrial_reasoning,numeric_capacity_planning,heavy_machinery,welding,3,30,bottleneck_reasoning,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-004.yaml
+IR-NCP-005,industrial_reasoning,numeric_capacity_planning,automotive,assembly,4,35,staffing_constraint_analysis,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-005.yaml
+IR-NCP-006,industrial_reasoning,numeric_capacity_planning,general_manufacturing,machining,4,35,equipment_capacity_calculation,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-006.yaml
+IR-NCP-007,industrial_reasoning,numeric_capacity_planning,general_manufacturing,logistics,4,35,shift_capacity_calculation,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-007.yaml
+IR-NCP-008,industrial_reasoning,numeric_capacity_planning,automotive,supply_chain_management,4,40,capacity_calculation,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-008.yaml
+IR-NCP-009,industrial_reasoning,numeric_capacity_planning,medical_device,quality_assurance,5,45,yield_adjusted_capacity,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-009.yaml
+IR-NCP-010,industrial_reasoning,numeric_capacity_planning,general_manufacturing,production_control,5,45,yield_adjusted_capacity,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-010.yaml

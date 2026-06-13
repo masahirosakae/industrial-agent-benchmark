@@ -1,0 +1,75 @@
+schema_version: '1.1'
+id: IR-NCP-001
+layer: industrial_reasoning
+category: numeric_capacity_planning
+domain: general_manufacturing
+subdomain: production_control
+difficulty: 2
+estimated_time_min: 20
+title: Takt Time Feasibility Check
+scenario: |
+  A final assembly line has 420 minutes of net available production time per shift after breaks and daily meetings.
+  The customer requires 840 good units per shift. One station currently has a measured cycle time of 32 seconds per unit.
+question: |
+  Calculate the required takt time in seconds per good unit and decide whether the 32-second station can meet the demand.
+  Explain the calculation, units, and feasibility decision.
+expected_skills:
+- capacity_calculation
+- unit_conversion
+- feasibility_judgement
+- numeric_result_explanation
+primary_skill: capacity_calculation
+secondary_skills:
+- unit_conversion
+- feasibility_judgement
+- numeric_result_explanation
+reference_answer: |
+  Net available time is 420 minutes * 60 = 25,200 seconds per shift.
+  Required takt time is 25,200 seconds / 840 good units = 30 seconds per good unit.
+  The station cycle time is 32 seconds, which is slower than the 30-second takt requirement.
+  The plan is therefore not feasible at the current cycle time without cycle-time improvement, added parallel capacity, demand reduction, or another approved capacity action.
+evaluation_rubric:
+  must_have:
+  - Converts 420 minutes to 25,200 seconds.
+  - Calculates takt time as 30 seconds per good unit.
+  - Compares 32-second cycle time against 30-second takt time.
+  - Concludes that the current station is infeasible for the required demand.
+  nice_to_have:
+  - States that the shortfall is caused by cycle time being slower than takt.
+  - Mentions practical actions such as improvement, added capacity, or demand adjustment.
+  critical_failures:
+  - Treats 32 seconds as feasible despite being slower than takt.
+  - Uses minutes and seconds inconsistently in a way that changes the decision.
+  - Calculates takt using total units or time incorrectly and reaches the wrong feasibility decision.
+reasoning_trace_required: true
+score_cap_rules:
+- condition: Final answer says the 32-second station is feasible without added capacity or improvement.
+  max_score: 1
+  reason: Wrong feasibility decision from numeric reasoning.
+- condition: Takt calculation does not use 420 minutes converted to seconds.
+  max_score: 3
+  reason: Unit conversion is central to the item.
+numeric_checks:
+- name: available_time_seconds
+  expected_value: 25200
+  tolerance: exact
+  unit: seconds
+  required: true
+- name: takt_time
+  expected_value: 30
+  tolerance: exact
+  unit: seconds_per_unit
+  required: true
+- name: feasibility
+  expected_value: infeasible
+  tolerance: exact
+  unit: decision
+  required: true
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - scenario_specific_numbers_not_used
+  - generic_framework_only
+disallowed_answers:
+- The 32-second cycle time can meet demand.
+- The station is feasible because 32 seconds is close to takt.
