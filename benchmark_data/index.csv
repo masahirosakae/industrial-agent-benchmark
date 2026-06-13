@@ -149,3 +149,13 @@ IR-NCP-007,industrial_reasoning,numeric_capacity_planning,general_manufacturing,
 IR-NCP-008,industrial_reasoning,numeric_capacity_planning,automotive,supply_chain_management,4,40,capacity_calculation,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-008.yaml
 IR-NCP-009,industrial_reasoning,numeric_capacity_planning,medical_device,quality_assurance,5,45,yield_adjusted_capacity,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-009.yaml
 IR-NCP-010,industrial_reasoning,numeric_capacity_planning,general_manufacturing,production_control,5,45,yield_adjusted_capacity,benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-010.yaml
+IK-CC-001,industrial_knowledge,change_control,general_manufacturing,process_engineering,2,20,change_control,benchmark_data/knowledge/change_control/IK-CC-001.yaml
+IK-CC-002,industrial_knowledge,change_control,general_manufacturing,production_control,2,20,approval_workflow_knowledge,benchmark_data/knowledge/change_control/IK-CC-002.yaml
+IK-CC-003,industrial_knowledge,change_control,automotive,process_engineering,3,30,impact_assessment,benchmark_data/knowledge/change_control/IK-CC-003.yaml
+IK-CC-004,industrial_knowledge,change_control,electronics,quality_assurance,3,30,risk_assessment,benchmark_data/knowledge/change_control/IK-CC-004.yaml
+IK-CC-005,industrial_knowledge,change_control,general_manufacturing,assembly,3,30,implementation_control,benchmark_data/knowledge/change_control/IK-CC-005.yaml
+IK-CC-006,industrial_knowledge,change_control,general_manufacturing,inspection,3,30,verification_planning,benchmark_data/knowledge/change_control/IK-CC-006.yaml
+IK-CC-007,industrial_knowledge,change_control,automotive,quality_assurance,4,40,documentation_control,benchmark_data/knowledge/change_control/IK-CC-007.yaml
+IK-CC-008,industrial_knowledge,change_control,general_manufacturing,quality_assurance,4,40,audit_trail_knowledge,benchmark_data/knowledge/change_control/IK-CC-008.yaml
+IK-CC-009,industrial_knowledge,change_control,general_manufacturing,production_control,4,40,rollback_planning,benchmark_data/knowledge/change_control/IK-CC-009.yaml
+IK-CC-010,industrial_knowledge,change_control,medical_device,quality_assurance,5,45,human_approval_boundary,benchmark_data/knowledge/change_control/IK-CC-010.yaml

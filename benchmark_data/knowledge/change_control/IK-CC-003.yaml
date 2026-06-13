@@ -1,0 +1,57 @@
+schema_version: '1.1'
+id: IK-CC-003
+layer: industrial_knowledge
+category: change_control
+domain: automotive
+subdomain: process_engineering
+difficulty: 3
+estimated_time_min: 30
+title: Impact Assessment Coverage
+scenario: |
+  A proposed process parameter change may affect product dimensions and inspection frequency.
+question: |
+  For the impact assessment, list the scope areas that must be checked to identify what is affected by the change.
+expected_skills:
+- change_control
+- impact_assessment
+- documentation_control
+- traceability_analysis
+primary_skill: impact_assessment
+secondary_skills:
+- change_control
+- documentation_control
+- traceability_analysis
+reference_answer: |
+  The impact assessment should identify the affected products, part numbers, variants, or customer programs.
+  It should check affected process steps, production lines, equipment, fixtures, tooling, and software settings.
+  It should include inspection plans, control plans, gauges, test methods, and sampling frequency; drawings, work instructions, setup sheets, forms, and other controlled documents; affected lots, WIP, inventory, shipment status, and effective-date boundary; and affected suppliers, customers, downstream processes, packaging, or service parts when applicable.
+evaluation_rubric:
+  must_have:
+  - Covers affected products, part numbers, variants, or customer programs.
+  - Covers affected process steps, lines, equipment, fixtures, tooling, or software settings.
+  - Covers inspection plans, control plans, gauges, test methods, or sampling frequency.
+  - Covers drawings, work instructions, setup sheets, forms, or other controlled documents.
+  - Covers affected lots, WIP, inventory, shipment status, or effective-date boundary.
+  - Covers suppliers, customers, downstream processes, packaging, or service parts when applicable.
+  nice_to_have:
+  - Clearly distinguishes impact scope from risk severity.
+  - Mentions that the assessment defines the boundary for approval and implementation control.
+  critical_failures:
+  - Lists only product quality risk and omits process, document, inspection, and material boundaries.
+  - Treats impact assessment as optional before changing process parameters.
+  - Gives subjective improvement advice without identifying affected scope areas.
+reasoning_trace_required: false
+score_cap_rules:
+- condition: Answer does not identify affected scope areas beyond the product itself.
+  max_score: 2
+  reason: The item tests impact scope coverage.
+- condition: Answer omits controlled documents and inspection/control-plan impact.
+  max_score: 3
+  reason: Documentation and inspection boundaries are central to this item.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+disallowed_answers:
+- Only check whether quality improves.
+- No impact assessment is needed if the parameter change is small.

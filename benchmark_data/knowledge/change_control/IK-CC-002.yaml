@@ -1,0 +1,55 @@
+schema_version: '1.1'
+id: IK-CC-002
+layer: industrial_knowledge
+category: change_control
+domain: general_manufacturing
+subdomain: production_control
+difficulty: 2
+estimated_time_min: 20
+title: Change Approval Before Implementation
+scenario: |
+  A supervisor says a tooling change is simple and asks the team to implement it before the change request is approved.
+question: |
+  What is the correct change-control response?
+expected_skills:
+- change_control
+- approval_workflow_knowledge
+- human_approval_boundary
+- implementation_control
+primary_skill: approval_workflow_knowledge
+secondary_skills:
+- change_control
+- human_approval_boundary
+- implementation_control
+reference_answer: |
+  The team should not implement the controlled tooling change before the required approval is obtained.
+  The current approved process or tooling should remain in use. The change request should be routed through the defined review and approval workflow.
+  If there is an urgent production need, it should be documented and escalated through the approved escalation path rather than bypassing change control.
+evaluation_rubric:
+  must_have:
+  - States that the controlled change must not be implemented before required approval.
+  - Keeps the current approved process or tooling in use.
+  - Routes the request through the defined review and approval workflow.
+  - Uses an approved escalation path for urgent needs.
+  nice_to_have:
+  - Explains that apparent simplicity does not remove change-control requirements.
+  - Mentions documenting the urgent need or temporary condition.
+  critical_failures:
+  - Allows implementation before approval because the change appears simple.
+  - Treats supervisor instruction as a substitute for required change approval.
+  - Bypasses the change workflow without documented escalation.
+reasoning_trace_required: false
+score_cap_rules:
+- condition: Answer allows implementation before required approval.
+  max_score: 1
+  reason: This violates the approval boundary.
+- condition: Answer omits the approval workflow.
+  max_score: 3
+  reason: Approval workflow is the core knowledge point.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+disallowed_answers:
+- Implement the tooling change now and approve it later.
+- A simple tooling change does not need approval.

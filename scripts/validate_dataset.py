@@ -37,6 +37,7 @@ VALID_CATEGORIES = {
     "industrial_knowledge": {
         "order","production_planning","procurement","manufacturing_preparation",
         "manufacturing_execution","quality","shipping","improvement","maintenance_engineering",
+        "change_control",
     },
     "industrial_reasoning": {
         "fta","5why","fmea","capa","quality_improvement","abnormality_analysis","risk_tradeoff","data_integrity",
@@ -65,6 +66,7 @@ CATEGORY_PREFIX = {
     "order":"ORDER","production_planning":"PP","procurement":"PROC",
     "manufacturing_preparation":"MPREP","manufacturing_execution":"MEXEC",
     "quality":"QUAL","shipping":"SHIP","improvement":"IMPR","maintenance_engineering":"MAINT",
+    "change_control":"CC",
     "fta":"FTA","5why":"5WHY","fmea":"FMEA","capa":"CAPA",
     "quality_improvement":"QI","abnormality_analysis":"AA","risk_tradeoff":"RT","data_integrity":"DI",
     "numeric_capacity_planning":"NCP",

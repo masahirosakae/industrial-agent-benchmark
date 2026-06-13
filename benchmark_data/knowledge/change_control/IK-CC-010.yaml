@@ -1,0 +1,77 @@
+schema_version: '1.1'
+id: IK-CC-010
+layer: industrial_knowledge
+category: change_control
+domain: medical_device
+subdomain: quality_assurance
+difficulty: 5
+estimated_time_min: 45
+title: Human Approval Boundary for Customer-impacting Change
+scenario: |
+  A manufacturing process change may affect a customer-approved or customer-impacting characteristic.
+  An automated system has enough information to update the work instruction, change the released revision, and mark the process ready for production.
+question: |
+  What must the automated system not do by itself, and what approvals, checks, and evidence are required before production release?
+expected_skills:
+- change_control
+- human_approval_boundary
+- approval_workflow_knowledge
+- risk_assessment
+- verification_planning
+- audit_trail_knowledge
+primary_skill: human_approval_boundary
+secondary_skills:
+- change_control
+- approval_workflow_knowledge
+- risk_assessment
+- verification_planning
+- audit_trail_knowledge
+reference_answer: |
+  The automated system must not release, implement, or mark the change production-ready by itself.
+  A required human approval boundary must be enforced before document release, production implementation, or shipment.
+  The customer-approved or customer-impacting characteristic must be identified explicitly, and responsible human functions such as quality, engineering, manufacturing, and the customer-facing approval owner must review or approve as applicable.
+  The customer notification or customer approval boundary must be checked when the change can affect a customer-approved characteristic.
+  Impact assessment must identify affected product, process, document, inspection, lot, and customer boundaries.
+  Risk assessment must identify potential failure modes, severity or quality impact, containment need, and validation need.
+  Verification or validation evidence must be required before production release.
+  The audit trail must record who approved, what was released, when it was released, and the basis for the release decision.
+evaluation_rubric:
+  must_have:
+  - States that the automated system must not release, implement, or mark the change production-ready by itself.
+  - Enforces required human approval before document release, production implementation, or shipment.
+  - Identifies the customer-approved or customer-impacting characteristic.
+  - Includes review or approval by responsible human functions such as quality, engineering, manufacturing, and customer-facing approval owner when applicable.
+  - Checks customer notification or customer approval boundary when the change can affect a customer-approved characteristic.
+  - Requires impact assessment for affected product, process, document, inspection, lot, and customer boundaries.
+  - Requires risk assessment for failure modes, severity or quality impact, containment need, and validation need.
+  - Requires verification or validation evidence before production release.
+  - Requires audit trail of who approved, what was released, when it was released, and the basis for the release decision.
+  nice_to_have:
+  - Explicitly states that this is a knowledge of approval boundaries, not an executable workflow design.
+  - Mentions shipment as a boundary in addition to document release and production implementation.
+  critical_failures:
+  - Allows the automated system to release, implement, or mark production-ready solely because it has enough information.
+  - Omits human approval for a customer-impacting change.
+  - Omits customer notification or customer approval boundary when a customer-approved characteristic may be affected.
+  - Omits verification or validation evidence before production release.
+  - Omits audit trail of approval and release decision.
+reasoning_trace_required: false
+score_cap_rules:
+- condition: Answer allows automated release, implementation, or production-ready marking without human approval.
+  max_score: 1
+  reason: This violates the human approval boundary.
+- condition: Answer omits customer notification or customer approval boundary.
+  max_score: 2
+  reason: Customer-impacting change control requires checking this boundary.
+- condition: Answer omits impact assessment, risk assessment, verification or validation evidence, or audit trail.
+  max_score: 3
+  reason: Expert item requires the full approval and evidence chain.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+  - no_named_stakeholder
+disallowed_answers:
+- The automated system can release the change because it has enough information.
+- Human approval is not required if the system updates the document correctly.
+- Customer notification or approval does not need to be checked.

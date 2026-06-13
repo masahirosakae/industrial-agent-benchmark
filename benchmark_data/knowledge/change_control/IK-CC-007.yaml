@@ -1,0 +1,58 @@
+schema_version: '1.1'
+id: IK-CC-007
+layer: industrial_knowledge
+category: change_control
+domain: automotive
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 40
+title: Documentation Control Across Revisions
+scenario: |
+  An approved engineering change updates a drawing, control plan, work instruction, and inspection checklist.
+question: |
+  What documentation-control actions are required to prevent mixed-revision production?
+expected_skills:
+- change_control
+- documentation_control
+- revision_control
+- implementation_control
+primary_skill: documentation_control
+secondary_skills:
+- change_control
+- revision_control
+- implementation_control
+reference_answer: |
+  The new controlled revisions should be released together or by a defined effective sequence.
+  Old revisions should be removed, blocked, or made obsolete at points of use.
+  The drawing, control plan, work instruction, and inspection checklist revisions must be aligned.
+  The effective date or lot/serial boundary should be communicated, revision history and approval records retained, and production use verified against only the current released documents.
+evaluation_rubric:
+  must_have:
+  - Releases new controlled revisions together or by a defined effective sequence.
+  - Removes, blocks, or obsoletes old revisions at points of use.
+  - Aligns drawing, control plan, work instruction, and inspection checklist revisions.
+  - Communicates effective date or lot/serial boundary.
+  - Retains revision history and approval records.
+  - Verifies production uses only current released documents.
+  nice_to_have:
+  - Mentions prevention of mixed-revision production.
+  - Identifies point-of-use control as separate from central document release.
+  critical_failures:
+  - Treats updating one document as sufficient while related controlled documents remain old.
+  - Allows old and new revisions to be used together without an effective boundary.
+  - Omits removal or blocking of obsolete point-of-use documents.
+reasoning_trace_required: false
+score_cap_rules:
+- condition: Answer says updating one document is sufficient.
+  max_score: 1
+  reason: The item tests aligned controlled-document release.
+- condition: Answer omits old-revision removal or blocking.
+  max_score: 3
+  reason: Preventing obsolete point-of-use documents is central.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+disallowed_answers:
+- Updating the drawing is enough.
+- Keep old and new instructions available and let operators choose.

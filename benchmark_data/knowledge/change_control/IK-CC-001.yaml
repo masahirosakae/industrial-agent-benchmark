@@ -1,0 +1,57 @@
+schema_version: '1.1'
+id: IK-CC-001
+layer: industrial_knowledge
+category: change_control
+domain: general_manufacturing
+subdomain: process_engineering
+difficulty: 2
+estimated_time_min: 20
+title: Required Change Request Fields
+scenario: |
+  A production engineer wants to submit a change request for a fixture modification.
+  The modification may also change a process parameter and the inspection method on one production line.
+question: |
+  Name the minimum manufacturing information that should be included in the change request before review begins.
+expected_skills:
+- change_control
+- documentation_control
+- manufacturing_process_knowledge
+- approval_workflow_knowledge
+primary_skill: change_control
+secondary_skills:
+- documentation_control
+- manufacturing_process_knowledge
+- approval_workflow_knowledge
+reference_answer: |
+  The request should identify the affected manufacturing boundary, such as the product, part number, production line, process step, fixture, equipment, or inspection method.
+  It should describe the proposed fixture, process parameter, or inspection method change; state the reason or trigger; identify the requester or owner; give the target timing or proposed effective date; and list initially affected documents or records such as the drawing, control plan, work instruction, setup sheet, inspection checklist, or fixture record.
+evaluation_rubric:
+  must_have:
+  - Identifies the affected manufacturing boundary, such as product, part, line, process step, fixture, equipment, or inspection method.
+  - Describes the proposed fixture, process parameter, or inspection method change.
+  - States the reason or trigger for the change.
+  - Identifies the requester or owner.
+  - Includes target timing or proposed effective date.
+  - Identifies initially affected documents or records.
+  nice_to_have:
+  - Gives examples of affected controlled documents such as drawing, control plan, work instruction, setup sheet, inspection checklist, or fixture record.
+  - Mentions that the information is needed before review and approval.
+  critical_failures:
+  - Only says to get approval without describing the required change request content.
+  - Omits the affected manufacturing boundary.
+  - Treats the change as informal because it is only a fixture or inspection-method change.
+reasoning_trace_required: false
+score_cap_rules:
+- condition: Answer does not identify any affected manufacturing boundary.
+  max_score: 2
+  reason: The affected product/process/equipment/document boundary is central to change request intake.
+- condition: Answer only says to get approval and provides no request content.
+  max_score: 1
+  reason: Approval alone is not enough to define a change request.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+disallowed_answers:
+- A simple fixture change does not need a formal request.
+- Approval is the only required information.

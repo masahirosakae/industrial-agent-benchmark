@@ -1,8 +1,8 @@
 version: '1.1'
-total_count: 150
+total_count: 160
 by_layer:
   industrial_agent: 40
-  industrial_knowledge: 50
+  industrial_knowledge: 60
   industrial_reasoning: 60
 items:
 - id: IA-AD-001
@@ -1355,3 +1355,93 @@ items:
   estimated_time_min: 45
   primary_skill: yield_adjusted_capacity
   file_path: benchmark_data/reasoning/numeric_capacity_planning/IR-NCP-010.yaml
+- id: IK-CC-001
+  layer: industrial_knowledge
+  category: change_control
+  domain: general_manufacturing
+  subdomain: process_engineering
+  difficulty: 2
+  estimated_time_min: 20
+  primary_skill: change_control
+  file_path: benchmark_data/knowledge/change_control/IK-CC-001.yaml
+- id: IK-CC-002
+  layer: industrial_knowledge
+  category: change_control
+  domain: general_manufacturing
+  subdomain: production_control
+  difficulty: 2
+  estimated_time_min: 20
+  primary_skill: approval_workflow_knowledge
+  file_path: benchmark_data/knowledge/change_control/IK-CC-002.yaml
+- id: IK-CC-003
+  layer: industrial_knowledge
+  category: change_control
+  domain: automotive
+  subdomain: process_engineering
+  difficulty: 3
+  estimated_time_min: 30
+  primary_skill: impact_assessment
+  file_path: benchmark_data/knowledge/change_control/IK-CC-003.yaml
+- id: IK-CC-004
+  layer: industrial_knowledge
+  category: change_control
+  domain: electronics
+  subdomain: quality_assurance
+  difficulty: 3
+  estimated_time_min: 30
+  primary_skill: risk_assessment
+  file_path: benchmark_data/knowledge/change_control/IK-CC-004.yaml
+- id: IK-CC-005
+  layer: industrial_knowledge
+  category: change_control
+  domain: general_manufacturing
+  subdomain: assembly
+  difficulty: 3
+  estimated_time_min: 30
+  primary_skill: implementation_control
+  file_path: benchmark_data/knowledge/change_control/IK-CC-005.yaml
+- id: IK-CC-006
+  layer: industrial_knowledge
+  category: change_control
+  domain: general_manufacturing
+  subdomain: inspection
+  difficulty: 3
+  estimated_time_min: 30
+  primary_skill: verification_planning
+  file_path: benchmark_data/knowledge/change_control/IK-CC-006.yaml
+- id: IK-CC-007
+  layer: industrial_knowledge
+  category: change_control
+  domain: automotive
+  subdomain: quality_assurance
+  difficulty: 4
+  estimated_time_min: 40
+  primary_skill: documentation_control
+  file_path: benchmark_data/knowledge/change_control/IK-CC-007.yaml
+- id: IK-CC-008
+  layer: industrial_knowledge
+  category: change_control
+  domain: general_manufacturing
+  subdomain: quality_assurance
+  difficulty: 4
+  estimated_time_min: 40
+  primary_skill: audit_trail_knowledge
+  file_path: benchmark_data/knowledge/change_control/IK-CC-008.yaml
+- id: IK-CC-009
+  layer: industrial_knowledge
+  category: change_control
+  domain: general_manufacturing
+  subdomain: production_control
+  difficulty: 4
+  estimated_time_min: 40
+  primary_skill: rollback_planning
+  file_path: benchmark_data/knowledge/change_control/IK-CC-009.yaml
+- id: IK-CC-010
+  layer: industrial_knowledge
+  category: change_control
+  domain: medical_device
+  subdomain: quality_assurance
+  difficulty: 5
+  estimated_time_min: 45
+  primary_skill: human_approval_boundary
+  file_path: benchmark_data/knowledge/change_control/IK-CC-010.yaml

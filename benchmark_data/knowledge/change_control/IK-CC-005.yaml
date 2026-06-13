@@ -1,0 +1,58 @@
+schema_version: '1.1'
+id: IK-CC-005
+layer: industrial_knowledge
+category: change_control
+domain: general_manufacturing
+subdomain: assembly
+difficulty: 3
+estimated_time_min: 30
+title: Implementation Control and Effective Date
+scenario: |
+  A process change is approved, but some work instructions and line labels still show the old revision.
+question: |
+  What controls are needed before implementation on the production line?
+expected_skills:
+- change_control
+- implementation_control
+- documentation_control
+- training_control
+primary_skill: implementation_control
+secondary_skills:
+- change_control
+- documentation_control
+- training_control
+reference_answer: |
+  Before implementation, the team should confirm the approved effective date or implementation point.
+  Controlled documents must be updated and released before use, and old instructions must be removed, blocked, or marked obsolete at the point of use.
+  Affected operators should be communicated to or trained, and line labels, setup sheets, and related records should match the new revision.
+  Evidence of implementation completion should be retained.
+evaluation_rubric:
+  must_have:
+  - Confirms the approved effective date or implementation point.
+  - Updates and releases controlled documents before use.
+  - Removes, blocks, or obsoletes old instructions at the point of use.
+  - Communicates or trains affected operators.
+  - Confirms line labels, setup sheets, or related records match the new revision.
+  - Keeps evidence of implementation completion.
+  nice_to_have:
+  - Distinguishes approval from controlled implementation.
+  - Mentions prevention of mixed-revision production.
+  critical_failures:
+  - Allows production to run with mixed old and new instructions.
+  - Treats approval alone as enough even though point-of-use documents are not updated.
+  - Omits effective date or implementation boundary.
+reasoning_trace_required: false
+score_cap_rules:
+- condition: Answer allows implementation with mixed old and new instructions.
+  max_score: 1
+  reason: Mixed revision use is a critical implementation-control failure.
+- condition: Answer omits effective date or implementation boundary.
+  max_score: 3
+  reason: Effective-date control is central to implementation control.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+disallowed_answers:
+- Run production with the old work instructions because approval is complete.
+- Update the documents after the line has already switched.

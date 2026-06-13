@@ -1,0 +1,57 @@
+schema_version: '1.1'
+id: IK-CC-004
+layer: industrial_knowledge
+category: change_control
+domain: electronics
+subdomain: quality_assurance
+difficulty: 3
+estimated_time_min: 30
+title: Risk Assessment Before Change Release
+scenario: |
+  A material substitution is proposed for an existing manufacturing process.
+question: |
+  Before releasing the material substitution, what risk mechanisms or failure modes should be checked to avoid unintended manufacturing or quality issues?
+expected_skills:
+- change_control
+- risk_assessment
+- quality_assurance
+- validation_planning
+primary_skill: risk_assessment
+secondary_skills:
+- change_control
+- quality_assurance
+- validation_planning
+reference_answer: |
+  The risk assessment should identify what could go wrong because of the material change, including fit, form, function, strength, contamination, durability, appearance, or processability.
+  It should consider severity or quality impact if the failure mode occurs, compatibility with existing process conditions, equipment, tooling, gauges, and inspection methods, and whether affected inventory, WIP, or early production output needs containment.
+  It should also identify the need for a trial run, validation, inspection evidence, or capability confirmation, and confirm the approval requirement before production use or shipment.
+evaluation_rubric:
+  must_have:
+  - Identifies potential failure modes or what could go wrong from the material change.
+  - Addresses severity or quality impact.
+  - Checks compatibility with process conditions, equipment, tooling, gauges, or inspection methods.
+  - Includes containment need for affected inventory, WIP, or early production output.
+  - Includes trial run, validation, inspection evidence, or capability confirmation.
+  - States that approval is required before production use or shipment.
+  nice_to_have:
+  - Gives concrete examples such as fit, form, function, contamination, durability, appearance, or processability.
+  - Distinguishes risk mechanism from impact scope.
+  critical_failures:
+  - Says the substitute material can be used immediately without approval or verification.
+  - Lists only affected documents or lots without identifying possible failure modes.
+  - Ignores containment when early output may be affected.
+reasoning_trace_required: false
+score_cap_rules:
+- condition: Answer permits production use before approval or verification.
+  max_score: 1
+  reason: This violates change-release control.
+- condition: Answer does not identify any failure mode or quality risk mechanism.
+  max_score: 2
+  reason: The item tests risk mechanism knowledge.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+disallowed_answers:
+- Use the substitute material immediately.
+- Risk assessment only needs to list affected documents.

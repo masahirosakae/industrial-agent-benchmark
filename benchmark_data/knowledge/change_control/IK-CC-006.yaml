@@ -1,0 +1,56 @@
+schema_version: '1.1'
+id: IK-CC-006
+layer: industrial_knowledge
+category: change_control
+domain: general_manufacturing
+subdomain: inspection
+difficulty: 3
+estimated_time_min: 30
+title: Verification After Change
+scenario: |
+  A fixture change has been implemented on an assembly line.
+question: |
+  What verification evidence should be collected before the change is considered complete?
+expected_skills:
+- change_control
+- verification_planning
+- inspection_knowledge
+- traceability_analysis
+primary_skill: verification_planning
+secondary_skills:
+- change_control
+- inspection_knowledge
+- traceability_analysis
+reference_answer: |
+  Verification evidence should include inspection or measurement results for affected characteristics, a first article, trial run, or initial production check, and confirmation that acceptance criteria are met.
+  The record should include review of any defects, abnormalities, or process instability, identify who verified the change and when, and link the verification evidence to the approved change request.
+evaluation_rubric:
+  must_have:
+  - Includes inspection or measurement results for affected characteristics.
+  - Includes first article, trial run, or initial production check.
+  - Confirms that acceptance criteria are met.
+  - Reviews defects, abnormalities, or process instability.
+  - Records who verified the change and when.
+  - Links verification to the approved change request.
+  nice_to_have:
+  - Mentions that the specific verification method should match the affected characteristic.
+  - Notes that evidence is required before closing the change.
+  critical_failures:
+  - Says to close the change with no objective verification evidence.
+  - Only says to check quality without acceptance criteria or records.
+  - Treats implementation as proof that the change is complete.
+reasoning_trace_required: false
+score_cap_rules:
+- condition: Answer has no objective verification evidence.
+  max_score: 1
+  reason: Verification evidence is the core item requirement.
+- condition: Answer omits acceptance criteria.
+  max_score: 3
+  reason: Evidence must be judged against acceptance criteria.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+disallowed_answers:
+- The change is complete once the fixture is installed.
+- No verification record is needed if operators report no problem.

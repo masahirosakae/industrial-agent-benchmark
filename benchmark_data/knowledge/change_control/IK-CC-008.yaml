@@ -1,0 +1,57 @@
+schema_version: '1.1'
+id: IK-CC-008
+layer: industrial_knowledge
+category: change_control
+domain: general_manufacturing
+subdomain: quality_assurance
+difficulty: 4
+estimated_time_min: 40
+title: Audit Trail for Change Control
+scenario: |
+  A quality auditor asks for the audit trail of a completed process change.
+question: |
+  What records should be available to show the change was controlled?
+expected_skills:
+- change_control
+- audit_trail_knowledge
+- documentation_control
+- traceability_analysis
+primary_skill: audit_trail_knowledge
+secondary_skills:
+- change_control
+- documentation_control
+- traceability_analysis
+reference_answer: |
+  The audit trail should include the original change request and reason, impact and risk assessment records, review and approval records with approver identity and date, and implementation records with the effective date or lot boundary.
+  It should also include updated document revision history, verification or validation evidence after implementation, and disposition of affected WIP, inventory, or lots when applicable.
+evaluation_rubric:
+  must_have:
+  - Includes original change request and reason.
+  - Includes impact and risk assessment records.
+  - Includes review and approval records with approver identity and date.
+  - Includes implementation record with effective date or lot boundary.
+  - Includes updated document revision history.
+  - Includes verification or validation evidence after implementation.
+  - Includes disposition of affected WIP, inventory, or lots if applicable.
+  nice_to_have:
+  - Notes that private system names are not required.
+  - Mentions traceability from request to approval, implementation, and verification.
+  critical_failures:
+  - Provides only the final approved document and no approval or assessment trail.
+  - Omits verification or validation evidence for the completed change.
+  - Omits who approved the change and when.
+reasoning_trace_required: false
+score_cap_rules:
+- condition: Answer omits approval records with identity or date.
+  max_score: 3
+  reason: Approval traceability is central to audit trail.
+- condition: Answer includes only the released document and no change request, assessment, or verification record.
+  max_score: 1
+  reason: A released document alone is not a controlled-change audit trail.
+generic_answer_penalty:
+  enabled: true
+  conditions:
+  - generic_framework_only
+disallowed_answers:
+- The final released document is the complete audit trail.
+- No verification record is needed after approval.
