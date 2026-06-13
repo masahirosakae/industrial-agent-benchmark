@@ -159,3 +159,13 @@ IK-CC-007,industrial_knowledge,change_control,automotive,quality_assurance,4,40,
 IK-CC-008,industrial_knowledge,change_control,general_manufacturing,quality_assurance,4,40,audit_trail_knowledge,benchmark_data/knowledge/change_control/IK-CC-008.yaml
 IK-CC-009,industrial_knowledge,change_control,general_manufacturing,production_control,4,40,rollback_planning,benchmark_data/knowledge/change_control/IK-CC-009.yaml
 IK-CC-010,industrial_knowledge,change_control,medical_device,quality_assurance,5,45,human_approval_boundary,benchmark_data/knowledge/change_control/IK-CC-010.yaml
+IA-HIL-004,industrial_agent,human_in_the_loop,general_manufacturing,quality_assurance,3,30,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-004.yaml
+IA-HIL-005,industrial_agent,human_in_the_loop,general_manufacturing,process_engineering,3,30,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-005.yaml
+IA-HIL-006,industrial_agent,human_in_the_loop,automotive,quality_assurance,4,45,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-006.yaml
+IA-HIL-007,industrial_agent,human_in_the_loop,general_manufacturing,quality_assurance,3,30,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-007.yaml
+IA-HIL-008,industrial_agent,human_in_the_loop,general_manufacturing,maintenance,3,30,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-008.yaml
+IA-HIL-009,industrial_agent,human_in_the_loop,general_manufacturing,production_control,3,30,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-009.yaml
+IA-HIL-010,industrial_agent,human_in_the_loop,automotive,supply_chain_management,4,45,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-010.yaml
+IA-HIL-011,industrial_agent,human_in_the_loop,general_manufacturing,process_engineering,4,45,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-011.yaml
+IA-HIL-012,industrial_agent,human_in_the_loop,general_manufacturing,quality_assurance,4,45,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-012.yaml
+IA-HIL-013,industrial_agent,human_in_the_loop,medical_device,quality_assurance,5,60,human_in_the_loop,benchmark_data/agent/human_in_the_loop/IA-HIL-013.yaml

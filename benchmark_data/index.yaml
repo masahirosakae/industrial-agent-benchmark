@@ -1,7 +1,7 @@
 version: '1.1'
-total_count: 160
+total_count: 170
 by_layer:
-  industrial_agent: 40
+  industrial_agent: 50
   industrial_knowledge: 60
   industrial_reasoning: 60
 items:
@@ -1445,3 +1445,93 @@ items:
   estimated_time_min: 45
   primary_skill: human_approval_boundary
   file_path: benchmark_data/knowledge/change_control/IK-CC-010.yaml
+- id: IA-HIL-004
+  layer: industrial_agent
+  category: human_in_the_loop
+  domain: general_manufacturing
+  subdomain: quality_assurance
+  difficulty: 3
+  estimated_time_min: 30
+  primary_skill: human_in_the_loop
+  file_path: benchmark_data/agent/human_in_the_loop/IA-HIL-004.yaml
+- id: IA-HIL-005
+  layer: industrial_agent
+  category: human_in_the_loop
+  domain: general_manufacturing
+  subdomain: process_engineering
+  difficulty: 3
+  estimated_time_min: 30
+  primary_skill: human_in_the_loop
+  file_path: benchmark_data/agent/human_in_the_loop/IA-HIL-005.yaml
+- id: IA-HIL-006
+  layer: industrial_agent
+  category: human_in_the_loop
+  domain: automotive
+  subdomain: quality_assurance
+  difficulty: 4
+  estimated_time_min: 45
+  primary_skill: human_in_the_loop
+  file_path: benchmark_data/agent/human_in_the_loop/IA-HIL-006.yaml
+- id: IA-HIL-007
+  layer: industrial_agent
+  category: human_in_the_loop
+  domain: general_manufacturing
+  subdomain: quality_assurance
+  difficulty: 3
+  estimated_time_min: 30
+  primary_skill: human_in_the_loop
+  file_path: benchmark_data/agent/human_in_the_loop/IA-HIL-007.yaml
+- id: IA-HIL-008
+  layer: industrial_agent
+  category: human_in_the_loop
+  domain: general_manufacturing
+  subdomain: maintenance
+  difficulty: 3
+  estimated_time_min: 30
+  primary_skill: human_in_the_loop
+  file_path: benchmark_data/agent/human_in_the_loop/IA-HIL-008.yaml
+- id: IA-HIL-009
+  layer: industrial_agent
+  category: human_in_the_loop
+  domain: general_manufacturing
+  subdomain: production_control
+  difficulty: 3
+  estimated_time_min: 30
+  primary_skill: human_in_the_loop
+  file_path: benchmark_data/agent/human_in_the_loop/IA-HIL-009.yaml
+- id: IA-HIL-010
+  layer: industrial_agent
+  category: human_in_the_loop
+  domain: automotive
+  subdomain: supply_chain_management
+  difficulty: 4
+  estimated_time_min: 45
+  primary_skill: human_in_the_loop
+  file_path: benchmark_data/agent/human_in_the_loop/IA-HIL-010.yaml
+- id: IA-HIL-011
+  layer: industrial_agent
+  category: human_in_the_loop
+  domain: general_manufacturing
+  subdomain: process_engineering
+  difficulty: 4
+  estimated_time_min: 45
+  primary_skill: human_in_the_loop
+  file_path: benchmark_data/agent/human_in_the_loop/IA-HIL-011.yaml
+- id: IA-HIL-012
+  layer: industrial_agent
+  category: human_in_the_loop
+  domain: general_manufacturing
+  subdomain: quality_assurance
+  difficulty: 4
+  estimated_time_min: 45
+  primary_skill: human_in_the_loop
+  file_path: benchmark_data/agent/human_in_the_loop/IA-HIL-012.yaml
+- id: IA-HIL-013
+  layer: industrial_agent
+  category: human_in_the_loop
+  domain: medical_device
+  subdomain: quality_assurance
+  difficulty: 5
+  estimated_time_min: 60
+  primary_skill: human_in_the_loop
+  file_path: benchmark_data/agent/human_in_the_loop/IA-HIL-013.yaml
