@@ -1,108 +1,61 @@
 # Industrial Agent Benchmark
 
-Industrial Agent Benchmark is a public benchmark project for evaluating industrial and manufacturing agent capabilities. It covers industrial knowledge, industrial reasoning, and industrial agent behavior across practical manufacturing scenarios.
+Industrial Agent Benchmark は、製造業における AI エージェントの実務能力を評価するための公開ベンチマークです。
 
-## Current Status
+v2.0.0 Stable Release は English Release です。データセット本体と評価対象の問題文は英語で提供し、日本語 README では日本の製造業でこのベンチマークが必要になる背景と使い方を説明します。
+
+English README: [README_EN.md](README_EN.md)
+
+## 現在のリリース
 
 | Version | Status | Summary |
 |---|---|---|
-| v1.0 | Public baseline | Initial 90-problem benchmark and judge methodology. |
-| v1.1.0 | Frozen pre-release snapshot | 140 public problem files, `evaluation_set_v2`, and Judge v2 materials. No further evaluation-result cleanup is planned on this line. |
-| v2.0.0 | Release candidate | 180-question public dataset with HF-compatible JSONL export and public validation workflow. |
+| v1.0 | Public baseline | 初期 90 問のベンチマークと judge 方法論。 |
+| v1.1.0 | Frozen pre-release snapshot | 140 問の pre-release snapshot。互換性確認用に保持。 |
+| v2.0.0 | Stable English Release | 180 問の公開データセット、HF-compatible JSONL、公開検証 workflow。 |
 
-v1.1.0 is frozen as a pre-release benchmark snapshot. The v1.1.0 dataset and evaluation materials remain available for inspection and compatibility work, but the public release candidate line is v2.0.0.
+v2.0.0 は、HLE-like な公開モデルを意識して設計しています。
 
-v2.0.0 follows an HLE-style public workflow:
+- 問題データは公開リポジトリで管理
+- Hugging Face Datasets で読み込みやすい JSONL を提供
+- 評価スクリプトとドキュメントを GitHub で公開
+- 生成回答、モデル別結果、非公開評価ログは commit しない
+- leaderboard は将来の安定した judge 互換性ルールの後に検討
 
-- dataset loaded through Hugging Face Datasets
-- GitHub repository provides evaluation scripts and documentation
-- simple local evaluation first
-- public leaderboard later
-- no private model evaluation artifacts committed
+## Why Industrial Agent Benchmark?
 
-The public repository does not include raw model answers, model-specific evaluation outputs, private reports, API keys, provider credentials, or unpublished model-evaluation artifacts.
+製造業で AI エージェントを使う場合、一般的な会話能力だけでは十分ではありません。現場では、受注、計画、購買、製造、検査、出荷、保全、変更管理などがつながっており、ひとつの判断が品質、納期、安全、トレーサビリティに影響します。
 
-## v2.0.0 Dataset Composition
+特に日本の製造業では、以下のような実務上の論点があります。
 
-The v2.0.0 release candidate contains 180 public benchmark questions:
+- 熟練者の暗黙知を、どこまで標準化された判断として扱えるか
+- 不具合、手戻り、特採、変更管理を、証跡付きで説明できるか
+- 自動化してよい作業と、人の承認が必要な作業を区別できるか
+- 現場データ、帳票、指示書、検査記録をまたいで矛盾を見つけられるか
+- 改善提案だけでなく、実行前にリスクと制約を確認できるか
 
-| Layer | Count |
-|---|---:|
-| Industrial Knowledge | 60 |
-| Industrial Reasoning | 60 |
-| Industrial Agent | 60 |
-| Total | 180 |
+Industrial Agent Benchmark は、こうした製造業固有の能力を、知識・推論・エージェント行動の 3 層で評価するための土台です。
 
-## 1. Benchmark Scope
+## v2.0.0 データセット構成
 
-The benchmark is organized into three layers:
+v2.0.0 Stable Release は 180 問です。
 
-| Layer | Description |
-|---|---|
-| Industrial Knowledge | Domain knowledge for order handling, production planning, procurement, manufacturing, quality, shipping, improvement, and maintenance engineering. |
-| Industrial Reasoning | Root-cause analysis, FMEA, CAPA, quality improvement, abnormality analysis, risk tradeoffs, and data integrity. |
-| Industrial Agent | Workflow design, tool selection, MCP-style behavior, human-in-the-loop boundaries, agent safety, structured decisions, and tool trajectories. |
+| Layer | Count | 評価対象 |
+|---|---:|---|
+| Industrial Knowledge | 60 | 製造業務、品質、保全、変更管理などの知識 |
+| Industrial Reasoning | 60 | 根本原因分析、FMEA、CAPA、能力計画、リスク判断 |
+| Industrial Agent | 60 | tool selection、workflow design、human-in-the-loop、安全な実行境界 |
+| Total | 180 |  |
 
-## 2. Repository Layout
+ローカルの Hugging Face-compatible JSONL は以下です。
 
 ```text
-industrial-agent-benchmark/
-  README.md
-  README_EN.md
-  benchmark_data/
-    index.yaml
-    index.csv
-    knowledge/
-    reasoning/
-    agent/
-  docs/
-  evaluation_set_v1.yaml
-  evaluation_set_v2.yaml
-  judge_template.md
-  judge_template_v2.md
-  scripts/
-    generate_dataset.py
-    validate_dataset.py
-    prepare_judge_inputs_v2.py
+data/v2/test.jsonl
 ```
 
-Private or generated outputs are intentionally excluded:
+Dataset card: [dataset_card.md](dataset_card.md)
 
-- `results_v2/`
-- `results/`
-- `judgements/`
-- raw model answers
-- judge outputs
-- model-specific evaluation results
-- private notes and unpublished reports
-- API keys, `.env` files, tokens, and provider credentials
-
-## 3. v1.1.0 Snapshot
-
-The frozen v1.1.0 snapshot includes:
-
-- 140 benchmark problem files under `benchmark_data/`
-- `evaluation_set_v1.yaml`
-- `evaluation_set_v2.yaml`
-- Judge templates for external evaluation workflows
-- dataset generation and validation scripts
-
-`evaluation_set_v2.yaml` contains 30 questions:
-
-- Knowledge: 10
-- Reasoning: 10
-- Agent: 10
-
-Judge v2 supports:
-
-- `score_cap_rules`
-- `numeric_checks`
-- `generic_answer_penalty`
-- `structured_output_requirements`
-- `disallowed_answers`
-- `critical_failures`
-
-## 4. Quick Start
+## Quick Start
 
 ### Requirements
 
@@ -113,7 +66,7 @@ Judge v2 supports:
 pip install pyyaml
 ```
 
-### Validate Dataset
+### データセット検証
 
 ```bash
 python scripts/validate_dataset.py
@@ -127,125 +80,72 @@ Errors: 0
 Warnings:0
 ```
 
-### Inspect Questions
-
-```bash
-cat benchmark_data/knowledge/order/IK-ORDER-001.yaml
-cat benchmark_data/agent/hil_boundary/IA-HILB-001.yaml
-```
-
-### Judge v2 Workflow
-
-Judge v2 requires model answer files and is not runnable from a fresh clone without answers.
-
-Expected answer layout:
-
-```text
-results_v2/<model_id>/answers/<question_id>.txt
-```
-
-`results_v2/` is intentionally excluded from the public repository.
-
-To prepare judge inputs after generating your own answers:
-
-```bash
-python scripts/prepare_judge_inputs_v2.py <model_id>
-```
-
-Example:
-
-```bash
-python scripts/prepare_judge_inputs_v2.py my_model
-```
-
-Do not use a placeholder model ID unless matching answer files exist locally.
-
-## 5. v2.0.0 Dataset Export
-
-v2.0.0 exports the public YAML benchmark questions from `benchmark_data/` to Hugging Face-compatible JSONL. The exported file follows the stable schema in `docs/dataset_schema_v2.md`.
-
-Export the local JSONL dataset:
+### JSONL export
 
 ```bash
 python scripts/export_hf_dataset_v2.py
-```
-
-Validate the exported dataset:
-
-```bash
 python scripts/validate_hf_dataset_v2.py data/v2/test.jsonl
 ```
 
-Load the local JSONL dataset with Hugging Face Datasets:
+### Hugging Face Datasets 形式で読み込む
 
 ```bash
 python examples/load_dataset_v2.py
 ```
 
-Hugging Face hosted loading is planned for publication. The local JSONL export is the supported v2.0.0 release-candidate workflow and should produce 180 records.
+Hugging Face Hub で公開する場合も、この `data/v2/test.jsonl` と [dataset_card.md](dataset_card.md) を中心に利用します。
 
-## 6. Simple Evaluation v2
+## リポジトリ構成
 
-Simple Evaluation v2 prepares standardized prediction files from pre-written JSONL answers. It does not score automatically and does not call external APIs.
-
-```bash
-python eval/run_simple_eval.py \
-  --dataset data/v2/test.jsonl \
-  --answers examples/simple_eval_answers.jsonl \
-  --model-id sample_model \
-  --output-dir results/simple_eval/sample_model
+```text
+industrial-agent-benchmark/
+  README.md
+  README_EN.md
+  dataset_card.md
+  data/
+    v2/
+      test.jsonl
+  benchmark_data/
+    index.yaml
+    index.csv
+    knowledge/
+    reasoning/
+    agent/
+  docs/
+  examples/
+  eval/
+  scripts/
 ```
 
-```bash
-python eval/summarize_simple_eval.py \
-  --predictions results/simple_eval/sample_model/predictions.jsonl \
-  --output results/simple_eval/sample_model/summary.json
-```
+## 評価アーキテクチャ
 
-Generated outputs under `results/` are local artifacts and are not committed.
+v2.0.0 は、次の judge 方向を想定しています。
 
-## 7. v2.0.0 Planning Documents
-
-| Document | Purpose |
+| Layer | Judge direction |
 |---|---|
-| `docs/v1_1_0_freeze_note.md` | Freezes v1.1.0 as a pre-release snapshot. |
-| `docs/v2_0_0_architecture.md` | Defines the active v2.0.0 architecture direction. |
-| `docs/huggingface_dataset_plan.md` | Plans Hugging Face dataset packaging and loading. |
-| `docs/dataset_schema_v2.md` | Defines the stable v2.0.0 dataset schema. |
-| `docs/dataset_export_v2.md` | Documents the local v2.0.0 JSONL export workflow. |
-| `docs/simple_evaluation_v2.md` | Documents the minimal simple evaluation workflow. |
-| `docs/simple_evaluation_plan.md` | Defines the first simple public evaluation workflow. |
-| `docs/leaderboard_policy.md` | Defines future leaderboard governance. |
-| `docs/versioning_policy.md` | Defines versioning and compatibility policy. |
+| Industrial Knowledge | Deterministic Judge |
+| Industrial Reasoning | Rubric Judge plus numeric checks |
+| Industrial Agent | Executable Judge |
 
-Additional public documentation:
+現時点の公開リポジトリは、データセット検証、JSONL export、簡易評価のための基盤を提供します。モデル回答や評価結果は含めません。
 
-| Document | Purpose |
-|---|---|
-| `docs/benchmark_card.md` | Benchmark card. |
-| `docs/benchmark_spec.md` | Problem schema and benchmark specification. |
-| `docs/evaluation_methodology.md` | Evaluation methodology and judge concepts. |
-| `docs/difficulty_definition.md` | Difficulty definition. |
-| `docs/v1.1_release_notes.md` | v1.1.0 pre-release notes. |
-| `docs/public_repository_audit.md` | Public repository audit and release checklist. |
+## Public Artifact Policy
 
-## 8. Public Artifact Policy
+このリポジトリは fresh clone で検証できる公開成果物だけを含めます。
 
-The repository is intended to be usable from a fresh public clone. Public users should be able to validate the dataset and inspect benchmark problems without any private answer or result directories.
-
-Evaluation scripts that consume answers require locally generated answer files. They should fail clearly when those files are absent.
-
-Do not commit:
+commit しないもの:
 
 - raw model answers
 - `results_v2/`
 - `results/`
-- judge inputs or judge outputs
+- judge inputs / judge outputs
 - model-specific evaluation results
 - unpublished reports
 - provider/model-name mappings
-- API keys or secrets
+- API keys, `.env`, tokens, credentials
 
-## 9. License
+## ライセンス
 
-Apache License 2.0. See `LICENSE`.
+Code: Apache License 2.0. See [LICENSE](LICENSE).
+
+Dataset: see [LICENSE_DATASET.md](LICENSE_DATASET.md).
