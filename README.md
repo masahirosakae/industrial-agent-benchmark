@@ -2,7 +2,7 @@
 
 Industrial Agent Benchmark は、製造業における AI エージェントの実務能力を評価するための公開ベンチマークです。
 
-v2.0.0 Stable Release は English Release です。データセット本体と評価対象の問題文は英語で提供し、日本語 README では日本の製造業でこのベンチマークが必要になる背景と使い方を説明します。
+v2.0.0 は Industrial Agent Benchmark の初の Stable Public Release です。現在のデータセットには英語タスクと日本語タスクが混在しており、v2.1.0 で multilingual architecture を整理する予定です。この日本語 README では、日本の製造業でこのベンチマークが必要になる背景と使い方を説明します。
 
 English README: [README_EN.md](README_EN.md)
 
@@ -12,7 +12,7 @@ English README: [README_EN.md](README_EN.md)
 |---|---|---|
 | v1.0 | Public baseline | 初期 90 問のベンチマークと judge 方法論。 |
 | v1.1.0 | Frozen pre-release snapshot | 140 問の pre-release snapshot。互換性確認用に保持。 |
-| v2.0.0 | Stable English Release | 180 問の公開データセット、HF-compatible JSONL、公開検証 workflow。 |
+| v2.0.0 | Stable Public Release | 180 問の公開データセット、HF-compatible JSONL、公開検証 workflow。英語と日本語のタスクが混在。 |
 
 v2.0.0 は、HLE-like な公開モデルを意識して設計しています。
 
@@ -21,6 +21,12 @@ v2.0.0 は、HLE-like な公開モデルを意識して設計しています。
 - 評価スクリプトとドキュメントを GitHub で公開
 - 生成回答、モデル別結果、非公開評価ログは commit しない
 - leaderboard は将来の安定した judge 互換性ルールの後に検討
+
+Language note:
+
+- v2.0.0 の実データは English / Japanese / Mixed を含みます。
+- v2.0.1 は、この実態に合わせるための Documentation & Metadata Correction Release です。
+- v2.1.0 では、言語別 metadata、multilingual 評価方針、English/Japanese task design を整理する予定です。
 
 ## Why Industrial Agent Benchmark?
 

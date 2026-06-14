@@ -6,7 +6,7 @@ The default Japanese README is available at [README.md](README.md).
 
 ## Dataset Overview
 
-v2.0.0 is the Stable English Release. It contains 180 public benchmark questions and exports to Hugging Face-compatible JSONL.
+v2.0.0 is the first stable public release. It contains 180 public benchmark questions, exports to Hugging Face-compatible JSONL, and currently includes both English and Japanese benchmark tasks. Multilingual formalization is planned for v2.1.0.
 
 | Layer | Count | Focus |
 |---|---:|---|
@@ -28,6 +28,12 @@ dataset_card.md
 ```
 
 The dataset is intended to be easy to publish or load through Hugging Face Datasets while keeping evaluation outputs separate from the dataset artifact.
+
+Language note:
+
+- v2.0.0 contains English, Japanese, and mixed-language records.
+- v2.0.1 is a documentation and metadata correction release; it does not change the 180 benchmark items or JSONL schema.
+- v2.1.0 is planned to formalize the multilingual English + Japanese architecture.
 
 ## Quick Start
 
@@ -131,7 +137,7 @@ Contributions should preserve the benchmark's public-release constraints:
 - do not include private company data, customer data, proprietary process data, or provider-specific model results
 - keep generated answers and evaluation outputs out of git
 - update dataset validation/export files only through the documented scripts
-- keep v2.0.0 as an English dataset release; multilingual English/Japanese design is planned for v2.1.0
+- preserve the current multilingual reality unless a future release explicitly translates or restructures the dataset
 
 Before proposing dataset changes, run:
 

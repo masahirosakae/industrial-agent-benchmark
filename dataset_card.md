@@ -2,6 +2,7 @@
 pretty_name: Industrial Agent Benchmark
 language:
   - en
+  - ja
 license: apache-2.0
 task_categories:
   - question-answering
@@ -21,6 +22,8 @@ size_categories:
 ## Overview
 
 Industrial Agent Benchmark is a public benchmark dataset for evaluating industrial and manufacturing agent capabilities. Version 2.0.0 packages 180 public benchmark questions as Hugging Face-compatible JSONL while keeping evaluation scripts and generated outputs outside the dataset artifact.
+
+Language note: v2.0.0 contains English, Japanese, and mixed-language records. v2.0.1 corrects documentation and metadata to reflect this reality without changing the 180 examples or JSONL schema. A more formal multilingual English + Japanese architecture is planned for v2.1.0.
 
 The dataset is intended to be loaded as:
 
