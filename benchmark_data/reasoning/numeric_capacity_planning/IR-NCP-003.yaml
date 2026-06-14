@@ -6,13 +6,13 @@ domain: general_manufacturing
 subdomain: assembly
 difficulty: 3
 estimated_time_min: 25
-title: Yield Adjusted Start Quantity
+title: 歩留まりを考慮した投入数量
 scenario: |
-  Final assembly must deliver 960 good units per day. First-pass yield is expected to be 92%.
-  Units that fail are scrapped and cannot be reworked.
+  最終組立は1日あたり良品960台を納入しなければならない。初回通過歩留まりは92%と見込まれている。
+  不合格品はスクラップとなり、再作業できない。
 question: |
-  How many assemblies must be started to expect 960 good units?
-  Explain the rounding rule and why it is required.
+  良品960台を期待するには、何台の組立を開始する必要があるか。
+  丸め規則と、それが必要な理由を説明せよ。
 expected_skills:
 - yield_adjusted_capacity
 - integer_rounding
@@ -24,31 +24,31 @@ secondary_skills:
 - unit_conversion
 - numeric_result_explanation
 reference_answer: |
-  Required starts must account for yield because only 92% are expected to become good units.
-  Required starts = 960 good units / 0.92 = 1043.48 starts.
-  Because partial assemblies cannot be started, the result must be rounded up to 1044 assemblies.
-  Rounding down to 1043 would not provide the expected 960 good units.
+  必要投入数は歩留まりを考慮する必要がある。良品になると期待されるのは92%だけだからである。
+  必要投入数 = 良品960台 / 0.92 = 1043.48台である。
+  部分的な組立は開始できないため、結果は1044台に切り上げなければならない。
+  1043台に切り下げると、期待値として良品960台を確保できない。
 evaluation_rubric:
   must_have:
-  - Divides 960 by 0.92 rather than multiplying by 0.92.
-  - Calculates approximately 1043.48 required starts.
-  - Rounds up to 1044 assemblies.
-  - Explains that fractional assemblies are impossible and yield drives the start quantity.
+  - 960に0.92を掛けるのではなく、960を0.92で割っている。
+  - 必要投入数を約1043.48台と計算している。
+  - 1044台に切り上げている。
+  - 小数の組立は不可能であり、歩留まりが投入数量を決めることを説明している。
   nice_to_have:
-  - States that this is an expected-value plan, not a guarantee.
-  - Mentions that yield risk may require monitoring or contingency.
+  - これは期待値に基づく計画であり、保証ではないと述べている。
+  - 歩留まりリスクには監視または代替策が必要になり得ると述べている。
   critical_failures:
-  - Multiplies 960 by 0.92 to reduce the required starts.
-  - Rounds down to 1043 assemblies.
-  - Ignores scrap/yield and says 960 starts are enough.
+  - 960に0.92を掛けて必要投入数を減らしている。
+  - 1043台に切り下げている。
+  - スクラップまたは歩留まりを無視し、960台の投入で十分としている。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Required starts are rounded down.
+- condition: 必要投入数を切り下げている。
   max_score: 1
-  reason: Rounding down creates insufficient expected starts.
-- condition: Yield is applied in the wrong direction.
+  reason: 切り下げると期待投入数が不足する。
+- condition: 歩留まりを逆方向に適用している。
   max_score: 1
-  reason: The central calculation is inverted.
+  reason: 中心となる計算が逆になっている。
 numeric_checks:
 - name: required_starts_unrounded
   expected_value: 1043.48
@@ -66,6 +66,6 @@ generic_answer_penalty:
   - scenario_specific_numbers_not_used
   - generic_framework_only
 disallowed_answers:
-- Start 1043 assemblies.
-- Start 960 assemblies because the requirement is 960 good units.
-- Required starts are 883 or 884 assemblies.
+- 1043台の組立を開始する。
+- 要求は良品960台なので、960台の組立を開始する。
+- 必要投入数は883台または884台である。

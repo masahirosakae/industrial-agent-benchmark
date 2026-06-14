@@ -6,14 +6,14 @@ domain: general_manufacturing
 subdomain: logistics
 difficulty: 4
 estimated_time_min: 35
-title: Shift Run Time Capacity
+title: シフト稼働時間能力
 scenario: |
-  A packaging line can process 300 units per hour when running.
-  The paid shift is 8 hours, but the plan includes 30 minutes of changeover and 45 minutes of planned cleaning.
-  Demand for the shift is 2,100 units.
+  包装ラインは稼働中、1時間あたり300台を処理できる。
+  有給シフトは8時間だが、計画には30分の段替えと45分の計画清掃が含まれている。
+  そのシフトの需要は2,100台である。
 question: |
-  Calculate available run time, shift capacity, and whether the shift plan is feasible.
-  Explain any shortfall or margin.
+  利用可能な稼働時間、シフト能力、シフト計画が実現可能かを計算せよ。
+  不足または余裕を説明せよ。
 expected_skills:
 - shift_capacity_calculation
 - unit_conversion
@@ -25,32 +25,32 @@ secondary_skills:
 - constraint_handling
 - feasibility_judgement
 reference_answer: |
-  Non-running time is 30 minutes + 45 minutes = 75 minutes, or 1.25 hours.
-  Available run time is 8 - 1.25 = 6.75 hours.
-  Capacity is 6.75 hours * 300 units/hour = 2,025 units.
-  Demand is 2,100 units, so the plan is short by 75 units and is infeasible without reducing non-running time, adding approved time/capacity, or rescheduling demand.
+  非稼働時間は30分 + 45分 = 75分、つまり1.25時間である。
+  利用可能な稼働時間は 8 - 1.25 = 6.75時間である。
+  能力は 6.75時間 * 300台/時間 = 2,025台である。
+  需要は2,100台であるため、計画は75台不足し、非稼働時間の削減、承認済み時間/能力の追加、または需要の再スケジュールなしには実現不可能である。
 evaluation_rubric:
   must_have:
-  - Subtracts changeover and cleaning time from the paid shift.
-  - Calculates available run time as 6.75 hours or 405 minutes.
-  - Calculates capacity as 2,025 units.
-  - Compares 2,025 units with 2,100 units of demand.
-  - Concludes the plan is infeasible with a 75-unit shortfall.
+  - 有給シフトから段替え時間と清掃時間を差し引いている。
+  - 利用可能な稼働時間を6.75時間または405分と計算している。
+  - 能力を2,025台と計算している。
+  - 2,025台を需要2,100台と比較している。
+  - 75台不足し、計画は実現不可能と結論づけている。
   nice_to_have:
-  - Shows conversion of 75 minutes to 1.25 hours.
-  - Suggests constraint-respecting options such as reducing downtime, adding approved time, or rescheduling.
+  - 75分を1.25時間に換算している。
+  - 停止時間削減、承認済み時間の追加、再スケジュールなど、制約を守る選択肢を提案している。
   critical_failures:
-  - Uses the full 8 paid hours as productive run time.
-  - Claims the plan is feasible without addressing planned non-running time.
-  - Ignores changeover or cleaning in the capacity calculation.
+  - 有給8時間すべてを生産稼働時間として使用している。
+  - 計画非稼働時間に対処せず、計画は実現可能と主張している。
+  - 能力計算で段替えまたは清掃を無視している。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Uses 8 hours as available run time.
+- condition: 利用可能な稼働時間として8時間を使用している。
   max_score: 2
-  reason: Planned non-running time is a central constraint.
-- condition: Final answer says the shift is feasible under the current plan.
+  reason: 計画非稼働時間は中心的な制約である。
+- condition: 最終回答が、現在の計画でシフトは実現可能としている。
   max_score: 1
-  reason: Wrong feasibility decision.
+  reason: 実現可能性判断が誤っている。
 numeric_checks:
 - name: available_run_time_hours
   expected_value: 6.75
@@ -78,5 +78,5 @@ generic_answer_penalty:
   - scenario_specific_numbers_not_used
   - generic_framework_only
 disallowed_answers:
-- Capacity is 2400 units because the paid shift is 8 hours.
-- The plan is feasible with the current shift.
+- 有給シフトが8時間なので、能力は2400台である。
+- 現在のシフトで計画は実現可能である。

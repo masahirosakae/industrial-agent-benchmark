@@ -5,16 +5,16 @@ domain: general_manufacturing
 subdomain: machining
 difficulty: 4
 estimated_time_min: 45
-title: Improvement Theme Selection for Setup Time Reduction
+title: 段取り時間短縮の改善テーマ選定
 scenario: |
-  A machining cell has a 55-minute setup changeover.
-  The observed breakdown is 25 minutes for fixture removal and installation, 15 minutes for tool offset checks, 10 minutes for first-piece inspection, and 5 minutes for paperwork.
-  The cell runs 4,000 changeovers per year, and each lost production minute is valued at 120 yen.
-  The team is considering a fixture preset cart that could reduce setup time by 40 minutes.
-  The cart costs 800,000 yen, requires 100,000 yen of annual maintenance, and needs two operators for 20 minutes per changeover during the first 8 weeks of introduction.
+  ある加工セルでは段取り替えに55分かかっている。
+  観察された内訳は、治具の取り外しと取り付けが25分、工具オフセット確認が15分、初品検査が10分、書類作業が5分である。
+  このセルでは年間4,000回の段取り替えがあり、生産ロス1分の価値は120円である。
+  チームは、段取り時間を40分短縮できる可能性がある治具プリセットカートを検討している。
+  カートの費用は800,000円、年間保守費は100,000円であり、導入後最初の8週間は段取り替え1回あたり作業者2名が20分必要である。
 question: |
-  What improvement theme should be selected, and what basic cost-benefit checks should be made?
-  Explain whether the 40-minute setup reduction is enough to justify further implementation planning.
+  どの改善テーマを選定すべきか。また、どの基本的な費用対効果確認を行うべきか。
+  40分の段取り短縮が、さらなる実施計画を正当化するのに十分かを説明せよ。
 expected_skills:
 - quality_improvement
 - shopfloor_control
@@ -26,19 +26,19 @@ secondary_skills:
 - cost_benefit_analysis
 - production_planning
 reference_answer: |
-  A fixture preset and setup-standardization theme is appropriate because the largest losses are fixture exchange, offset checks, and first-piece confirmation.
-  A 40-minute reduction across 4,000 changeovers saves 160,000 minutes per year. At 120 yen per minute, the gross annual benefit is 19,200,000 yen.
-  Even after the 800,000 yen purchase cost and 100,000 yen annual maintenance, the expected benefit is large enough to justify implementation planning.
-  The plan should still check introduction labor during the first 8 weeks, operator training, fixture accuracy, first-piece quality risk, and whether the reduction is repeatable before full rollout.
+  治具交換、オフセット確認、初品確認が最大のロスであるため、治具プリセットと段取り標準化のテーマが適切である。
+  40分の短縮を4,000回の段取り替えに適用すると、年間160,000分を削減できる。1分あたり120円では、年間総便益は19,200,000円である。
+  800,000円の購入費と100,000円の年間保守費を考慮しても、期待便益は実施計画を正当化するのに十分大きい。
+  ただし、本格展開前に、導入後最初の8週間の追加作業工数、作業者教育、治具精度、初品品質リスク、短縮効果の再現性を確認する必要がある。
 evaluation_rubric:
   must_have:
-  - Recognizes setup time reduction as the improvement theme.
-  - Calculates the annual time saving from 40 minutes times 4,000 changeovers.
-  - Compares expected benefit with purchase and maintenance costs.
+  - 段取り時間短縮を改善テーマとして認識している。
+  - 40分に4,000回の段取り替えを掛けて、年間時間削減を計算している。
+  - 期待便益を購入費および保守費と比較している。
   nice_to_have:
-  - Notes first-piece quality, training, and repeatability checks.
-  - Mentions phased introduction or pilot confirmation.
+  - 初品品質、教育、再現性確認を指摘している。
+  - 段階的導入またはパイロット確認に言及している。
   critical_failures:
-  - Treats the 40-minute reduction as automatically approved without verification.
-  - Ignores cost, quality, or implementation constraints.
+  - 40分短縮を検証なしに自動承認されたものとして扱っている。
+  - 費用、品質、または実施上の制約を無視している。
 reasoning_trace_required: true

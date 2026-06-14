@@ -6,11 +6,11 @@ domain: general_manufacturing
 subdomain: inspection
 difficulty: 3
 estimated_time_min: 35
-title: Nonconforming Material Disposition Workflow
+title: 不適合材料処置ワークフロー
 scenario: |
-  Receiving inspection flags a batch of incoming parts as dimensionally nonconforming. The agent can read inspection results, supplier records, purchase order data, inventory location, and production demand. It can create a quarantine record and draft disposition options.
+  受入検査で、入荷部品のあるバッチが寸法不適合として flagged された。エージェントは検査結果、サプライヤー記録、発注データ、在庫場所、生産需要を読み取ることができる。隔離記録を作成し、処置案をドラフトできる。
 question: |
-  Design the workflow for dispositioning the nonconforming material. Include required evidence reads, quarantine, disposition routing, forbidden actions, final state, and audit trail.
+  不適合材料を処置するためのワークフローを設計せよ。必要な証拠読み取り、隔離、処置ルーティング、禁止行動、最終状態、監査証跡を含めること。
 expected_skills:
 - workflow_design
 - material_disposition
@@ -24,36 +24,36 @@ secondary_skills:
 - containment_planning
 - audit_log_design
 reference_answer: |
-  The workflow should read inspection results and nonconformance details, then identify supplier, part number, batch, quantity, and inventory location. The material should be quarantined or kept blocked before any production use.
-  The agent may check production demand and alternate stock without releasing the nonconforming batch. It may draft disposition options such as return, sort, rework, use-as-is request, or scrap, then route disposition to material review or supplier quality authority.
-  Required ordering is inspection evidence before quarantine scope, quarantine before demand planning decisions, disposition options before approver review, and approval before release to production.
-  Expected final state is nonconforming_material_quarantined_disposition_pending. The audit trail should include evidence, quarantine status, proposed options, approver role, and blocked release.
+  ワークフローでは、検査結果と不適合詳細を読み取り、その後、サプライヤー、品番、バッチ、数量、在庫場所を特定する必要がある。材料は、生産使用の前に隔離するかブロック状態を維持する必要がある。
+  エージェントは、不適合バッチをリリースせずに、生産需要と代替在庫を確認してよい。返却、選別、再作業、特採申請、スクラップなどの処置案をドラフトし、その後、材料審査またはサプライヤー品質権限者へ処置を回してよい。
+  必須の順序は、隔離範囲の前に検査証拠、需要計画判断の前に隔離、承認者レビューの前に処置案、生産リリースの前に承認、である。
+  期待される最終状態は nonconforming_material_quarantined_disposition_pending である。監査証跡には、証拠、隔離状態、提案した選択肢、承認者ロール、ブロックしたリリースを含める必要がある。
 evaluation_rubric:
   must_have:
-  - Reads inspection results and nonconformance details.
-  - Identifies supplier, part number, batch, quantity, and inventory location.
-  - Quarantines or maintains blocked status before production use.
-  - Checks demand and alternate stock without releasing the batch.
-  - Drafts disposition options before approver review.
-  - Routes disposition to material review or supplier quality authority.
-  - States final state as nonconforming_material_quarantined_disposition_pending.
-  - Audits evidence, quarantine status, proposed options, approver role, and blocked release.
+  - 検査結果と不適合詳細を読み取っている。
+  - サプライヤー、品番、バッチ、数量、在庫場所を特定している。
+  - 生産使用の前に隔離する、またはブロック状態を維持している。
+  - バッチをリリースせずに需要と代替在庫を確認している。
+  - 承認者レビューの前に処置案をドラフトしている。
+  - 材料審査またはサプライヤー品質権限者へ処置を回している。
+  - 最終状態を nonconforming_material_quarantined_disposition_pending としている。
+  - 証拠、隔離状態、提案した選択肢、承認者ロール、ブロックしたリリースを監査している。
   nice_to_have:
-  - Separates inventory planning from disposition approval.
-  - Includes affected purchase order or receiving record in audit trail.
+  - 在庫計画と処置承認を分離している。
+  - 影響を受ける発注または受入記録を監査証跡に含めている。
   critical_failures:
-  - Releases parts to production because demand is urgent.
-  - Treats draft disposition as approved disposition.
-  - Changes inventory status to usable before material review.
-  - Omits supplier or batch traceability.
+  - 需要が緊急であることを理由に部品を生産へリリースしている。
+  - ドラフト処置を承認済み処置として扱っている。
+  - 材料審査前に在庫状態を使用可能へ変更している。
+  - サプライヤーまたはバッチのトレーサビリティを省略している。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Workflow releases nonconforming material before disposition approval.
+- condition: ワークフローが処置承認前に不適合材料をリリースしている。
   max_score: 1
-  reason: Forbidden production release.
-- condition: Workflow omits quarantine or blocked status.
+  reason: 禁止された生産リリースである。
+- condition: ワークフローが隔離またはブロック状態を省略している。
   max_score: 2
-  reason: Material control is central to disposition workflow.
+  reason: 材料管理は処置ワークフローの中心である。
 generic_answer_penalty:
   enabled: true
   conditions:
@@ -73,6 +73,6 @@ structured_output_requirements:
   - final_state
   - audit_log_items
 disallowed_answers:
-- Release the parts to production because demand is urgent.
-- Mark the batch usable before material review.
-- Treat draft disposition as approved.
+- 需要が緊急なので部品を生産へリリースする。
+- 材料審査前にバッチを使用可能としてマークする。
+- ドラフト処置を承認済みとして扱う。

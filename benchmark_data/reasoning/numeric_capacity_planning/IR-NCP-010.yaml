@@ -6,15 +6,15 @@ domain: general_manufacturing
 subdomain: production_control
 difficulty: 5
 estimated_time_min: 45
-title: Expedite Capacity With Yield and Quality Boundary
+title: 歩留まりと品質境界を考慮した特急対応能力
 scenario: |
-  An expedite request requires 1,600 good units in two days.
-  The process has two machines, each capable of 500 starts per day before quality loss.
-  Running above that rate increases scrap risk and requires quality approval. Normal yield is 96%.
-  No additional machines are available.
+  特急依頼では2日間で良品1,600台が必要である。
+  工程には2台の機械があり、品質低下が生じる前の能力は各機械1日あたり500投入である。
+  その能力を超えて稼働するとスクラップリスクが増加し、品質承認が必要である。通常歩留まりは96%である。
+  追加機械は利用できない。
 question: |
-  Assess whether the request is feasible without exceeding normal machine limits.
-  Calculate the required starts, compare them with available start capacity, and state the escalation decision.
+  通常の機械制限を超えずにこの依頼が実現可能か評価せよ。
+  必要投入数を計算し、利用可能な投入能力と比較し、エスカレーション判断を述べよ。
 expected_skills:
 - yield_adjusted_capacity
 - equipment_capacity_calculation
@@ -28,36 +28,36 @@ secondary_skills:
 - constraint_handling
 - escalation_design
 reference_answer: |
-  Required starts must account for yield: 1,600 good units / 0.96 = 1,666.67 starts, so at least 1,667 starts are required.
-  Normal start capacity is 2 machines * 500 starts/day * 2 days = 2,000 starts.
-  Because 2,000 normal starts exceed the 1,667 required starts, the request is capacity-feasible without exceeding normal machine limits, assuming material, staffing, and other constraints are available.
-  No above-rate quality escalation is needed for capacity because the normal machine limit is sufficient. The answer should still confirm assumptions and should not recommend above-rate running unless another constraint emerges and quality approval is obtained.
+  必要投入数は歩留まりを考慮する必要がある。良品1,600台 / 0.96 = 1,666.67投入であるため、少なくとも1,667投入が必要である。
+  通常投入能力は 2台の機械 * 500投入/日 * 2日 = 2,000投入である。
+  通常投入2,000は必要投入1,667を上回るため、材料、要員、その他の制約が利用可能であるという前提では、通常の機械制限を超えずに依頼は能力上実現可能である。
+  通常の機械制限で十分であるため、能力面では定格超過に対する品質エスカレーションは不要である。ただし、前提条件は確認すべきであり、別の制約が発生して品質承認を得る場合を除き、定格超過稼働を推奨してはならない。
 evaluation_rubric:
   must_have:
-  - Calculates required starts from good-unit demand and 96% yield.
-  - Rounds required starts up to 1,667.
-  - Calculates normal two-day machine capacity as 2,000 starts.
-  - Concludes the request is capacity-feasible within normal machine limits.
-  - States that above-rate quality escalation is not needed for capacity, while assumptions such as material and staffing should be confirmed.
+  - 良品需要と96%歩留まりから必要投入数を計算している。
+  - 必要投入数を1,667に切り上げている。
+  - 通常の2日間機械能力を2,000投入と計算している。
+  - 通常の機械制限内で依頼は能力上実現可能と結論づけている。
+  - 能力面では定格超過の品質エスカレーションは不要だが、材料や要員などの前提は確認すべきだと述べている。
   nice_to_have:
-  - Explains why comparing good units directly to start capacity is incomplete.
-  - Identifies residual assumptions and avoids unnecessary overtime or quality risk.
+  - 良品台数を投入能力と直接比較するだけでは不十分な理由を説明している。
+  - 残る前提条件を特定し、不要な残業または品質リスクを避けている。
   critical_failures:
-  - Compares 1,600 good units directly to start capacity without considering yield.
-  - Recommends above-rate production even though normal capacity is sufficient.
-  - Fails to round required starts up.
-  - Claims the request is infeasible because it ignores the two-machine, two-day capacity.
+  - 歩留まりを考慮せず、良品1,600台を投入能力と直接比較している。
+  - 通常能力で十分であるにもかかわらず、定格超過生産を推奨している。
+  - 必要投入数を切り上げていない。
+  - 2台の機械による2日間能力を無視し、依頼は実現不可能と主張している。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Required starts are not adjusted for yield.
+- condition: 必要投入数が歩留まりで調整されていない。
   max_score: 2
-  reason: Yield-adjusted starts are central to the decision.
-- condition: Recommends above-rate production without need or quality approval.
+  reason: 歩留まり調整後の投入数が判断の中心である。
+- condition: 必要性または品質承認なしに定格超過生産を推奨している。
   max_score: 1
-  reason: This creates unnecessary quality risk.
-- condition: Required starts are rounded down.
+  reason: 不要な品質リスクを生じさせる。
+- condition: 必要投入数を切り下げている。
   max_score: 1
-  reason: Integer rounding is required for starts.
+  reason: 投入数には整数への切り上げが必要である。
 numeric_checks:
 - name: required_starts_unrounded
   expected_value: 1666.67
@@ -86,6 +86,6 @@ generic_answer_penalty:
   - generic_framework_only
   - no_tradeoff_analysis
 disallowed_answers:
-- Run above normal machine limits without quality approval.
-- The request is infeasible because only 1000 starts are available.
-- Required starts are 1600 because demand is 1600 good units.
+- 品質承認なしに通常の機械制限を超えて稼働する。
+- 利用可能なのは1000投入だけなので、この依頼は実現不可能である。
+- 需要が良品1600台なので、必要投入数は1600である。

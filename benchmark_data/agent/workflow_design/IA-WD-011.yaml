@@ -6,11 +6,11 @@ domain: general_manufacturing
 subdomain: inspection
 difficulty: 4
 estimated_time_min: 45
-title: Inspection Plan Update Workflow
+title: 検査計画更新ワークフロー
 scenario: |
-  A new defect mode appears after a process change. The agent can read defect records, current control plan, inspection checklist, measurement system status, and affected lot genealogy. It can draft inspection-plan changes but cannot release them.
+  工程変更後に新しい不良モードが現れた。エージェントは不良記録、現在の管理計画、検査チェックリスト、測定システム状態、影響ロット系譜を読み取ることができる。検査計画変更をドラフトできるが、リリースはできない。
 question: |
-  Design the workflow for updating the inspection plan safely. Include evidence reads, measurement readiness, containment, review routing, blocked release, final state, and audit trail.
+  検査計画を安全に更新するためのワークフローを設計せよ。証拠読み取り、測定準備状態、封じ込め、レビュールーティング、ブロックされたリリース、最終状態、監査証跡を含めること。
 expected_skills:
 - workflow_design
 - inspection_planning
@@ -24,39 +24,39 @@ secondary_skills:
 - documentation_control
 - audit_log_design
 reference_answer: |
-  The workflow should read defect evidence and affected characteristics, then check current control plan, inspection checklist, sampling frequency, and gauge or measurement readiness.
-  It should identify affected lots and decide whether temporary containment inspection is needed. The agent may draft inspection-plan updates and validation or MSA requirements if needed, then route to quality and process engineering review.
-  Final release of the inspection plan must be blocked until approval.
-  Expected final state is inspection_plan_review_pending. Audit trail should include evidence, affected characteristics, draft change, review state, and containment actions.
+  ワークフローでは、不良証拠と影響を受ける特性を読み取り、その後、現在の管理計画、検査チェックリスト、サンプリング頻度、ゲージまたは測定準備状態を確認する必要がある。
+  影響ロットを特定し、一時的な封じ込め検査が必要かを判断する必要がある。エージェントは、必要に応じて検査計画更新とバリデーションまたはMSA要求をドラフトし、その後、品質および工程技術レビューへ回してよい。
+  検査計画の最終リリースは、承認までブロックしなければならない。
+  期待される最終状態は inspection_plan_review_pending である。監査証跡には、証拠、影響特性、ドラフト変更、レビュー状態、封じ込め行動を含める必要がある。
 evaluation_rubric:
   must_have:
-  - Reads defect evidence and affected characteristics before drafting changes.
-  - Checks current control plan, inspection checklist, sampling frequency, and gauge readiness.
-  - Identifies affected lots and temporary containment inspection need.
-  - Drafts inspection-plan update and validation or MSA requirement if needed.
-  - Routes to quality and process engineering review.
-  - Blocks final release of inspection plan until approval.
-  - States final state as inspection_plan_review_pending.
-  - Audits evidence, affected characteristics, draft change, review state, and containment actions.
+  - 変更をドラフトする前に、不良証拠と影響特性を読み取っている。
+  - 現在の管理計画、検査チェックリスト、サンプリング頻度、ゲージ準備状態を確認している。
+  - 影響ロットと一時的な封じ込め検査の要否を特定している。
+  - 必要に応じて検査計画更新とバリデーションまたはMSA要求をドラフトしている。
+  - 品質および工程技術レビューへ回している。
+  - 承認まで検査計画の最終リリースをブロックしている。
+  - 最終状態を inspection_plan_review_pending としている。
+  - 証拠、影響特性、ドラフト変更、レビュー状態、封じ込め行動を監査している。
   nice_to_have:
-  - Distinguishes temporary containment inspection from permanent plan release.
-  - Includes measurement readiness as a gate before deployment.
+  - 一時的な封じ込め検査と恒久的な計画リリースを区別している。
+  - 展開前のゲートとして測定準備状態を含めている。
   critical_failures:
-  - Releases new inspection plan without approval.
-  - Changes inspection frequency without evidence.
-  - Deploys inspection using unready measurement method.
-  - Omits affected lot containment.
+  - 承認なしに新しい検査計画をリリースしている。
+  - 証拠なしに検査頻度を変更している。
+  - 準備できていない測定方法を使って検査を展開している。
+  - 影響ロットの封じ込めを省略している。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Workflow releases inspection plan without approval.
+- condition: ワークフローが承認なしに検査計画をリリースしている。
   max_score: 1
-  reason: Forbidden document/control plan release.
-- condition: Workflow omits measurement readiness check.
+  reason: 禁止された文書または管理計画リリースである。
+- condition: ワークフローが測定準備状態の確認を省略している。
   max_score: 2
-  reason: Inspection deployment requires measurement readiness.
-- condition: Workflow omits affected lot containment.
+  reason: 検査展開には測定準備状態が必要である。
+- condition: ワークフローが影響ロットの封じ込めを省略している。
   max_score: 3
-  reason: Containment is required when affected lots exist.
+  reason: 影響ロットが存在する場合、封じ込めが必要である。
 generic_answer_penalty:
   enabled: true
   conditions:
@@ -76,6 +76,6 @@ structured_output_requirements:
   - final_state
   - audit_log_items
 disallowed_answers:
-- Release the inspection plan immediately.
-- Change sampling frequency without defect evidence.
-- Deploy an inspection method before gauge readiness is confirmed.
+- 検査計画を直ちにリリースする。
+- 不良証拠なしにサンプリング頻度を変更する。
+- ゲージ準備状態が確認される前に検査方法を展開する。

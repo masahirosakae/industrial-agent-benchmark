@@ -6,11 +6,11 @@ domain: general_manufacturing
 subdomain: process_engineering
 difficulty: 4
 estimated_time_min: 45
-title: Engineering Change Workflow
+title: 設計変更ワークフロー
 scenario: |
-  A fixture improvement is proposed to reduce assembly defects. The agent can draft a change request, identify affected documents, request reviews, and prepare an implementation checklist. It cannot release documents or implement the change without approval.
+  組立不良を減らすための治具改善が提案されている。エージェントは変更申請をドラフトし、影響を受ける文書を特定し、レビューを依頼し、実施チェックリストを準備できる。承認なしに文書をリリースしたり変更を実施したりすることはできない。
 question: |
-  Design the workflow from change request intake through controlled implementation readiness. Include dependencies, gate checks, blocked actions, final state, and audit trail.
+  変更申請の受付から管理された実施準備完了までのワークフローを設計せよ。依存関係、ゲート確認、ブロック行動、最終状態、監査証跡を含めること。
 expected_skills:
 - workflow_design
 - change_control
@@ -24,40 +24,40 @@ secondary_skills:
 - documentation_control
 - audit_log_design
 reference_answer: |
-  The workflow should read current fixture, process, defect, and document state before drafting the change request. The request should include reason and affected product, process, equipment, and document boundaries.
-  It should perform impact scope checks for work instruction, control plan, inspection method, and training, then route review to engineering, quality, and production owner.
-  It may prepare an implementation checklist with effective date, revision boundary, and rollback plan, but document release and line implementation must be blocked until approvals are recorded.
-  Required ordering is current-state read before drafting, impact assessment before approval routing, approval routing before release or implementation, and implementation checklist before final readiness state.
-  Expected final state is change_ready_for_approval. Audit trail should include request, affected items, review state, blocked actions, and readiness checklist.
+  ワークフローでは、変更申請をドラフトする前に、現在の治具、工程、不良、文書状態を読み取る必要がある。申請には、理由と、影響を受ける製品、工程、設備、文書の境界を含める必要がある。
+  作業標準、管理計画、検査方法、教育に関する影響範囲確認を実施し、その後、技術、品質、生産責任者へレビューを回す必要がある。
+  適用日、改訂境界、ロールバック計画を含む実施チェックリストを準備してよいが、承認が記録されるまで文書リリースとライン実施はブロックしなければならない。
+  必須の順序は、ドラフト前に現状を読み取る、承認ルーティング前に影響評価を行う、リリースまたは実施前に承認ルーティングを行う、最終準備完了状態の前に実施チェックリストを作成する、である。
+  期待される最終状態は change_ready_for_approval である。監査証跡には、申請、影響項目、レビュー状態、ブロック行動、準備完了チェックリストを含める必要がある。
 evaluation_rubric:
   must_have:
-  - Reads current fixture, process, defect, and document state before drafting the change.
-  - Drafts a change request with reason and affected boundaries.
-  - Performs impact scope check for work instruction, control plan, inspection method, and training.
-  - Routes review to engineering, quality, and production owner.
-  - Prepares implementation checklist with effective date, revision boundary, and rollback plan.
-  - Blocks document release and line implementation until approvals are recorded.
-  - States final state as change_ready_for_approval.
-  - Audits request, affected items, review state, blocked actions, and readiness checklist.
+  - 変更をドラフトする前に、現在の治具、工程、不良、文書状態を読み取っている。
+  - 理由と影響境界を含む変更申請をドラフトしている。
+  - 作業標準、管理計画、検査方法、教育に関する影響範囲確認を実施している。
+  - 技術、品質、生産責任者へレビューを回している。
+  - 適用日、改訂境界、ロールバック計画を含む実施チェックリストを準備している。
+  - 承認が記録されるまで文書リリースとライン実施をブロックしている。
+  - 最終状態を change_ready_for_approval としている。
+  - 申請、影響項目、レビュー状態、ブロック行動、準備完了チェックリストを監査している。
   nice_to_have:
-  - Distinguishes draft, review, approval, and implementation readiness states.
-  - Identifies rollback planning as a pre-implementation dependency.
+  - ドラフト、レビュー、承認、実施準備完了の状態を区別している。
+  - ロールバック計画を実施前の依存関係として特定している。
   critical_failures:
-  - Updates production documents before approval.
-  - Implements fixture change before impact assessment.
-  - Skips rollback or effective-date boundary.
-  - Treats defect reduction benefit as automatic approval.
+  - 承認前に生産文書を更新している。
+  - 影響評価前に治具変更を実施している。
+  - ロールバックまたは適用日境界を省略している。
+  - 不良削減効果を自動承認として扱っている。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Workflow releases documents or implements the fixture before approval.
+- condition: ワークフローが承認前に文書をリリースする、または治具を実施している。
   max_score: 1
-  reason: Controlled change action before approval.
-- condition: Workflow omits impact assessment.
+  reason: 承認前の管理対象変更行動である。
+- condition: ワークフローが影響評価を省略している。
   max_score: 2
-  reason: Impact assessment is a required gate before review and implementation.
-- condition: Workflow omits rollback or effective-date boundary.
+  reason: 影響評価はレビューと実施の前に必要なゲートである。
+- condition: ワークフローがロールバックまたは適用日境界を省略している。
   max_score: 3
-  reason: Implementation readiness is incomplete.
+  reason: 実施準備が不完全である。
 generic_answer_penalty:
   enabled: true
   conditions:
@@ -77,6 +77,6 @@ structured_output_requirements:
   - final_state
   - audit_log_items
 disallowed_answers:
-- Release the work instruction before approval.
-- Implement the fixture change before impact assessment.
-- Treat expected defect reduction as approval.
+- 承認前に作業標準をリリースする。
+- 影響評価前に治具変更を実施する。
+- 期待される不良削減を承認として扱う。

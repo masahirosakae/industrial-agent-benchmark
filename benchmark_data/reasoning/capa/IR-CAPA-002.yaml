@@ -5,15 +5,15 @@ domain: general_manufacturing
 subdomain: quality_assurance
 difficulty: 4
 estimated_time_min: 45
-title: CAPA for Torque Measurement Drift
+title: トルク測定ドリフトに対するCAPA
 scenario: |
-  An internal audit found that one torque wrench used on a final assembly station may have drifted low.
-  The affected production window covers two shifts and 1,240 assembled units.
-  The specification is 0.80 N*m minimum, but spot checks found fasteners at 0.72 N*m and 0.74 N*m.
-  Reinspection capacity is 300 units per shift, and the next shipment is scheduled in 48 hours. Each unit has 20 fasteners that could be affected.
+  内部監査により、最終組立ステーションで使用されている1本のトルクレンチが低めにドリフトしていた可能性が見つかった。
+  影響を受ける生産時間帯は2直分で、組立済み1,240台を含む。
+  仕様は最小0.80 N*mであるが、抜き取り確認では締結部が0.72 N*mおよび0.74 N*mで見つかった。
+  再検査能力は1直あたり300台であり、次回出荷は48時間後に予定されている。各製品には影響を受け得る締結部が20箇所ある。
 question: |
-  Propose a CAPA response.
-  Include containment, scope definition, reinspection capacity, suspected cause, corrective action, and verification of effectiveness.
+  CAPA対応を提案せよ。
+  封じ込め、範囲定義、再検査能力、推定原因、是正処置、有効性確認を含めよ。
 expected_skills:
 - capa_planning
 - measurement_system_analysis
@@ -25,19 +25,19 @@ secondary_skills:
 - traceability_analysis
 - risk_assessment
 reference_answer: |
-  Immediate containment is required because measured values of 0.72 N*m and 0.74 N*m are below the 0.80 N*m minimum. The affected scope is the two-shift window covering 1,240 units built with the suspect torque wrench.
-  At 300 units per shift, reinspection needs five shifts to cover 1,240 units, so the 48-hour shipment plan is at risk unless additional qualified inspection capacity is added. Shipment should be held or formally risk-assessed until affected units are verified.
-  The CAPA should quarantine affected inventory, identify any shipped units from the same window, recalibrate or remove the torque wrench, check operator setup and calibration records, and retorque or disposition nonconforming units.
-  Corrective action may include calibration interval review, daily torque verification, tool lockout on failed checks, and operator retraining. Effectiveness should be verified with follow-up torque data and audit evidence showing no repeat drift.
+  0.72 N*mおよび0.74 N*mの測定値は最小仕様0.80 N*mを下回っているため、即時封じ込めが必要である。影響範囲は、疑わしいトルクレンチで組み立てられた1,240台を含む2直分の時間帯である。
+  再検査能力が1直あたり300台の場合、1,240台をカバーするには5直が必要である。そのため、追加の有資格検査能力を投入しない限り、48時間後の出荷計画にはリスクがある。影響を受けた製品が確認されるまで、出荷は保留するか、正式にリスク評価すべきである。
+  CAPAでは、影響を受けた在庫を隔離し、同じ時間帯からすでに出荷された製品を特定し、トルクレンチを再校正または使用停止し、作業者の設定記録と校正記録を確認し、不適合品を再締付けまたは処置する必要がある。
+  是正処置には、校正間隔の見直し、日次トルク確認、不合格確認時の工具ロックアウト、作業者再教育を含めることができる。有効性は、フォローアップのトルクデータと、ドリフト再発がないことを示す監査証拠で確認すべきである。
 evaluation_rubric:
   must_have:
-  - Recognizes that 0.72 N*m and 0.74 N*m are below the 0.80 N*m minimum.
-  - Defines the affected population as 1,240 units from the two-shift window.
-  - Accounts for 300 units per shift and the 48-hour shipment constraint.
+  - 0.72 N*mおよび0.74 N*mが最小0.80 N*mを下回っていることを認識している。
+  - 影響を受ける母集団を2直分の時間帯に由来する1,240台として定義している。
+  - 1直あたり300台の再検査能力と48時間後の出荷制約を考慮している。
   nice_to_have:
-  - Includes tool calibration, traceability, and shipped-product checks.
-  - Defines effectiveness verification using follow-up torque data.
+  - 工具校正、トレーサビリティ、出荷済み製品の確認を含めている。
+  - フォローアップのトルクデータを用いた有効性確認を定義している。
   critical_failures:
-  - Releases shipment without containment or verification.
-  - Ignores the measurement tool as a potential systemic cause.
+  - 封じ込めまたは検証なしに出荷をリリースしている。
+  - 測定工具を潜在的なシステム要因として無視している。
 reasoning_trace_required: true

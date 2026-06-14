@@ -5,16 +5,16 @@ domain: general_manufacturing
 subdomain: assembly
 difficulty: 4
 estimated_time_min: 60
-title: PFMEA for New Assembly Sequence
+title: 新しい組立順序に対するPFMEA
 scenario: |
-  A new assembly sequence is planned for a connector installation step.
-  The current process has a customer defect rate of 0.7%, and the target after improvement is 0.4%.
-  The new sequence will be introduced on one line that builds 2,000 units per week.
-  Training coverage is expected to reach 70% before launch, and the remaining operators will be trained during the first production week.
-  The engineering team has budget for 50 hours of mistake-proofing or inspection improvement work.
+  コネクタ取付工程に対して、新しい組立順序が計画されている。
+  現行工程の顧客不良率は0.7%であり、改善後の目標は0.4%である。
+  新しい順序は、週2,000台を生産する1本のラインに導入される。
+  立上げ前の教育完了率は70%に達する見込みで、残りの作業者は初回生産週の間に教育される。
+  技術チームには、ポカヨケまたは検査改善作業に使える50時間の予算がある。
 question: |
-  Build the key PFMEA reasoning for this process change.
-  Identify likely failure modes, causes, effects, controls, and how the limited 50 hours should be prioritized.
+  この工程変更に対する主要なPFMEA上の考え方を組み立てよ。
+  起こり得る故障モード、原因、影響、管理策、および限られた50時間をどのように優先配分すべきかを特定せよ。
 expected_skills:
 - fmea_analysis
 - risk_assessment
@@ -26,19 +26,19 @@ secondary_skills:
 - work_standardization
 - human_factors
 reference_answer: |
-  The PFMEA should focus on failure modes such as connector not fully seated, wrong orientation, damaged terminal, skipped visual check, and mixed training status between operators.
-  At 0.7% defects, 2,000 units per week implies about 14 defects per week. The target 0.4% rate is about 8 defects per week, so controls should be strong enough to reduce roughly 6 defects per week while avoiding new risks from the sequence change.
-  Causes include unclear work sequence, insufficient training, similar-looking parts, poor fixture feedback, and weak first-piece confirmation. Effects include customer failure, rework, line stoppage, and loss of traceability.
-  The 50 hours should be prioritized toward mistake-proofing or detection improvements with the highest risk reduction: fixture or sensor confirmation, standardized work update, operator certification before independent work, first-piece approval, and layered process audit checks.
+  PFMEAでは、コネクタの未完全挿入、向き違い、端子損傷、目視確認漏れ、作業者間で教育状態が混在することなどの故障モードに焦点を当てるべきである。
+  不良率0.7%では、週2,000台は週あたり約14件の不良を意味する。目標0.4%は週あたり約8件の不良であるため、管理策は、順序変更による新たなリスクを避けながら、週あたり約6件の不良を削減できる強さが必要である。
+  原因には、不明確な作業順序、不十分な教育、似た外観の部品、治具フィードバック不足、初品確認の弱さが含まれる。影響には、顧客不具合、再作業、ライン停止、トレーサビリティ喪失が含まれる。
+  50時間は、リスク低減効果が最も高いポカヨケまたは検出改善に優先配分すべきである。例として、治具またはセンサーによる確認、標準作業の更新、単独作業前の作業者認定、初品承認、階層的工程監査の確認がある。
 evaluation_rubric:
   must_have:
-  - Identifies process-change failure modes and effects.
-  - Connects risk to training coverage and work standardization.
-  - Prioritizes the limited 50 hours toward high-risk controls.
+  - 工程変更に伴う故障モードと影響を特定している。
+  - リスクを教育完了率および作業標準化と結び付けている。
+  - 限られた50時間を高リスク管理策に優先配分している。
   nice_to_have:
-  - Uses the 2,000 units per week and defect-rate figures to quantify risk.
-  - Mentions PFMEA severity, occurrence, detection, or RPN-style prioritization.
+  - 週2,000台と不良率の数値を使ってリスクを定量化している。
+  - PFMEAの重大度、発生度、検出度、またはRPN形式の優先順位付けに言及している。
   critical_failures:
-  - Treats the sequence change as low risk without analysis.
-  - Ignores training coverage or mistake-proofing constraints.
+  - 分析なしに順序変更を低リスクとして扱っている。
+  - 教育完了率またはポカヨケ制約を無視している。
 reasoning_trace_required: true

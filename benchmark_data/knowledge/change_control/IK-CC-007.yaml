@@ -6,11 +6,11 @@ domain: automotive
 subdomain: quality_assurance
 difficulty: 4
 estimated_time_min: 40
-title: Documentation Control Across Revisions
+title: 改訂間の文書管理
 scenario: |
-  An approved engineering change updates a drawing, control plan, work instruction, and inspection checklist.
+  承認済みの設計変更により、図面、管理計画、作業標準、検査チェックリストが更新される。
 question: |
-  What documentation-control actions are required to prevent mixed-revision production?
+  改訂混在生産を防止するために、どのような文書管理上の対応が必要か。
 expected_skills:
 - change_control
 - documentation_control
@@ -22,37 +22,37 @@ secondary_skills:
 - revision_control
 - implementation_control
 reference_answer: |
-  The new controlled revisions should be released together or by a defined effective sequence.
-  Old revisions should be removed, blocked, or made obsolete at points of use.
-  The drawing, control plan, work instruction, and inspection checklist revisions must be aligned.
-  The effective date or lot/serial boundary should be communicated, revision history and approval records retained, and production use verified against only the current released documents.
+  新しい管理改訂は、一括で、または定義された適用順序に従ってリリースする必要がある。
+  旧改訂は使用場所で撤去、使用停止、または廃止扱いにする必要がある。
+  図面、管理計画、作業標準、検査チェックリストの改訂を整合させなければならない。
+  適用日またはロット/シリアル境界を周知し、改訂履歴と承認記録を保持し、生産では現在リリース済みの文書だけが使用されていることを確認する。
 evaluation_rubric:
   must_have:
-  - Releases new controlled revisions together or by a defined effective sequence.
-  - Removes, blocks, or obsoletes old revisions at points of use.
-  - Aligns drawing, control plan, work instruction, and inspection checklist revisions.
-  - Communicates effective date or lot/serial boundary.
-  - Retains revision history and approval records.
-  - Verifies production uses only current released documents.
+  - 新しい管理改訂を一括で、または定義された適用順序に従ってリリースしている。
+  - 使用場所で旧改訂を撤去、使用停止、または廃止している。
+  - 図面、管理計画、作業標準、検査チェックリストの改訂を整合させている。
+  - 適用日またはロット/シリアル境界を周知している。
+  - 改訂履歴と承認記録を保持している。
+  - 生産で現在リリース済みの文書だけが使用されていることを確認している。
   nice_to_have:
-  - Mentions prevention of mixed-revision production.
-  - Identifies point-of-use control as separate from central document release.
+  - 改訂混在生産の防止に言及している。
+  - 使用場所での管理を中央文書リリースとは別の管理として特定している。
   critical_failures:
-  - Treats updating one document as sufficient while related controlled documents remain old.
-  - Allows old and new revisions to be used together without an effective boundary.
-  - Omits removal or blocking of obsolete point-of-use documents.
+  - 関連する管理文書が旧版のままなのに、1つの文書更新だけで十分としている。
+  - 適用境界なしに旧改訂と新改訂を併用することを認めている。
+  - 使用場所にある旧版文書の撤去または使用停止を省略している。
 reasoning_trace_required: false
 score_cap_rules:
-- condition: Answer says updating one document is sufficient.
+- condition: 回答が1つの文書更新だけで十分としている。
   max_score: 1
-  reason: The item tests aligned controlled-document release.
-- condition: Answer omits old-revision removal or blocking.
+  reason: この項目は管理文書リリースの整合性を評価する。
+- condition: 回答が旧改訂の撤去または使用停止を省略している。
   max_score: 3
-  reason: Preventing obsolete point-of-use documents is central.
+  reason: 使用場所にある廃止文書の防止が中核である。
 generic_answer_penalty:
   enabled: true
   conditions:
   - generic_framework_only
 disallowed_answers:
-- Updating the drawing is enough.
-- Keep old and new instructions available and let operators choose.
+- 図面を更新すれば十分である。
+- 旧作業標準と新作業標準を両方利用可能にし、作業者に選ばせる。

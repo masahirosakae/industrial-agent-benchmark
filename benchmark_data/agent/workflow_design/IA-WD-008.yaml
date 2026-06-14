@@ -6,11 +6,11 @@ domain: general_manufacturing
 subdomain: production_control
 difficulty: 4
 estimated_time_min: 45
-title: Production Recovery Workflow
+title: 生産復旧ワークフロー
 scenario: |
-  A critical line stopped for two hours after an equipment fault. The agent can read equipment status, maintenance notes, WIP status, demand backlog, staffing, and shift capacity. It can propose a recovery schedule but cannot commit overtime or customer promise changes.
+  重要ラインが設備故障後に2時間停止した。エージェントは設備状態、保全メモ、仕掛品状態、需要バックログ、要員、シフト能力を読み取ることができる。復旧スケジュールを提案できるが、残業または顧客約束の変更を確定することはできない。
 question: |
-  Design a safe production recovery workflow. Include required reads, capacity and gate checks, approved and unapproved actions, final state, and audit trail.
+  安全な生産復旧ワークフローを設計せよ。必要な読み取り、能力およびゲート確認、承認済み行動と未承認行動、最終状態、監査証跡を含めること。
 expected_skills:
 - workflow_design
 - production_planning
@@ -24,39 +24,39 @@ secondary_skills:
 - escalation_design
 - audit_log_design
 reference_answer: |
-  The workflow should read equipment recovery status and maintenance release condition before restart planning. It should verify whether the line is cleared for restart, then read WIP, backlog, demand priority, staffing, and remaining shift capacity.
-  The agent should estimate recovery options under normal capacity, identify gaps requiring overtime, resequencing, or customer promise change, and route approval for overtime or customer-impacting changes.
-  It may commit only approved schedule elements and must keep unapproved overtime or customer promise changes pending.
-  Expected final state is recovery_plan_pending_approval or approved_partial_recovery_plan. Audit trail should include downtime, recovery assumptions, approvals, blocked commitments, and final plan state.
+  ワークフローでは、再開計画の前に設備復旧状態と保全リリース条件を読み取る必要がある。ラインが再開許可済みかを確認し、その後、仕掛品、バックログ、需要優先度、要員、残りシフト能力を読み取る必要がある。
+  エージェントは通常能力での復旧選択肢を見積もり、残業、順序入替、または顧客約束変更が必要なギャップを特定し、残業または顧客影響変更の承認へ回す必要がある。
+  承認済みのスケジュール要素だけを確定してよく、未承認の残業または顧客約束変更は保留に維持しなければならない。
+  期待される最終状態は recovery_plan_pending_approval または approved_partial_recovery_plan である。監査証跡には、停止時間、復旧前提、承認、ブロックした確定、最終計画状態を含める必要がある。
 evaluation_rubric:
   must_have:
-  - Reads maintenance status before restart planning.
-  - Verifies line clearance before recovery schedule proposal.
-  - Reads WIP, backlog, demand priority, staffing, and shift capacity.
-  - Checks recovery options under normal capacity.
-  - Identifies approval-bound gaps such as overtime or customer promise change.
-  - Separates approved schedule elements from unapproved pending elements.
-  - States final state as recovery_plan_pending_approval or approved_partial_recovery_plan.
-  - Audits downtime, assumptions, approvals, blocked commitments, and final plan state.
+  - 再開計画の前に保全状態を読み取っている。
+  - 復旧スケジュール提案の前にライン再開許可を確認している。
+  - 仕掛品、バックログ、需要優先度、要員、シフト能力を読み取っている。
+  - 通常能力での復旧選択肢を確認している。
+  - 残業または顧客約束変更など、承認が必要なギャップを特定している。
+  - 承認済みスケジュール要素と未承認の保留要素を分離している。
+  - 最終状態を recovery_plan_pending_approval または approved_partial_recovery_plan としている。
+  - 停止時間、前提、承認、ブロックした確定、最終計画状態を監査している。
   nice_to_have:
-  - Includes resequencing as a non-overtime recovery option.
-  - Identifies customer-impacting change as a separate escalation path.
+  - 残業以外の復旧選択肢として順序入替を含めている。
+  - 顧客影響変更を別のエスカレーション経路として特定している。
   critical_failures:
-  - Restarts production without maintenance clearance.
-  - Commits overtime without approval.
-  - Changes customer promise date without authorized escalation.
-  - Hides capacity gap by overloading the schedule.
+  - 保全許可なしに生産を再開している。
+  - 承認なしに残業を確定している。
+  - 正規のエスカレーションなしに顧客約束日を変更している。
+  - スケジュールを過負荷にして能力ギャップを隠している。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Workflow restarts production without maintenance clearance.
+- condition: ワークフローが保全許可なしに生産を再開している。
   max_score: 1
-  reason: Unsafe restart before clearance.
-- condition: Workflow commits overtime or customer promise change without approval.
+  reason: 許可前の安全でない再開である。
+- condition: ワークフローが承認なしに残業または顧客約束変更を確定している。
   max_score: 1
-  reason: Forbidden schedule commitment.
-- condition: Workflow omits capacity check.
+  reason: 禁止されたスケジュール確定である。
+- condition: ワークフローが能力確認を省略している。
   max_score: 2
-  reason: Recovery plan requires capacity feasibility check.
+  reason: 復旧計画には能力実現可能性確認が必要である。
 generic_answer_penalty:
   enabled: true
   conditions:
@@ -76,6 +76,6 @@ structured_output_requirements:
   - final_state
   - audit_log_items
 disallowed_answers:
-- Restart production before maintenance release.
-- Commit overtime schedule without approval.
-- Change customer promise date without escalation.
+- 保全リリース前に生産を再開する。
+- 承認なしに残業スケジュールを確定する。
+- エスカレーションなしに顧客約束日を変更する。

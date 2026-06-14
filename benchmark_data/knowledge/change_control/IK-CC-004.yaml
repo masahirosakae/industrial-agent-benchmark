@@ -6,11 +6,11 @@ domain: electronics
 subdomain: quality_assurance
 difficulty: 3
 estimated_time_min: 30
-title: Risk Assessment Before Change Release
+title: 変更リリース前のリスク評価
 scenario: |
-  A material substitution is proposed for an existing manufacturing process.
+  既存の製造工程に対して、材料代替が提案されている。
 question: |
-  Before releasing the material substitution, what risk mechanisms or failure modes should be checked to avoid unintended manufacturing or quality issues?
+  材料代替をリリースする前に、意図しない製造上または品質上の問題を避けるため、どのようなリスクメカニズムまたは故障モードを確認すべきか。
 expected_skills:
 - change_control
 - risk_assessment
@@ -22,36 +22,36 @@ secondary_skills:
 - quality_assurance
 - validation_planning
 reference_answer: |
-  The risk assessment should identify what could go wrong because of the material change, including fit, form, function, strength, contamination, durability, appearance, or processability.
-  It should consider severity or quality impact if the failure mode occurs, compatibility with existing process conditions, equipment, tooling, gauges, and inspection methods, and whether affected inventory, WIP, or early production output needs containment.
-  It should also identify the need for a trial run, validation, inspection evidence, or capability confirmation, and confirm the approval requirement before production use or shipment.
+  リスク評価では、材料変更によって何が起こり得るかを特定する必要がある。例として、はめ合い、形状、機能、強度、汚染、耐久性、外観、加工性への影響がある。
+  故障モードが発生した場合の重大度または品質影響、既存の工程条件、設備、工具、ゲージ、検査方法との適合性、ならびに影響を受ける在庫、仕掛品、初期生産品に封じ込めが必要かを検討する。
+  また、試作、バリデーション、検査証拠、または能力確認の必要性を特定し、生産使用または出荷前に必要な承認を確認する。
 evaluation_rubric:
   must_have:
-  - Identifies potential failure modes or what could go wrong from the material change.
-  - Addresses severity or quality impact.
-  - Checks compatibility with process conditions, equipment, tooling, gauges, or inspection methods.
-  - Includes containment need for affected inventory, WIP, or early production output.
-  - Includes trial run, validation, inspection evidence, or capability confirmation.
-  - States that approval is required before production use or shipment.
+  - 材料変更によって起こり得る故障モードまたは不具合を特定している。
+  - 重大度または品質影響を扱っている。
+  - 工程条件、設備、工具、ゲージ、または検査方法との適合性を確認している。
+  - 影響を受ける在庫、仕掛品、または初期生産品の封じ込め要否を含めている。
+  - 試作、バリデーション、検査証拠、または能力確認を含めている。
+  - 生産使用または出荷前に承認が必要であると述べている。
   nice_to_have:
-  - Gives concrete examples such as fit, form, function, contamination, durability, appearance, or processability.
-  - Distinguishes risk mechanism from impact scope.
+  - はめ合い、形状、機能、汚染、耐久性、外観、加工性などの具体例を挙げている。
+  - リスクメカニズムと影響範囲を区別している。
   critical_failures:
-  - Says the substitute material can be used immediately without approval or verification.
-  - Lists only affected documents or lots without identifying possible failure modes.
-  - Ignores containment when early output may be affected.
+  - 承認または検証なしに代替材料を直ちに使用できるとしている。
+  - 起こり得る故障モードを特定せず、影響を受ける文書やロットだけを列挙している。
+  - 初期生産品が影響を受ける可能性があるのに封じ込めを無視している。
 reasoning_trace_required: false
 score_cap_rules:
-- condition: Answer permits production use before approval or verification.
+- condition: 回答が承認または検証前の生産使用を認めている。
   max_score: 1
-  reason: This violates change-release control.
-- condition: Answer does not identify any failure mode or quality risk mechanism.
+  reason: 変更リリース管理に違反している。
+- condition: 回答が故障モードまたは品質リスクメカニズムを一切特定していない。
   max_score: 2
-  reason: The item tests risk mechanism knowledge.
+  reason: この項目はリスクメカニズムの知識を評価する。
 generic_answer_penalty:
   enabled: true
   conditions:
   - generic_framework_only
 disallowed_answers:
-- Use the substitute material immediately.
-- Risk assessment only needs to list affected documents.
+- 代替材料を直ちに使用する。
+- リスク評価では影響を受ける文書だけを列挙すればよい。

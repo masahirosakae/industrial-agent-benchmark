@@ -6,11 +6,11 @@ domain: general_manufacturing
 subdomain: quality_assurance
 difficulty: 5
 estimated_time_min: 60
-title: Audit-ready Workflow Documentation
+title: 監査対応可能なワークフロー文書化
 scenario: |
-  A cross-functional workflow handled a process abnormality, containment, engineering review, temporary inspection, and final release. The agent must prepare an audit-ready workflow record from available state transitions and evidence references.
+  部門横断ワークフローにより、工程異常、封じ込め、技術レビュー、一時検査、最終リリースが処理された。エージェントは、利用可能な状態遷移と証拠参照から、監査対応可能なワークフロー記録を準備しなければならない。
 question: |
-  Design the workflow documentation structure needed to make the case audit-ready. Include state transitions, evidence linkage, missing-record checks, final state, and audit trail.
+  この事案を監査対応可能にするために必要なワークフロー文書構造を設計せよ。状態遷移、証拠リンク、不足記録確認、最終状態、監査証跡を含めること。
 expected_skills:
 - workflow_design
 - audit_log_design
@@ -24,38 +24,38 @@ secondary_skills:
 - structured_output_design
 - traceability_analysis
 reference_answer: |
-  The workflow should collect the event timeline and state transitions before writing an audit summary. Each decision should be linked to evidence sources and responsible role.
-  The record should identify controlled actions, blocked actions, approvals, and final states. It should verify that containment, review, inspection, release, and communication steps have records.
-  The agent must flag missing evidence or missing approval before declaring the case audit-ready. It should produce a structured workflow record with IDs, timestamps or sequence markers, owners, evidence references, decisions, actions, and residual open items.
-  Expected final state is audit_ready_record_complete when all required records exist, or audit_record_incomplete_missing_evidence when evidence or approvals are missing.
+  ワークフローでは、監査サマリーを書く前にイベントタイムラインと状態遷移を収集する必要がある。各判断は、証拠ソースと責任ロールにリンクされるべきである。
+  記録では、管理対象行動、ブロック行動、承認、最終状態を特定する必要がある。封じ込め、レビュー、検査、リリース、連絡の各手順に記録があることを確認する必要がある。
+  エージェントは、事案を監査対応可能と宣言する前に、不足証拠または不足承認をフラグしなければならない。ID、タイムスタンプまたは順序マーカー、責任者、証拠参照、判断、行動、残存未完了項目を含む構造化ワークフロー記録を作成する必要がある。
+  期待される最終状態は、必要な記録がすべて存在する場合は audit_ready_record_complete、証拠または承認が不足している場合は audit_record_incomplete_missing_evidence である。
 evaluation_rubric:
   must_have:
-  - Collects event timeline and state transitions before audit summary.
-  - Links each decision to evidence sources and responsible role.
-  - Identifies controlled actions, blocked actions, approvals, and final states.
-  - Verifies containment, review, inspection, release, and communication records.
-  - Flags missing evidence or missing approval before declaring audit-ready.
-  - Produces structured record with IDs, timestamps or sequence markers, owners, evidence references, decisions, actions, and residual open items.
-  - States final state as audit_ready_record_complete or audit_record_incomplete_missing_evidence.
+  - 監査サマリーの前にイベントタイムラインと状態遷移を収集している。
+  - 各判断を証拠ソースと責任ロールにリンクしている。
+  - 管理対象行動、ブロック行動、承認、最終状態を特定している。
+  - 封じ込め、レビュー、検査、リリース、連絡の記録を確認している。
+  - 監査対応可能と宣言する前に、不足証拠または不足承認をフラグしている。
+  - ID、タイムスタンプまたは順序マーカー、責任者、証拠参照、判断、行動、残存未完了項目を含む構造化記録を作成している。
+  - 最終状態を audit_ready_record_complete または audit_record_incomplete_missing_evidence としている。
   nice_to_have:
-  - Uses a machine-checkable structure for state transitions.
-  - Separates open items from completed evidence.
+  - 状態遷移に機械確認可能な構造を使っている。
+  - 未完了項目と完了済み証拠を分離している。
   critical_failures:
-  - Declares audit-ready with missing approvals or evidence.
-  - Fabricates evidence references.
-  - Summarizes only final outcome without state transitions.
-  - Omits blocked actions or escalation history.
+  - 承認または証拠が不足しているのに監査対応可能と宣言している。
+  - 証拠参照を捏造している。
+  - 状態遷移なしに最終結果だけを要約している。
+  - ブロック行動またはエスカレーション履歴を省略している。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Workflow declares audit-ready with missing approvals or evidence.
+- condition: ワークフローが承認または証拠不足のまま監査対応可能と宣言している。
   max_score: 1
-  reason: Audit-ready final state is invalid.
-- condition: Workflow fabricates evidence references.
+  reason: 監査対応可能という最終状態が無効である。
+- condition: ワークフローが証拠参照を捏造している。
   max_score: 1
-  reason: Fabricated evidence is a critical audit failure.
-- condition: Workflow omits state transitions.
+  reason: 捏造された証拠は重大な監査不良である。
+- condition: ワークフローが状態遷移を省略している。
   max_score: 2
-  reason: Workflow documentation requires state transition traceability.
+  reason: ワークフロー文書化には状態遷移のトレーサビリティが必要である。
 generic_answer_penalty:
   enabled: true
   conditions:
@@ -75,6 +75,6 @@ structured_output_requirements:
   - final_state
   - audit_log_items
 disallowed_answers:
-- Declare audit-ready despite missing approval records.
-- Invent evidence references to complete the audit trail.
-- Provide only the final outcome without workflow state transitions.
+- 承認記録が不足していても監査対応可能と宣言する。
+- 監査証跡を完成させるために証拠参照を作る。
+- ワークフロー状態遷移なしに最終結果だけを提示する。

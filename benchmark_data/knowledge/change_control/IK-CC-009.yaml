@@ -6,11 +6,11 @@ domain: general_manufacturing
 subdomain: production_control
 difficulty: 4
 estimated_time_min: 40
-title: Rollback Plan for Failed Change
+title: 失敗した変更のロールバック計画
 scenario: |
-  A newly implemented process change causes defects during the first production run.
+  新たに実施した工程変更により、初回生産中に欠陥が発生した。
 question: |
-  What elements should a rollback plan include?
+  ロールバック計画にはどの要素を含めるべきか。
 expected_skills:
 - change_control
 - rollback_planning
@@ -22,35 +22,35 @@ secondary_skills:
 - containment_planning
 - documentation_control
 reference_answer: |
-  A rollback plan should define criteria for stopping or reversing the change, containment of affected product, WIP, or lots, and the approved method to return to the previous validated process or revision.
-  It should define required notification or approval before rollback when applicable, require re-verification after rollback, and document the defect evidence, rollback action, and final disposition of affected material.
+  ロールバック計画では、変更を停止または元に戻す基準、影響を受けた製品、仕掛品、またはロットの封じ込め、ならびに以前の検証済み工程または改訂へ戻す承認済み方法を定義する必要がある。
+  該当する場合は、ロールバック前に必要な通知または承認を定義し、ロールバック後の再検証を要求し、欠陥証拠、ロールバック処置、影響を受けた材料の最終処置を記録する必要がある。
 evaluation_rubric:
   must_have:
-  - Defines criteria for stopping or reversing the change.
-  - Includes containment of affected product, WIP, or lots.
-  - Defines the approved method to return to the previous validated process or revision.
-  - Includes notification or approval from required functions before rollback when applicable.
-  - Requires re-verification after rollback.
-  - Documents defect evidence, rollback action, and final disposition.
+  - 変更を停止または元に戻す基準を定義している。
+  - 影響を受けた製品、仕掛品、またはロットの封じ込めを含めている。
+  - 以前の検証済み工程または改訂へ戻す承認済み方法を定義している。
+  - 該当する場合、ロールバック前に必要部門への通知または承認を含めている。
+  - ロールバック後の再検証を求めている。
+  - 欠陥証拠、ロールバック処置、最終処置を記録している。
   nice_to_have:
-  - Distinguishes rollback control from root-cause investigation.
-  - Mentions preventing further production under the failed change condition.
+  - ロールバック管理と根本原因調査を区別している。
+  - 失敗した変更条件下での追加生産を防止することに言及している。
   critical_failures:
-  - Continues production with known defects.
-  - Rolls back without controlling or dispositioning affected material.
-  - Returns to an old process without confirming it is approved or validated.
+  - 既知の欠陥がある状態で生産を継続している。
+  - 影響を受けた材料を管理または処置せずにロールバックしている。
+  - 旧工程が承認済みまたは検証済みであることを確認せずに戻している。
 reasoning_trace_required: false
 score_cap_rules:
-- condition: Answer continues production with known defects.
+- condition: 回答が既知の欠陥がある状態で生産を継続している。
   max_score: 1
-  reason: This is an unsafe change-control failure.
-- condition: Answer omits containment of affected material.
+  reason: これは安全でない変更管理不良である。
+- condition: 回答が影響を受けた材料の封じ込めを省略している。
   max_score: 2
-  reason: Containment is central to rollback planning.
+  reason: 封じ込めはロールバック計画の中心である。
 generic_answer_penalty:
   enabled: true
   conditions:
   - generic_framework_only
 disallowed_answers:
-- Continue production and sort later without containment.
-- Roll back informally without records or affected-lot disposition.
+- 封じ込めなしに生産を継続し、後で選別する。
+- 記録や影響ロットの処置なしに非公式にロールバックする。

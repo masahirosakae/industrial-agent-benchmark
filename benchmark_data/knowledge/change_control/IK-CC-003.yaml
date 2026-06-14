@@ -6,11 +6,11 @@ domain: automotive
 subdomain: process_engineering
 difficulty: 3
 estimated_time_min: 30
-title: Impact Assessment Coverage
+title: 影響評価の対象範囲
 scenario: |
-  A proposed process parameter change may affect product dimensions and inspection frequency.
+  提案されている工程条件の変更により、製品寸法と検査頻度に影響が出る可能性がある。
 question: |
-  For the impact assessment, list the scope areas that must be checked to identify what is affected by the change.
+  影響評価において、その変更が何に影響するかを特定するために確認すべき範囲を挙げよ。
 expected_skills:
 - change_control
 - impact_assessment
@@ -22,36 +22,36 @@ secondary_skills:
 - documentation_control
 - traceability_analysis
 reference_answer: |
-  The impact assessment should identify the affected products, part numbers, variants, or customer programs.
-  It should check affected process steps, production lines, equipment, fixtures, tooling, and software settings.
-  It should include inspection plans, control plans, gauges, test methods, and sampling frequency; drawings, work instructions, setup sheets, forms, and other controlled documents; affected lots, WIP, inventory, shipment status, and effective-date boundary; and affected suppliers, customers, downstream processes, packaging, or service parts when applicable.
+  影響評価では、影響を受ける製品、品番、派生品、または顧客プログラムを特定する必要がある。
+  影響を受ける工程、生産ライン、設備、治具、工具、ソフトウェア設定を確認する。
+  また、検査計画、管理計画、ゲージ、試験方法、サンプリング頻度、図面、作業標準、段取り表、帳票、その他の管理文書、影響を受けるロット、仕掛品、在庫、出荷状態、適用日境界を含める。該当する場合は、サプライヤー、顧客、後工程、包装、補給部品への影響も確認する。
 evaluation_rubric:
   must_have:
-  - Covers affected products, part numbers, variants, or customer programs.
-  - Covers affected process steps, lines, equipment, fixtures, tooling, or software settings.
-  - Covers inspection plans, control plans, gauges, test methods, or sampling frequency.
-  - Covers drawings, work instructions, setup sheets, forms, or other controlled documents.
-  - Covers affected lots, WIP, inventory, shipment status, or effective-date boundary.
-  - Covers suppliers, customers, downstream processes, packaging, or service parts when applicable.
+  - 影響を受ける製品、品番、派生品、または顧客プログラムを含めている。
+  - 影響を受ける工程、ライン、設備、治具、工具、またはソフトウェア設定を含めている。
+  - 検査計画、管理計画、ゲージ、試験方法、またはサンプリング頻度を含めている。
+  - 図面、作業標準、段取り表、帳票、またはその他の管理文書を含めている。
+  - 影響を受けるロット、仕掛品、在庫、出荷状態、または適用日境界を含めている。
+  - 該当する場合、サプライヤー、顧客、後工程、包装、または補給部品を含めている。
   nice_to_have:
-  - Clearly distinguishes impact scope from risk severity.
-  - Mentions that the assessment defines the boundary for approval and implementation control.
+  - 影響範囲とリスクの重大度を明確に区別している。
+  - この評価が承認および実施管理の境界を定義することに言及している。
   critical_failures:
-  - Lists only product quality risk and omits process, document, inspection, and material boundaries.
-  - Treats impact assessment as optional before changing process parameters.
-  - Gives subjective improvement advice without identifying affected scope areas.
+  - 製品品質リスクだけを列挙し、工程、文書、検査、材料の境界を省略している。
+  - 工程条件を変更する前の影響評価を任意のものとして扱っている。
+  - 影響を受ける範囲を特定せず、主観的な改善助言だけを示している。
 reasoning_trace_required: false
 score_cap_rules:
-- condition: Answer does not identify affected scope areas beyond the product itself.
+- condition: 回答が製品そのもの以外の影響範囲を特定していない。
   max_score: 2
-  reason: The item tests impact scope coverage.
-- condition: Answer omits controlled documents and inspection/control-plan impact.
+  reason: この項目は影響範囲の網羅性を評価する。
+- condition: 回答が管理文書および検査計画または管理計画への影響を省略している。
   max_score: 3
-  reason: Documentation and inspection boundaries are central to this item.
+  reason: 文書と検査の境界はこの項目の中心である。
 generic_answer_penalty:
   enabled: true
   conditions:
   - generic_framework_only
 disallowed_answers:
-- Only check whether quality improves.
-- No impact assessment is needed if the parameter change is small.
+- 品質が改善するかどうかだけを確認すればよい。
+- 条件変更が小さければ影響評価は不要である。

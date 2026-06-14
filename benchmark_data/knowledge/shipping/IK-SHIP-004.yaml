@@ -5,15 +5,15 @@ domain: general_manufacturing
 subdomain: logistics
 difficulty: 4
 estimated_time_min: 45
-title: Shipment Hold for Packing List and Lot Mismatch
+title: パッキングリストとロット不一致による出荷保留
 scenario: |
-  A customer shipment is being prepared for overseas dispatch.
-  The truck cutoff is 16:00, and the issue is found at 14:10. The normal document correction route takes 90 minutes, and a physical relabel check takes 40 minutes.
-  The packing list shows lot L2406A, but two cartons on the pallet are labeled L2406B while the ERP shipment record still shows L2406A.
-  Twenty cartons are staged, two are already sealed, and opening sealed cartons requires logistics supervisor approval and about 30 minutes.
+  顧客向け出荷品が海外発送のために準備されている。
+  トラックの締切は16:00であり、問題は14:10に発見された。通常の文書修正ルートには90分かかり、現物の再ラベル確認には40分かかる。
+  パッキングリストにはロットL2406Aと記載されているが、パレット上の2つのカートンにはL2406Bと表示されており、ERP出荷記録はまだL2406Aを示している。
+  20カートンが準備済みで、そのうち2つはすでに封緘されている。封緘済みカートンを開封するには物流監督者の承認と約30分が必要である。
 question: |
-  What should shipping control do before the 16:00 cutoff?
-  Explain the document, lot-traceability, and shipment-release checks required before deciding whether the shipment can leave.
+  16:00の締切前に、出荷管理は何をすべきか。
+  出荷してよいかを判断する前に必要な文書、ロットトレーサビリティ、出荷リリース確認を説明せよ。
 expected_skills:
 - shipment_control
 - traceability_analysis
@@ -25,19 +25,19 @@ secondary_skills:
 - evidence_management
 - risk_assessment
 reference_answer: |
-  The shipment should be placed on hold until the lot mismatch is resolved.
-  Shipping control must reconcile the ERP shipment record, packing list, carton labels, and physical contents. The two L2406B-labeled cartons need investigation to determine whether the label is wrong or the cartons contain the wrong lot.
-  From 14:10 to 16:00 there are 110 minutes available. The normal document correction route takes 90 minutes, the relabel check takes 40 minutes, and opening sealed cartons can add 30 minutes with supervisor approval, so release by 16:00 is only possible if the investigation is completed with evidence and approvals in time.
-  If traceability cannot be confirmed before cutoff, the shipment must not leave. The final record should document the hold, evidence checked, approval decision, and any corrected documents or labels.
+  ロット不一致が解決するまで、出荷は保留にすべきである。
+  出荷管理は、ERP出荷記録、パッキングリスト、カートンラベル、現物内容を照合しなければならない。L2406Bと表示された2つのカートンについては、ラベル誤りなのか、カートンに誤ったロットが入っているのかを調査する必要がある。
+  14:10から16:00までは110分ある。通常の文書修正ルートは90分、再ラベル確認は40分、封緘済みカートンの開封は監督者承認付きで30分追加され得るため、16:00までのリリースは、証拠と承認を伴って調査が時間内に完了した場合に限り可能である。
+  締切前にトレーサビリティを確認できない場合、出荷してはならない。最終記録には、保留、確認した証拠、承認判断、修正された文書またはラベルを記録する必要がある。
 evaluation_rubric:
   must_have:
-  - Requires shipment hold until lot identity and documents are reconciled.
-  - Checks ERP, packing list, carton labels, and physical contents.
-  - States that shipment cannot leave if traceability is unresolved.
+  - ロット識別と文書が照合されるまで出荷保留を求めている。
+  - ERP、パッキングリスト、カートンラベル、現物内容を確認している。
+  - トレーサビリティが未解決なら出荷できないと述べている。
   nice_to_have:
-  - Considers the 16:00 cutoff and the available correction time.
-  - Mentions supervisor approval for opening sealed cartons.
+  - 16:00の締切と利用可能な修正時間を考慮している。
+  - 封緘済みカートンを開封するための監督者承認に言及している。
   critical_failures:
-  - Ships with unresolved lot mismatch.
-  - Treats document correction alone as sufficient without physical traceability evidence.
+  - ロット不一致が未解決のまま出荷している。
+  - 現物トレーサビリティ証拠なしに、文書修正だけで十分としている。
 reasoning_trace_required: true

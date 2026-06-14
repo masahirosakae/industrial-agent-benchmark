@@ -6,11 +6,11 @@ domain: general_manufacturing
 subdomain: inspection
 difficulty: 3
 estimated_time_min: 30
-title: Verification After Change
+title: 変更後の検証
 scenario: |
-  A fixture change has been implemented on an assembly line.
+  組立ラインで治具変更が実施された。
 question: |
-  What verification evidence should be collected before the change is considered complete?
+  変更を完了と見なす前に、どのような検証証拠を収集すべきか。
 expected_skills:
 - change_control
 - verification_planning
@@ -22,35 +22,35 @@ secondary_skills:
 - inspection_knowledge
 - traceability_analysis
 reference_answer: |
-  Verification evidence should include inspection or measurement results for affected characteristics, a first article, trial run, or initial production check, and confirmation that acceptance criteria are met.
-  The record should include review of any defects, abnormalities, or process instability, identify who verified the change and when, and link the verification evidence to the approved change request.
+  検証証拠には、影響を受ける特性の検査または測定結果、初品、試作、または初期生産確認、および受入基準を満たしていることの確認を含める必要がある。
+  記録には、欠陥、異常、または工程不安定の有無のレビュー、誰がいつ変更を検証したかの特定、および検証証拠と承認済み変更申請との紐付けを含める必要がある。
 evaluation_rubric:
   must_have:
-  - Includes inspection or measurement results for affected characteristics.
-  - Includes first article, trial run, or initial production check.
-  - Confirms that acceptance criteria are met.
-  - Reviews defects, abnormalities, or process instability.
-  - Records who verified the change and when.
-  - Links verification to the approved change request.
+  - 影響を受ける特性の検査または測定結果を含めている。
+  - 初品、試作、または初期生産確認を含めている。
+  - 受入基準を満たしていることを確認している。
+  - 欠陥、異常、または工程不安定をレビューしている。
+  - 誰がいつ変更を検証したかを記録している。
+  - 検証を承認済み変更申請に紐付けている。
   nice_to_have:
-  - Mentions that the specific verification method should match the affected characteristic.
-  - Notes that evidence is required before closing the change.
+  - 具体的な検証方法は影響を受ける特性に合わせるべきだと述べている。
+  - 変更をクローズする前に証拠が必要であることを指摘している。
   critical_failures:
-  - Says to close the change with no objective verification evidence.
-  - Only says to check quality without acceptance criteria or records.
-  - Treats implementation as proof that the change is complete.
+  - 客観的な検証証拠なしに変更をクローズするとしている。
+  - 受入基準や記録なしに品質を確認するとだけ述べている。
+  - 実施したことをもって変更完了の証明として扱っている。
 reasoning_trace_required: false
 score_cap_rules:
-- condition: Answer has no objective verification evidence.
+- condition: 回答に客観的な検証証拠がない。
   max_score: 1
-  reason: Verification evidence is the core item requirement.
-- condition: Answer omits acceptance criteria.
+  reason: 検証証拠がこの項目の中核要求である。
+- condition: 回答が受入基準を省略している。
   max_score: 3
-  reason: Evidence must be judged against acceptance criteria.
+  reason: 証拠は受入基準に照らして判断されなければならない。
 generic_answer_penalty:
   enabled: true
   conditions:
   - generic_framework_only
 disallowed_answers:
-- The change is complete once the fixture is installed.
-- No verification record is needed if operators report no problem.
+- 治具を設置した時点で変更は完了である。
+- 作業者から問題報告がなければ検証記録は不要である。

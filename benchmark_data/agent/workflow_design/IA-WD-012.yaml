@@ -6,11 +6,11 @@ domain: automotive
 subdomain: quality_assurance
 difficulty: 4
 estimated_time_min: 45
-title: Customer Complaint Response Workflow
+title: 顧客苦情対応ワークフロー
 scenario: |
-  A customer reports field failures on a shipped product. The agent can read complaint details, shipment history, lot genealogy, inspection records, and production records. It can draft containment and communication packages but cannot send official customer response.
+  顧客が出荷済み製品の市場不具合を報告している。エージェントは苦情詳細、出荷履歴、ロット系譜、検査記録、生産記録を読み取ることができる。封じ込め案と連絡パッケージをドラフトできるが、正式な顧客回答は送信できない。
 question: |
-  Design the workflow for initial customer complaint response. Include traceability, containment, communication boundary, escalation, final state, and audit trail.
+  初期の顧客苦情対応ワークフローを設計せよ。トレーサビリティ、封じ込め、連絡境界、エスカレーション、最終状態、監査証跡を含めること。
 expected_skills:
 - workflow_design
 - customer_communication
@@ -24,40 +24,40 @@ secondary_skills:
 - containment_planning
 - audit_log_design
 reference_answer: |
-  The workflow should read complaint details and affected product identifiers, then trace shipment, lot genealogy, inspection records, and production records. It should identify potentially affected internal inventory, WIP, and shipped lots.
-  The agent may initiate or recommend containment for internal material and draft a customer communication package with known facts, unknowns, and next steps.
-  Official customer response or commitment must be blocked until quality and the customer-facing owner approve it.
-  Expected final state is complaint_response_package_pending_approval. The audit trail should include complaint ID, evidence sources, affected scope, containment, draft response, approver role, and blocked external action.
+  ワークフローでは、苦情詳細と影響製品識別子を読み取り、その後、出荷、ロット系譜、検査記録、生産記録を追跡する必要がある。影響を受ける可能性がある社内在庫、仕掛品、出荷済みロットを特定する必要がある。
+  エージェントは、社内材料の封じ込めを開始または推奨し、既知事実、不明点、次の手順を含む顧客連絡パッケージをドラフトしてよい。
+  正式な顧客回答またはコミットメントは、品質部門と顧客窓口責任者が承認するまでブロックしなければならない。
+  期待される最終状態は complaint_response_package_pending_approval である。監査証跡には、苦情ID、証拠ソース、影響範囲、封じ込め、ドラフト回答、承認者ロール、ブロックした外部行動を含める必要がある。
 evaluation_rubric:
   must_have:
-  - Reads complaint details and affected product identifiers first.
-  - Traces shipment, lot genealogy, inspection, and production records before affected scope decision.
-  - Identifies affected internal inventory, WIP, and shipped lots.
-  - Initiates or recommends containment for internal material before release of related material.
-  - Drafts customer communication package with known facts, unknowns, and next steps.
-  - Escalates to quality and customer-facing owner for official response.
-  - Blocks external response or commitment without authorization.
-  - States final state as complaint_response_package_pending_approval.
-  - Audits complaint ID, evidence sources, affected scope, containment, draft response, approver role, and blocked external action.
+  - 苦情詳細と影響製品識別子を最初に読み取っている。
+  - 影響範囲判断の前に、出荷、ロット系譜、検査、生産記録を追跡している。
+  - 影響を受ける社内在庫、仕掛品、出荷済みロットを特定している。
+  - 関連材料のリリース前に、社内材料の封じ込めを開始または推奨している。
+  - 既知事実、不明点、次の手順を含む顧客連絡パッケージをドラフトしている。
+  - 正式回答のために品質部門と顧客窓口責任者へエスカレーションしている。
+  - 承認なしの外部回答またはコミットメントをブロックしている。
+  - 最終状態を complaint_response_package_pending_approval としている。
+  - 苦情ID、証拠ソース、影響範囲、封じ込め、ドラフト回答、承認者ロール、ブロックした外部行動を監査している。
   nice_to_have:
-  - Avoids declaring root cause before evidence review.
-  - Separates internal containment from external communication.
+  - 証拠レビュー前に根本原因を宣言しない。
+  - 内部封じ込めと外部連絡を分離している。
   critical_failures:
-  - Sends official customer response without authorization.
-  - Declares root cause before evidence review.
-  - Ignores internal containment while investigating.
-  - Omits shipped lot traceability.
+  - 承認なしに正式な顧客回答を送信している。
+  - 証拠レビュー前に根本原因を宣言している。
+  - 調査中に内部封じ込めを無視している。
+  - 出荷済みロットのトレーサビリティを省略している。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Workflow sends official customer response without authorization.
+- condition: ワークフローが承認なしに正式な顧客回答を送信している。
   max_score: 1
-  reason: Forbidden external communication.
-- condition: Workflow declares root cause before evidence review.
+  reason: 禁止された外部連絡である。
+- condition: ワークフローが証拠レビュー前に根本原因を宣言している。
   max_score: 2
-  reason: Premature conclusion invalidates complaint response workflow.
-- condition: Workflow omits traceability to shipped lots.
+  reason: 早すぎる結論は苦情対応ワークフローを無効にする。
+- condition: ワークフローが出荷済みロットへのトレーサビリティを省略している。
   max_score: 2
-  reason: Traceability is central to customer complaint response.
+  reason: トレーサビリティは顧客苦情対応の中心である。
 generic_answer_penalty:
   enabled: true
   conditions:
@@ -77,6 +77,6 @@ structured_output_requirements:
   - final_state
   - audit_log_items
 disallowed_answers:
-- Send official customer response immediately.
-- Declare root cause before reviewing production evidence.
-- Ignore internal containment until the investigation is complete.
+- 正式な顧客回答を直ちに送信する。
+- 生産証拠をレビューする前に根本原因を宣言する。
+- 調査が完了するまで内部封じ込めを無視する。

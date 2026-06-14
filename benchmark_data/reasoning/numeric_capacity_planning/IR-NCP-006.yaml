@@ -6,14 +6,14 @@ domain: general_manufacturing
 subdomain: machining
 difficulty: 4
 estimated_time_min: 35
-title: Required Machine Count
+title: 必要機械台数
 scenario: |
-  A machining center has a cycle time of 45 seconds per unit.
-  It runs 2 shifts per day, and each shift has 7 net production hours.
-  Daily demand is 1,200 units.
+  マシニングセンタのサイクルタイムは1台あたり45秒である。
+  1日2直で稼働し、各直の正味生産時間は7時間である。
+  日次需要は1,200台である。
 question: |
-  Calculate the daily capacity of one machine and determine how many identical machines are required.
-  Explain the rounding rule.
+  1台の機械の日次能力を計算し、同一機械が何台必要かを判断せよ。
+  丸め規則を説明せよ。
 expected_skills:
 - equipment_capacity_calculation
 - unit_conversion
@@ -25,33 +25,33 @@ secondary_skills:
 - integer_rounding
 - feasibility_judgement
 reference_answer: |
-  One machine has 2 * 7 = 14 net production hours per day.
-  In seconds, that is 14 * 3600 = 50,400 seconds per day.
-  Capacity per machine = 50,400 / 45 = 1,120 units per day.
-  Required machines = 1,200 / 1,120 = 1.071 machines.
-  Because partial machines are not available, this must be rounded up to 2 machines.
+  1台の機械には 2 * 7 = 14時間/日の正味生産時間がある。
+  秒に換算すると、14 * 3600 = 50,400秒/日である。
+  1台あたりの能力 = 50,400 / 45 = 1,120台/日である。
+  必要機械台数 = 1,200 / 1,120 = 1.071台である。
+  部分的な機械は利用できないため、2台に切り上げなければならない。
 evaluation_rubric:
   must_have:
-  - Converts 14 net hours to 50,400 seconds.
-  - Calculates one-machine capacity as 1,120 units per day.
-  - Divides 1,200 demand by 1,120 capacity.
-  - Rounds up from 1.071 to 2 machines.
-  - Explains that partial machines cannot satisfy the requirement.
+  - 正味14時間を50,400秒に換算している。
+  - 1台あたりの能力を1日あたり1,120台と計算している。
+  - 需要1,200台を能力1,120台で割っている。
+  - 1.071台から2台へ切り上げている。
+  - 部分的な機械では要求を満たせないことを説明している。
   nice_to_have:
-  - Notes that one machine is short by 80 units per day.
-  - States that the second machine may not be fully utilized but is required under the given constraints.
+  - 1台では1日あたり80台不足すると指摘している。
+  - 2台目はフル活用されない可能性があるが、与えられた制約下では必要であると述べている。
   critical_failures:
-  - Reports 1.071 machines as the executable plan.
-  - Rounds down to 1 machine.
-  - Fails to convert hours to seconds before using the 45-second cycle time.
+  - 実行可能な計画として1.071台を報告している。
+  - 1台に切り下げている。
+  - 45秒のサイクルタイムを使う前に時間を秒へ換算していない。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Required machine count is rounded down to 1.
+- condition: 必要機械台数を1台に切り下げている。
   max_score: 1
-  reason: Equipment count must be rounded up.
-- condition: Does not convert hours to seconds for a seconds-per-unit cycle time.
+  reason: 設備台数は切り上げる必要がある。
+- condition: 秒/台のサイクルタイムに対して、時間を秒に換算していない。
   max_score: 3
-  reason: Unit conversion is required.
+  reason: 単位換算が必要である。
 numeric_checks:
 - name: one_machine_capacity
   expected_value: 1120
@@ -74,5 +74,5 @@ generic_answer_penalty:
   - scenario_specific_numbers_not_used
   - generic_framework_only
 disallowed_answers:
-- One machine is sufficient.
-- 1.071 machines are required as the final executable answer.
+- 1台で十分である。
+- 最終的な実行可能回答として1.071台が必要である。

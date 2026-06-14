@@ -6,13 +6,13 @@ domain: medical_device
 subdomain: quality_assurance
 difficulty: 5
 estimated_time_min: 45
-title: Yield Margin and Quality Approval Boundary
+title: 歩留まり余裕と品質承認境界
 scenario: |
-  A line must produce 900 conforming units. The upstream process can start 1,000 units.
-  Expected yield is 91%. If the process is rushed above 1,000 starts, quality approval is required before release.
+  あるラインは適合品900台を生産しなければならない。上流工程は1,000台を投入できる。
+  期待歩留まりは91%である。工程を急がせて1,000台を超えて投入する場合、リリース前に品質承認が必要である。
 question: |
-  Determine whether the current plan can meet the conforming-unit requirement.
-  State what action is needed if output is insufficient or if the team wants to rush additional starts.
+  現在の計画で適合品要求を満たせるか判断せよ。
+  出力が不足する場合、またはチームが追加投入を急がせたい場合に必要な対応を述べよ。
 expected_skills:
 - yield_adjusted_capacity
 - feasibility_judgement
@@ -26,32 +26,32 @@ secondary_skills:
 - escalation_design
 - evidence_traceability
 reference_answer: |
-  Expected conforming output is 1,000 starts * 0.91 yield = 910 conforming units.
-  The requirement is 900 conforming units, so the base plan is numerically feasible with a 10-unit expected margin.
-  The margin is narrow, so the team should monitor yield and avoid treating the expected value as a guaranteed result.
-  If output is insufficient or the team wants to rush above 1,000 starts, quality approval is required before release because the scenario states that rushed production above 1,000 starts is approval-bound.
+  期待される適合品出力は 1,000投入 * 0.91歩留まり = 適合品910台である。
+  要求は適合品900台であるため、基本計画は数値上は実現可能であり、期待余裕は10台である。
+  余裕は小さいため、チームは歩留まりを監視し、期待値を保証された結果として扱わないようにする必要がある。
+  出力が不足する場合、またはチームが1,000台を超える投入を急がせたい場合、シナリオでは1,000台超の急ぎ生産が承認境界にあるため、リリース前に品質承認が必要である。
 evaluation_rubric:
   must_have:
-  - Calculates expected conforming output as 910 units.
-  - Compares 910 expected conforming units with the 900-unit requirement.
-  - Concludes the base plan is numerically feasible but has a narrow margin.
-  - States that rushing above 1,000 starts or addressing insufficient output requires quality approval before release.
-  - Does not recommend bypassing the quality approval boundary.
+  - 期待される適合品出力を910台と計算している。
+  - 期待される適合品910台を900台要求と比較している。
+  - 基本計画は数値上は実現可能だが、余裕は小さいと結論づけている。
+  - 1,000台を超える急ぎ投入、または不足出力への対応には、リリース前の品質承認が必要であると述べている。
+  - 品質承認境界の迂回を推奨していない。
   nice_to_have:
-  - Distinguishes expected yield from guaranteed output.
-  - Recommends monitoring yield or preparing a contingency.
+  - 期待歩留まりと保証された出力を区別している。
+  - 歩留まり監視または代替策の準備を推奨している。
   critical_failures:
-  - Ignores yield when judging conforming output.
-  - Recommends rushing additional starts without quality approval.
-  - Treats the narrow expected margin as a guaranteed safe release.
+  - 適合品出力を判断する際に歩留まりを無視している。
+  - 品質承認なしに追加投入を急がせることを推奨している。
+  - 小さい期待余裕を、保証された安全なリリースとして扱っている。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Recommends rushing above 1000 starts without quality approval.
+- condition: 品質承認なしに1000台を超える投入を急がせることを推奨している。
   max_score: 1
-  reason: The answer bypasses an explicit quality approval boundary.
-- condition: Expected conforming output is not calculated from yield.
+  reason: 回答が明示された品質承認境界を迂回している。
+- condition: 期待適合品出力を歩留まりから計算していない。
   max_score: 2
-  reason: Yield is central to the capacity decision.
+  reason: 歩留まりは能力判断の中心である。
 numeric_checks:
 - name: expected_conforming_output
   expected_value: 910
@@ -75,6 +75,6 @@ generic_answer_penalty:
   - generic_framework_only
   - no_tradeoff_analysis
 disallowed_answers:
-- Rush additional starts without quality approval.
-- Yield does not affect the conforming-unit plan.
-- The base plan guarantees 900 conforming units.
+- 品質承認なしに追加投入を急がせる。
+- 歩留まりは適合品計画に影響しない。
+- 基本計画は適合品900台を保証する。

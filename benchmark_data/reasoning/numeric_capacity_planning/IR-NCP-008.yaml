@@ -6,14 +6,14 @@ domain: automotive
 subdomain: supply_chain_management
 difficulty: 4
 estimated_time_min: 40
-title: Overtime Approval Capacity
+title: 残業承認を考慮した能力
 scenario: |
-  A supplier can ship 400 parts per day with normal staffing.
-  Approved overtime can add 80 parts per day, but overtime requires production manager approval.
-  Demand for the next three days is 1,380 parts.
+  あるサプライヤーは通常要員で1日あたり400個を出荷できる。
+  承認済み残業により1日あたり80個を追加できるが、残業には生産マネージャーの承認が必要である。
+  今後3日間の需要は1,380個である。
 question: |
-  Determine whether the demand can be met under normal capacity.
-  Then determine whether approved overtime would make the plan feasible and state the escalation decision.
+  通常能力で需要を満たせるか判断せよ。
+  次に、承認済み残業によって計画が実現可能になるかを判断し、エスカレーション判断を述べよ。
 expected_skills:
 - capacity_calculation
 - feasibility_judgement
@@ -25,33 +25,33 @@ secondary_skills:
 - constraint_handling
 - escalation_design
 reference_answer: |
-  Normal three-day capacity is 400 parts/day * 3 days = 1,200 parts.
-  Demand is 1,380 parts, so normal capacity is short by 180 parts and is not feasible.
-  With approved overtime, daily capacity becomes 400 + 80 = 480 parts/day.
-  Three-day capacity with overtime is 480 * 3 = 1,440 parts, which exceeds demand by 60 parts.
-  The plan requires escalation for production manager approval because overtime is approval-bound; overtime should not be treated as automatically available.
+  通常能力での3日間の能力は 400個/日 * 3日 = 1,200個である。
+  需要は1,380個であるため、通常能力では180個不足し、実現不可能である。
+  承認済み残業を使うと、日次能力は 400 + 80 = 480個/日となる。
+  残業込みの3日間能力は 480 * 3 = 1,440個であり、需要を60個上回る。
+  残業は承認が必要な能力であるため、生産マネージャー承認へのエスカレーションが必要である。残業を自動的に利用可能なものとして扱ってはならない。
 evaluation_rubric:
   must_have:
-  - Calculates normal three-day capacity as 1,200 parts.
-  - Calculates the normal-capacity shortfall as 180 parts.
-  - Calculates approved-overtime capacity as 1,440 parts over three days.
-  - Concludes normal capacity is infeasible but approved overtime can make the plan feasible.
-  - States that production manager approval is required before using overtime.
+  - 通常能力での3日間能力を1,200個と計算している。
+  - 通常能力での不足を180個と計算している。
+  - 承認済み残業込みの3日間能力を1,440個と計算している。
+  - 通常能力では実現不可能だが、承認済み残業により計画は実現可能になると結論づけている。
+  - 残業を使用する前に生産マネージャーの承認が必要であると述べている。
   nice_to_have:
-  - Calculates the 60-part margin with approved overtime.
-  - Distinguishes capacity feasibility from approval status.
+  - 承認済み残業込みで60個の余裕を計算している。
+  - 能力上の実現可能性と承認状態を区別している。
   critical_failures:
-  - Claims normal capacity can meet 1,380 parts.
-  - Uses overtime without mentioning required approval.
-  - Treats overtime as mandatory or automatic without escalation.
+  - 通常能力で1,380個を満たせると主張している。
+  - 必要な承認に言及せずに残業を使用している。
+  - エスカレーションなしに残業を必須または自動的なものとして扱っている。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Overtime is recommended without required production manager approval.
+- condition: 必要な生産マネージャー承認なしに残業を推奨している。
   max_score: 1
-  reason: Approval-bound capacity cannot be assumed.
-- condition: Normal capacity is judged feasible.
+  reason: 承認が必要な能力を前提として扱ってはならない。
+- condition: 通常能力を実現可能と判断している。
   max_score: 1
-  reason: The normal-capacity calculation is wrong.
+  reason: 通常能力の計算が誤っている。
 numeric_checks:
 - name: normal_capacity_three_days
   expected_value: 1200
@@ -80,5 +80,5 @@ generic_answer_penalty:
   - generic_framework_only
   - no_named_stakeholder
 disallowed_answers:
-- Normal capacity is enough for 1380 parts.
-- Use overtime without approval.
+- 通常能力で1380個に十分である。
+- 承認なしに残業を使う。

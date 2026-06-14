@@ -6,13 +6,13 @@ domain: heavy_machinery
 subdomain: welding
 difficulty: 3
 estimated_time_min: 30
-title: Multi-process Bottleneck Capacity
+title: 複数工程のボトルネック能力
 scenario: |
-  A product passes through cutting, welding, and inspection in sequence.
-  Per-shift capacities are cutting 520 units, welding 460 units, and inspection 500 units.
-  Customer demand is 480 units per shift.
+  製品は切断、溶接、検査を順番に通過する。
+  1直あたりの能力は、切断520台、溶接460台、検査500台である。
+  顧客需要は1直あたり480台である。
 question: |
-  Identify the bottleneck process, determine whether the line can meet demand, and calculate the shortfall or margin.
+  ボトルネック工程を特定し、ラインが需要を満たせるか判断し、不足または余裕を計算せよ。
 expected_skills:
 - bottleneck_reasoning
 - capacity_calculation
@@ -24,32 +24,32 @@ secondary_skills:
 - feasibility_judgement
 - evidence_traceability
 reference_answer: |
-  In a serial process, line capacity is limited by the lowest process capacity.
-  Cutting can make 520 units per shift, welding can make 460 units per shift, and inspection can process 500 units per shift.
-  Welding is the bottleneck at 460 units per shift.
-  Demand is 480 units per shift, so the line is short by 480 - 460 = 20 units per shift and cannot meet demand as currently constrained.
+  直列工程では、ライン能力は最も低い工程能力に制約される。
+  切断は1直あたり520台、溶接は1直あたり460台、検査は1直あたり500台を処理できる。
+  ボトルネックは、1直あたり460台の溶接である。
+  需要は1直あたり480台であるため、ラインは 480 - 460 = 20台/直 不足し、現在の制約下では需要を満たせない。
 evaluation_rubric:
   must_have:
-  - Compares all three process capacities.
-  - Identifies welding as the bottleneck.
-  - Uses 460 units per shift as the line capacity.
-  - Concludes the line is infeasible for 480 units per shift.
-  - Calculates a 20-unit per shift shortfall.
+  - 3つすべての工程能力を比較している。
+  - 溶接をボトルネックとして特定している。
+  - ライン能力として1直あたり460台を使用している。
+  - 1直あたり480台に対してラインは実現不可能と結論づけている。
+  - 1直あたり20台の不足を計算している。
   nice_to_have:
-  - Explains why serial capacity is limited by the minimum process capacity.
-  - Avoids averaging capacities.
+  - 直列能力が最小工程能力に制約される理由を説明している。
+  - 能力を平均していない。
   critical_failures:
-  - Averages process capacities to decide feasibility.
-  - Selects cutting or inspection as the bottleneck.
-  - Treats 480 units per shift as feasible without addressing the 460-unit welding limit.
+  - 実現可能性判断のために工程能力を平均している。
+  - 切断または検査をボトルネックとして選んでいる。
+  - 溶接の460台制約に対処せず、1直あたり480台を実現可能としている。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Bottleneck is not identified as welding.
+- condition: ボトルネックが溶接として特定されていない。
   max_score: 2
-  reason: Bottleneck identification is central to the item.
-- condition: Uses average capacity as line capacity.
+  reason: ボトルネック特定がこの項目の中心である。
+- condition: 平均能力をライン能力として使用している。
   max_score: 1
-  reason: Averaging serial process capacities is invalid.
+  reason: 直列工程能力を平均することは不適切である。
 numeric_checks:
 - name: bottleneck_capacity
   expected_value: 460
@@ -72,6 +72,6 @@ generic_answer_penalty:
   - scenario_specific_numbers_not_used
   - generic_framework_only
 disallowed_answers:
-- The line is feasible because average capacity exceeds demand.
-- Cutting is the bottleneck.
-- Inspection is the bottleneck.
+- 平均能力が需要を上回るため、ラインは実現可能である。
+- 切断がボトルネックである。
+- 検査がボトルネックである。

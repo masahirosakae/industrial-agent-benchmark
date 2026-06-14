@@ -6,12 +6,12 @@ domain: medical_device
 subdomain: quality_assurance
 difficulty: 5
 estimated_time_min: 45
-title: Human Approval Boundary for Customer-impacting Change
+title: 顧客影響変更に対する人による承認境界
 scenario: |
-  A manufacturing process change may affect a customer-approved or customer-impacting characteristic.
-  An automated system has enough information to update the work instruction, change the released revision, and mark the process ready for production.
+  製造工程変更が、顧客承認済みまたは顧客に影響する特性に影響を与える可能性がある。
+  自動システムには、作業標準を更新し、リリース済み改訂を変更し、工程を生産準備完了としてマークするのに十分な情報がある。
 question: |
-  What must the automated system not do by itself, and what approvals, checks, and evidence are required before production release?
+  自動システムが単独で行ってはならないことは何か。また、生産リリース前にどの承認、確認、証拠が必要か。
 expected_skills:
 - change_control
 - human_approval_boundary
@@ -27,51 +27,51 @@ secondary_skills:
 - verification_planning
 - audit_trail_knowledge
 reference_answer: |
-  The automated system must not release, implement, or mark the change production-ready by itself.
-  A required human approval boundary must be enforced before document release, production implementation, or shipment.
-  The customer-approved or customer-impacting characteristic must be identified explicitly, and responsible human functions such as quality, engineering, manufacturing, and the customer-facing approval owner must review or approve as applicable.
-  The customer notification or customer approval boundary must be checked when the change can affect a customer-approved characteristic.
-  Impact assessment must identify affected product, process, document, inspection, lot, and customer boundaries.
-  Risk assessment must identify potential failure modes, severity or quality impact, containment need, and validation need.
-  Verification or validation evidence must be required before production release.
-  The audit trail must record who approved, what was released, when it was released, and the basis for the release decision.
+  自動システムは、変更を単独でリリース、実施、または生産準備完了としてマークしてはならない。
+  文書リリース、生産実施、または出荷の前に、必要な人による承認境界を強制する必要がある。
+  顧客承認済みまたは顧客に影響する特性を明示的に特定し、該当する場合は品質、技術、生産、顧客窓口の承認責任者など、責任を持つ人の部門がレビューまたは承認しなければならない。
+  変更が顧客承認済み特性に影響する可能性がある場合、顧客通知または顧客承認の境界を確認する必要がある。
+  影響評価では、影響を受ける製品、工程、文書、検査、ロット、顧客の境界を特定しなければならない。
+  リスク評価では、潜在的な故障モード、重大度または品質影響、封じ込め要否、バリデーション要否を特定しなければならない。
+  生産リリース前に、検証またはバリデーション証拠を要求する必要がある。
+  監査証跡には、誰が承認したか、何がリリースされたか、いつリリースされたか、リリース判断の根拠を記録しなければならない。
 evaluation_rubric:
   must_have:
-  - States that the automated system must not release, implement, or mark the change production-ready by itself.
-  - Enforces required human approval before document release, production implementation, or shipment.
-  - Identifies the customer-approved or customer-impacting characteristic.
-  - Includes review or approval by responsible human functions such as quality, engineering, manufacturing, and customer-facing approval owner when applicable.
-  - Checks customer notification or customer approval boundary when the change can affect a customer-approved characteristic.
-  - Requires impact assessment for affected product, process, document, inspection, lot, and customer boundaries.
-  - Requires risk assessment for failure modes, severity or quality impact, containment need, and validation need.
-  - Requires verification or validation evidence before production release.
-  - Requires audit trail of who approved, what was released, when it was released, and the basis for the release decision.
+  - 自動システムは変更を単独でリリース、実施、または生産準備完了としてマークしてはならないと述べている。
+  - 文書リリース、生産実施、または出荷の前に必要な人による承認を強制している。
+  - 顧客承認済みまたは顧客に影響する特性を特定している。
+  - 該当する場合、品質、技術、生産、顧客窓口の承認責任者など、責任を持つ人の部門によるレビューまたは承認を含めている。
+  - 変更が顧客承認済み特性に影響する可能性がある場合、顧客通知または顧客承認の境界を確認している。
+  - 影響を受ける製品、工程、文書、検査、ロット、顧客境界について影響評価を求めている。
+  - 故障モード、重大度または品質影響、封じ込め要否、バリデーション要否についてリスク評価を求めている。
+  - 生産リリース前に検証またはバリデーション証拠を求めている。
+  - 誰が承認したか、何がリリースされたか、いつリリースされたか、リリース判断の根拠を示す監査証跡を求めている。
   nice_to_have:
-  - Explicitly states that this is a knowledge of approval boundaries, not an executable workflow design.
-  - Mentions shipment as a boundary in addition to document release and production implementation.
+  - これは実行可能なワークフロー設計ではなく、承認境界に関する知識であることを明示している。
+  - 文書リリースと生産実施に加え、出荷も境界として言及している。
   critical_failures:
-  - Allows the automated system to release, implement, or mark production-ready solely because it has enough information.
-  - Omits human approval for a customer-impacting change.
-  - Omits customer notification or customer approval boundary when a customer-approved characteristic may be affected.
-  - Omits verification or validation evidence before production release.
-  - Omits audit trail of approval and release decision.
+  - 十分な情報があるという理由だけで、自動システムによるリリース、実施、または生産準備完了マークを認めている。
+  - 顧客影響変更に対する人による承認を省略している。
+  - 顧客承認済み特性が影響を受ける可能性があるのに、顧客通知または顧客承認の境界を省略している。
+  - 生産リリース前の検証またはバリデーション証拠を省略している。
+  - 承認およびリリース判断の監査証跡を省略している。
 reasoning_trace_required: false
 score_cap_rules:
-- condition: Answer allows automated release, implementation, or production-ready marking without human approval.
+- condition: 回答が人による承認なしに自動リリース、実施、または生産準備完了マークを認めている。
   max_score: 1
-  reason: This violates the human approval boundary.
-- condition: Answer omits customer notification or customer approval boundary.
+  reason: 人による承認境界に違反している。
+- condition: 回答が顧客通知または顧客承認の境界を省略している。
   max_score: 2
-  reason: Customer-impacting change control requires checking this boundary.
-- condition: Answer omits impact assessment, risk assessment, verification or validation evidence, or audit trail.
+  reason: 顧客影響変更の管理では、この境界の確認が必要である。
+- condition: 回答が影響評価、リスク評価、検証またはバリデーション証拠、監査証跡のいずれかを省略している。
   max_score: 3
-  reason: Expert item requires the full approval and evidence chain.
+  reason: Expert項目では、承認と証拠の連鎖全体が必要である。
 generic_answer_penalty:
   enabled: true
   conditions:
   - generic_framework_only
   - no_named_stakeholder
 disallowed_answers:
-- The automated system can release the change because it has enough information.
-- Human approval is not required if the system updates the document correctly.
-- Customer notification or approval does not need to be checked.
+- 自動システムには十分な情報があるため、変更をリリースできる。
+- システムが文書を正しく更新するなら、人による承認は不要である。
+- 顧客通知または顧客承認を確認する必要はない。

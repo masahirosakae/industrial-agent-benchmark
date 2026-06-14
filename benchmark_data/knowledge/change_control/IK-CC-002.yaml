@@ -6,11 +6,11 @@ domain: general_manufacturing
 subdomain: production_control
 difficulty: 2
 estimated_time_min: 20
-title: Change Approval Before Implementation
+title: 実施前の変更承認
 scenario: |
-  A supervisor says a tooling change is simple and asks the team to implement it before the change request is approved.
+  監督者が、工具変更は単純な内容だとして、変更申請が承認される前にチームへ実施を求めている。
 question: |
-  What is the correct change-control response?
+  変更管理上、正しい対応は何か。
 expected_skills:
 - change_control
 - approval_workflow_knowledge
@@ -22,34 +22,34 @@ secondary_skills:
 - human_approval_boundary
 - implementation_control
 reference_answer: |
-  The team should not implement the controlled tooling change before the required approval is obtained.
-  The current approved process or tooling should remain in use. The change request should be routed through the defined review and approval workflow.
-  If there is an urgent production need, it should be documented and escalated through the approved escalation path rather than bypassing change control.
+  チームは、必要な承認を得る前に管理対象の工具変更を実施してはならない。
+  現在承認済みの工程または工具を継続して使用し、変更申請を定められたレビューおよび承認ワークフローに回す必要がある。
+  緊急の生産上の必要がある場合でも、変更管理を迂回するのではなく、その必要性を記録し、承認済みのエスカレーション経路で対応する。
 evaluation_rubric:
   must_have:
-  - States that the controlled change must not be implemented before required approval.
-  - Keeps the current approved process or tooling in use.
-  - Routes the request through the defined review and approval workflow.
-  - Uses an approved escalation path for urgent needs.
+  - 管理対象の変更は、必要な承認前に実施してはならないと述べている。
+  - 現在承認済みの工程または工具を継続使用するとしている。
+  - 申請を定められたレビューおよび承認ワークフローに回している。
+  - 緊急時には承認済みのエスカレーション経路を使うとしている。
   nice_to_have:
-  - Explains that apparent simplicity does not remove change-control requirements.
-  - Mentions documenting the urgent need or temporary condition.
+  - 見かけ上単純であっても、変更管理要求はなくならないと説明している。
+  - 緊急の必要性または一時的状態を記録することに言及している。
   critical_failures:
-  - Allows implementation before approval because the change appears simple.
-  - Treats supervisor instruction as a substitute for required change approval.
-  - Bypasses the change workflow without documented escalation.
+  - 変更が単純に見えることを理由に、承認前の実施を認めている。
+  - 監督者の指示を、必要な変更承認の代替として扱っている。
+  - 記録されたエスカレーションなしに変更ワークフローを迂回している。
 reasoning_trace_required: false
 score_cap_rules:
-- condition: Answer allows implementation before required approval.
+- condition: 必要な承認前の実施を認めている。
   max_score: 1
-  reason: This violates the approval boundary.
-- condition: Answer omits the approval workflow.
+  reason: 承認境界に違反している。
+- condition: 承認ワークフローを省略している。
   max_score: 3
-  reason: Approval workflow is the core knowledge point.
+  reason: 承認ワークフローがこの知識項目の中核である。
 generic_answer_penalty:
   enabled: true
   conditions:
   - generic_framework_only
 disallowed_answers:
-- Implement the tooling change now and approve it later.
-- A simple tooling change does not need approval.
+- 工具変更を今すぐ実施し、後で承認すればよい。
+- 単純な工具変更には承認は不要である。

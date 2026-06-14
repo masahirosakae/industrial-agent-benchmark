@@ -6,11 +6,11 @@ domain: automotive
 subdomain: supply_chain_management
 difficulty: 3
 estimated_time_min: 35
-title: Supplier Deviation Workflow
+title: サプライヤー逸脱ワークフロー
 scenario: |
-  A supplier asks to ship parts with a minor dimensional deviation. The agent can read supplier request data, drawing requirements, historical defect records, incoming inspection capacity, and current inventory risk. It can draft a deviation review package.
+  サプライヤーが、軽微な寸法逸脱のある部品の出荷を求めている。エージェントはサプライヤー申請データ、図面要求、過去の不良記録、受入検査能力、現在の在庫リスクを読み取ることができる。逸脱レビュー資料をドラフトできる。
 question: |
-  Design the workflow for handling the supplier deviation request. Include evidence package creation, review routing, blocked actions, final state, and audit trail.
+  サプライヤー逸脱申請を扱うためのワークフローを設計せよ。証拠パッケージ作成、レビュールーティング、ブロック行動、最終状態、監査証跡を含めること。
 expected_skills:
 - workflow_design
 - supplier_quality
@@ -24,37 +24,37 @@ secondary_skills:
 - risk_assessment
 - audit_log_design
 reference_answer: |
-  The workflow should read supplier deviation request and affected part details, compare the deviation against drawing or requirement boundary, check historical defect and incoming inspection context, and assess inventory and production risk without accepting parts.
-  The agent may draft a deviation review package with evidence, proposed controls, and affected lots, then route it to supplier quality or material review authority.
-  Receiving acceptance must remain blocked until disposition is approved.
-  Expected final state is supplier_deviation_review_pending. Audit trail should include supplier request, evidence, proposed controls, blocked acceptance, approver role, and disposition state.
+  ワークフローでは、サプライヤー逸脱申請と影響部品の詳細を読み取り、逸脱を図面または要求境界と比較し、過去の不良と受入検査の文脈を確認し、部品を受け入れずに在庫および生産リスクを評価する必要がある。
+  エージェントは、証拠、提案管理策、影響ロットを含む逸脱レビュー資料をドラフトし、その後、サプライヤー品質または材料審査権限者へ回してよい。
+  処置が承認されるまで、受入承認はブロックされたままでなければならない。
+  期待される最終状態は supplier_deviation_review_pending である。監査証跡には、サプライヤー申請、証拠、提案管理策、ブロックした受入、承認者ロール、処置状態を含める必要がある。
 evaluation_rubric:
   must_have:
-  - Reads supplier deviation request and affected part details.
-  - Compares deviation against drawing or requirement boundary.
-  - Checks historical defect and incoming inspection context.
-  - Assesses inventory and production risk without accepting parts.
-  - Drafts review package with evidence, proposed controls, and affected lots.
-  - Routes review to supplier quality or material review authority.
-  - Blocks receiving acceptance until disposition is approved.
-  - States final state as supplier_deviation_review_pending.
-  - Audits request, evidence, proposed controls, blocked acceptance, and approver role.
+  - サプライヤー逸脱申請と影響部品の詳細を読み取っている。
+  - 逸脱を図面または要求境界と比較している。
+  - 過去の不良と受入検査の文脈を確認している。
+  - 部品を受け入れずに在庫および生産リスクを評価している。
+  - 証拠、提案管理策、影響ロットを含むレビュー資料をドラフトしている。
+  - サプライヤー品質または材料審査権限者へレビューを回している。
+  - 処置が承認されるまで受入承認をブロックしている。
+  - 最終状態を supplier_deviation_review_pending としている。
+  - 申請、証拠、提案管理策、ブロックした受入、承認者ロールを監査している。
   nice_to_have:
-  - Separates purchasing communication from quality disposition authority.
-  - Includes incoming inspection capacity as a control consideration.
+  - 購買連絡と品質処置権限を分離している。
+  - 受入検査能力を管理策の検討事項として含めている。
   critical_failures:
-  - Accepts deviated parts before disposition.
-  - Decides use-as-is without authority.
-  - Ignores drawing or requirement boundary.
-  - Routes only to purchasing when quality disposition is required.
+  - 処置前に逸脱部品を受け入れている。
+  - 権限なしに特採使用を決定している。
+  - 図面または要求境界を無視している。
+  - 品質処置が必要なのに購買だけへ回している。
 reasoning_trace_required: true
 score_cap_rules:
-- condition: Workflow accepts deviated parts before disposition approval.
+- condition: ワークフローが処置承認前に逸脱部品を受け入れている。
   max_score: 1
-  reason: Forbidden receiving acceptance.
-- condition: Workflow omits drawing or requirement boundary check.
+  reason: 禁止された受入承認である。
+- condition: ワークフローが図面または要求境界の確認を省略している。
   max_score: 2
-  reason: Requirement boundary is central to deviation review.
+  reason: 要求境界は逸脱レビューの中心である。
 generic_answer_penalty:
   enabled: true
   conditions:
@@ -74,6 +74,6 @@ structured_output_requirements:
   - final_state
   - audit_log_items
 disallowed_answers:
-- Accept the deviated parts before disposition.
-- Decide use-as-is without material review or supplier quality authority.
-- Route only to purchasing for final disposition.
+- 処置前に逸脱部品を受け入れる。
+- 材料審査またはサプライヤー品質権限なしに特採使用を決定する。
+- 最終処置を購買だけへ回す。
