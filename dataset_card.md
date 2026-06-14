@@ -1,8 +1,8 @@
 ---
 pretty_name: Industrial Agent Benchmark
 language:
-  - en
   - ja
+  - en
 license: apache-2.0
 task_categories:
   - question-answering
@@ -10,50 +10,37 @@ task_categories:
 tags:
   - manufacturing
   - industrial-ai
-  - agents
-  - evaluation
+  - industrial-agent
+  - agent-evaluation
+  - llm-evaluation
   - benchmark
 size_categories:
   - n<1K
 ---
 
-# Industrial Agent Benchmark v2.0.0
+# Industrial Agent Benchmark v2.2.0
 
 ## Overview
 
-Industrial Agent Benchmark is a public benchmark dataset for evaluating industrial and manufacturing agent capabilities. Version 2.0.0 packages 180 public benchmark questions as Hugging Face-compatible JSONL while keeping evaluation scripts and generated outputs outside the dataset artifact.
+Industrial Agent Benchmark is a public benchmark dataset for evaluating Industrial AI systems, Manufacturing AI assistants, and Industrial Agents.
 
-Language note: v2.0.0 contains English, Japanese, and mixed-language records. v2.0.1 corrects documentation and metadata to reflect this reality without changing the 180 examples or JSONL schema. A more formal multilingual English + Japanese architecture is planned for v2.1.0.
+**v2.2.0 is the Japanese Canonical Normalization release.** Japanese is now the canonical language of the benchmark. English should be treated as a future translated or derivative distribution, not as the source of truth.
 
-The dataset is intended to be loaded as:
+v2.2.0 preserves the 180-task dataset composition and validation/export pipeline while migrating previously English-only tasks to Japanese canonical form.
 
-```python
-from datasets import load_dataset
+## v2.2.0 Release Note
 
-dataset = load_dataset(
-    "masahirosakae/industrial-agent-benchmark",
-    split="test",
-)
+- Japanese Canonical Normalization completed.
+- Previously English-only tasks migrated to Japanese canonical form.
+- English-only tasks: 45 -> 0.
+- Total tasks retained: 180.
+- Layer balance retained: Knowledge 60 / Reasoning 60 / Agent 60.
+- HF-compatible JSONL workflow preserved.
+- No generated answers, private results, or provider-specific evaluation outputs are included.
 
-item = dataset[0]
-```
-
-Until the hosted dataset is published, the repository supports a local JSONL export workflow.
-
-## Motivation
-
-Industrial agent systems need evaluation tasks that reflect manufacturing constraints, quality gates, human approval boundaries, structured reasoning, risk tradeoffs, and data integrity requirements. This dataset provides synthetic but domain-oriented benchmark questions for developing and testing such evaluation workflows.
-
-The v2.0.0 publication goal is to separate public benchmark data from non-public local run artifacts:
-
-- Hugging Face hosts the public dataset.
-- GitHub hosts scripts, documentation, and validation tools.
-- Local evaluation outputs remain local and are not committed.
-- Leaderboard infrastructure is deferred to later work.
+Note: some machine-readable schema keys, enum-like final states, numeric check names, JSON field names, and accepted technical abbreviations may remain in English for evaluation compatibility.
 
 ## Dataset Structure
-
-Each record is a single benchmark question with public reference material and a public rubric. Records do not contain generated model answers or model-specific evaluation results.
 
 Primary files:
 
@@ -63,16 +50,16 @@ docs/dataset_schema_v2.md
 docs/dataset_export_v2.md
 ```
 
-## Dataset Summary
+Each record is a single benchmark task with public reference material and a public rubric. Records do not contain generated model answers or model-specific evaluation results.
 
-The v2.0.0 release candidate contains 180 public synthetic benchmark questions.
+## Dataset Summary
 
 | Layer | Count | Focus |
 |---|---:|---|
-| Knowledge | 60 | Manufacturing facts, procedures, constraints, governance, and reference-answer correctness. |
-| Reasoning | 60 | Root-cause analysis, risk tradeoffs, data integrity, CAPA, and numeric capacity planning. |
-| Agent | 60 | Workflow design, tool use, human approval boundaries, safety, structured decisions, and auditability. |
-| Total | 180 | Balanced public benchmark split. |
+| Knowledge | 60 | Manufacturing facts, procedures, constraints, governance, and reference-answer correctness |
+| Reasoning | 60 | Root-cause analysis, risk tradeoffs, data integrity, CAPA, FMEA, and numeric capacity planning |
+| Agent | 60 | Workflow design, tool use, human approval boundaries, safety, structured decisions, and auditability |
+| Total | 180 | Balanced public benchmark split |
 
 Category distribution:
 
@@ -97,15 +84,13 @@ Items are prompt-style benchmark records. A model or agent receives `context` an
 
 | Split | Status | Description |
 |---|---|---|
-| `test` | Public | Public benchmark questions. |
-| `dev` | Planned | Small public examples for tool and evaluation debugging. |
-| `private` | Reserved | Reserved name only; not published in GitHub. |
+| `test` | Public | Public benchmark tasks |
 
-The v2.0.0 release candidate exports the public `test` split with 180 records.
+The v2.2.0 release uses the public `test` split with 180 records.
 
 ## Schema
 
-Every record uses the same stable keys:
+Every record uses stable keys:
 
 ```json
 {
@@ -114,23 +99,15 @@ Every record uses the same stable keys:
   "domain": "manufacturing",
   "category": "agent",
   "sub_category": "hil_boundary",
-  "task_type": "short_answer",
+  "task_type": "case_analysis",
   "question": "...",
   "context": "...",
   "choices": [],
   "answer": "...",
   "rubric": "...",
-  "expected_capabilities": [
-    "manufacturing_reasoning",
-    "risk_identification",
-    "human_in_the_loop_judgment"
-  ],
-  "difficulty": "medium",
-  "tags": [
-    "quality",
-    "manufacturing",
-    "human-in-the-loop"
-  ],
+  "expected_capabilities": [],
+  "difficulty": "hard",
+  "tags": [],
   "source": "synthetic",
   "public": true,
   "requires_external_knowledge": false,
@@ -138,31 +115,7 @@ Every record uses the same stable keys:
 }
 ```
 
-Required fields:
-
-- `id`
-- `version`
-- `domain`
-- `category`
-- `sub_category`
-- `task_type`
-- `question`
-- `answer`
-- `rubric`
-- `difficulty`
-- `tags`
-
-Optional but schema-stable fields:
-
-- `context`
-- `choices`
-- `expected_capabilities`
-- `source`
-- `public`
-- `requires_external_knowledge`
-- `notes`
-
-The `answer` field is a public reference answer, not a model output.
+The `version` field is retained for schema compatibility with the existing v2 JSONL pipeline. The current public release state is v2.2.0.
 
 ## Intended Use
 
@@ -174,35 +127,43 @@ The `answer` field is a public reference answer, not a model output.
 ## Limitations
 
 - The dataset is synthetic and should not be treated as operational manufacturing advice.
-- Public reference answers and rubrics are included for evaluation development.
-- The v2.0.0 dataset does not include generated answers, judge outputs, benchmark run artifacts, or per-run score files.
-- The initial rule-based judge pipeline is a deterministic format/pipeline placeholder, not a final leaderboard scorer.
-- Hosted Hugging Face loading is planned; local JSONL export is the current repository workflow until publication.
+- The benchmark is not a certification benchmark.
+- It does not cover all manufacturing domains, sectors, product types, or factory systems.
+- English translation pairs are not yet the source of truth; English is planned as a derivative distribution.
+- Machine-readable schema and evaluation compatibility fields may remain in English.
+
+## Evaluation
+
+The GitHub repository provides validation and evaluation scripts:
+
+- `scripts/validate_dataset.py`
+- `scripts/export_hf_dataset_v2.py`
+- `scripts/validate_hf_dataset_v2.py`
+- `eval/run_simple_eval.py`
+- `eval/run_judge_eval.py`
+
+Example validation:
+
+```bash
+python scripts/validate_dataset.py
+python scripts/export_hf_dataset_v2.py
+python scripts/validate_hf_dataset_v2.py data/v2/test.jsonl
+```
 
 ## Citation
 
-If you use this dataset, cite the repository and version:
+If you use this dataset, cite the repository and release version:
 
 ```bibtex
-@misc{industrial_agent_benchmark_v2,
-  title = {Industrial Agent Benchmark v2.0.0},
-  author = {Sakae, Masahiro},
+@misc{sakae2026industrialagentbenchmark,
+  title = {Industrial Agent Benchmark},
+  author = {Masahiro Sakae},
   year = {2026},
-  howpublished = {\url{https://github.com/masahirosakae/industrial-agent-benchmark}},
-  note = {Public benchmark dataset for industrial and manufacturing agent evaluation}
+  version = {2.2.0},
+  url = {https://github.com/masahirosakae/industrial-agent-benchmark}
 }
 ```
 
-## Versioning
+## License
 
-Version 2.0.0 is the active dataset architecture line. Version 1.1.0 is frozen as a pre-release benchmark snapshot.
-
-Versioned artifacts should document:
-
-- dataset version
-- schema version
-- split names
-- evaluator compatibility
-- known limitations
-
-Generated local evaluation outputs are not part of the published dataset.
+Apache License 2.0. See the GitHub repository for full license files and dataset release notes.

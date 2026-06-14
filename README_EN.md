@@ -1,39 +1,42 @@
 # Industrial Agent Benchmark
 
-Industrial Agent Benchmark is a public benchmark for evaluating industrial and manufacturing agent capabilities. It is designed for tasks where factual manufacturing knowledge, multi-step operational reasoning, and safe agent behavior all matter.
+Industrial Agent Benchmark is a public benchmark for evaluating Industrial AI systems, Manufacturing AI assistants, and Industrial Agents.
 
-The default Japanese README is available at [README.md](README.md).
+The canonical language of Industrial Agent Benchmark is **Japanese**. English should be treated as a future translated or derivative distribution, not as the source of truth.
+
+Japanese README: [README.md](README.md)
 
 ## Dataset Overview
 
-v2.0.0 is the first stable public release. It contains 180 public benchmark questions, exports to Hugging Face-compatible JSONL, and currently includes both English and Japanese benchmark tasks. Multilingual formalization is planned for v2.1.0.
+**Current release: v2.2.0 Japanese Canonical Normalization**
+
+v2.2.0 completed the migration of previously English-only benchmark tasks into Japanese canonical form while preserving the dataset size and validation pipeline.
+
+- Total: 180 tasks
+- Knowledge: 60
+- Reasoning: 60
+- Agent: 60
+- English-only tasks: 45 -> 0
+- HF-compatible JSONL: `data/v2/test.jsonl`
+- Validation/export pipeline: preserved
+
+Some compatibility fields inside `data/v2/test.jsonl` may retain historical schema values. The public release state is v2.2.0.
 
 | Layer | Count | Focus |
 |---|---:|---|
-| Industrial Knowledge | 60 | Manufacturing operations, quality, maintenance, change control, and procedural knowledge |
+| Industrial Knowledge | 60 | Manufacturing knowledge, procedures, quality, maintenance, and change control |
 | Industrial Reasoning | 60 | Root-cause analysis, FMEA, CAPA, risk tradeoffs, data integrity, and numeric capacity planning |
-| Industrial Agent | 60 | Workflow design, tool selection, human-in-the-loop boundaries, safety, structured decisions, and tool trajectories |
+| Industrial Agent | 60 | Workflow design, tool selection, human approval boundaries, safety, structured decisions, and auditability |
 | Total | 180 |  |
 
-Local dataset artifact:
+## Language Policy
 
-```text
-data/v2/test.jsonl
-```
+v2.2.0 establishes Japanese as the canonical language for benchmark tasks.
 
-Dataset card:
-
-```text
-dataset_card.md
-```
-
-The dataset is intended to be easy to publish or load through Hugging Face Datasets while keeping evaluation outputs separate from the dataset artifact.
-
-Language note:
-
-- v2.0.0 contains English, Japanese, and mixed-language records.
-- v2.0.1 is a documentation and metadata correction release; it does not change the 180 benchmark items or JSONL schema.
-- v2.1.0 is planned to formalize the multilingual English + Japanese architecture.
+- Japanese records are the source of truth.
+- English is planned as a translated or derivative distribution.
+- English-only task records have been migrated to Japanese canonical form.
+- Machine-readable schema keys, enum-like final states, JSON field names, and accepted technical abbreviations may remain in English where needed for evaluation compatibility.
 
 ## Quick Start
 
@@ -67,11 +70,31 @@ python scripts/export_hf_dataset_v2.py
 python scripts/validate_hf_dataset_v2.py data/v2/test.jsonl
 ```
 
-### Load with Hugging Face Datasets
+### Load locally
 
 ```bash
 python examples/load_dataset_v2.py
 ```
+
+## Hugging Face Dataset
+
+```text
+https://huggingface.co/datasets/MSakae/industrial-agent-benchmark
+```
+
+Primary dataset file:
+
+```text
+data/v2/test.jsonl
+```
+
+## Evaluation Architecture
+
+| Layer | Judge direction | Notes |
+|---|---|---|
+| Industrial Knowledge | Deterministic Judge | Expected points, keywords, and structured reference answers |
+| Industrial Reasoning | Rubric Judge plus numeric checks | Evidence, constraints, feasibility, and calculation checks |
+| Industrial Agent | Executable Judge | Safe workflow behavior, gate checks, action boundaries, escalation, and audit trails |
 
 ## Repository Layout
 
@@ -84,8 +107,6 @@ industrial-agent-benchmark/
     v2/
       test.jsonl
   benchmark_data/
-    index.yaml
-    index.csv
     knowledge/
     reasoning/
     agent/
@@ -95,49 +116,24 @@ industrial-agent-benchmark/
   scripts/
 ```
 
-## Evaluation Architecture
-
-The benchmark is organized around three evaluation layers.
-
-| Layer | Judge direction | Notes |
-|---|---|---|
-| Industrial Knowledge | Deterministic Judge | Clear expected points, keywords, and structured reference answers |
-| Industrial Reasoning | Rubric Judge plus numeric checks | Multi-step reasoning with evidence, constraints, feasibility, and calculation checks |
-| Industrial Agent | Executable Judge | Safe workflow behavior, gate checks, tool/action boundaries, escalation, and audit trail requirements |
-
-The public repository includes dataset validation, JSONL export, schema documentation, and simple local evaluation utilities. It does not include raw model answers, provider-specific outputs, private evaluation results, or leaderboard data.
-
-## Hugging Face Dataset Path
-
-The release artifact is prepared around:
-
-- [dataset_card.md](dataset_card.md)
-- [data/v2/test.jsonl](data/v2/test.jsonl)
-- [docs/dataset_schema_v2.md](docs/dataset_schema_v2.md)
-- [docs/dataset_export_v2.md](docs/dataset_export_v2.md)
-
-When published to Hugging Face Hub, these files are the intended entry points for dataset loading and documentation.
-
 ## Citation
 
 If you use Industrial Agent Benchmark in research, evaluation, or public reporting, cite the repository and release version.
 
 ```text
-Industrial Agent Benchmark v2.0.0.
+Industrial Agent Benchmark v2.2.0.
 https://github.com/masahirosakae/industrial-agent-benchmark
 ```
-
-A formal citation entry may be added after publication metadata is finalized.
 
 ## Contributing
 
 Contributions should preserve the benchmark's public-release constraints:
 
 - keep benchmark items manufacturing-domain relevant and public safe
+- treat Japanese as the canonical language
 - do not include private company data, customer data, proprietary process data, or provider-specific model results
 - keep generated answers and evaluation outputs out of git
-- update dataset validation/export files only through the documented scripts
-- preserve the current multilingual reality unless a future release explicitly translates or restructures the dataset
+- update derived JSONL only through the documented export script
 
 Before proposing dataset changes, run:
 
