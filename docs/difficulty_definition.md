@@ -1,4 +1,4 @@
-﻿# Industrial Agent Benchmark v1.0 — Difficulty Definition
+# Industrial Agent Benchmark v1.0 — Difficulty Definition
 
 本ドキュメントは難易度 1〜5 の正式定義を示す。
 LLM-as-a-Judge による評価および採点重み付けの基準とする。

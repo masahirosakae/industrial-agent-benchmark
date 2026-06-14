@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """generate_dataset.py
 
 Industrial Agent Benchmark v1.0 helper script.

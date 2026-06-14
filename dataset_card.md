@@ -1,7 +1,6 @@
 ---
 pretty_name: Industrial Agent Benchmark
 language:
-  - ja
   - en
 license: apache-2.0
 task_categories:

@@ -1,4 +1,4 @@
-﻿version: "1.0"
+version: "1.0"
 name: evaluation_set_v1
 description: |
   Industrial Agent Benchmark v1.0 の比較評価用サブセット。
